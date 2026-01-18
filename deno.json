@@ -1,0 +1,30 @@
+{
+  "name": "@jlongyam/ts",
+  "version": "1.0.0",
+  "exports": "./src/main.ts",
+  "tasks": {
+    "check": "deno fmt ./src/main.ts --check",
+    "lint": "deno lint ./src/main.ts --fix",
+    "dev": "deno run ./src/main.ts",
+    "test": "deno test ./src/main.ts -A",
+    "bundle": "deno bundle ./src/main.ts --outdir dist",
+    "info": "deno info ./dist/main.js",
+    "clean": "rm -rf ./dist",
+    "clean:workflow": "gh run list --status failure --limit 200 --json databaseId -q '.[].databaseId' | xargs -I{} gh run delete {}"
+  },
+  "fmt": {
+    "useTabs": false,
+    "indentWidth": 2,
+    "semiColons": false,
+    "singleQuote": true,
+    "proseWrap": "always",
+    "exclude": ["**/logs.json"]
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["ban-untagged-todo"],
+      "exclude": ["no-unused-vars"]
+    }
+  }
+}
