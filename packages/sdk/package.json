@@ -1,0 +1,8 @@
+{
+  "name": "@local/sdk",
+  "main": "osx-sdk-clean.js",
+  "type": "module",
+  "dependencies": {
+    "@local/fs": "file:../fs"
+  }
+}

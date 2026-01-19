@@ -1,0 +1,5 @@
+{
+  "name": "@local/fs",
+  "main": "./src/fs.js",
+  "type": "module"
+}

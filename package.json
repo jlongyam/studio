@@ -13,12 +13,9 @@
   ],
   "author": "jlongyam",
   "license": "MIT",
-  "main": "index.js",
+  "private": true,
   "type": "module",
-  "bin": {
-    "studio": "./bin/cli.js"
-  },
-  "scripts": {
-    "run": "node ."
-  }
+  "workspaces": [
+    "./packages/*"
+  ]
 }
