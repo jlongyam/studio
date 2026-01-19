@@ -19,14 +19,30 @@
     "transpile": "babel src -d lib"
   },
   "dependencies": {
-    "systemjs": "^6.15.1",
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.28.6",
     "@babel/plugin-transform-modules-systemjs": "^7.28.5",
-    "@babel/preset-env": "^7.28.6"
+    "@babel/preset-env": "^7.28.6",
+    "fs-extra": "^11.3.3",
+    "sync-directory": "^6.0.5",
+    "systemjs": "^6.15.1"
   },
   "babel": {
-    "presets": [["@babel/preset-env",{ "targets": "chrome 50"}]],
-    "plugins": ["@babel/plugin-syntax-bigint"]
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": "chrome 50"
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-transform-modules-systemjs",
+        {
+          "systemGlobal": "System"
+        }
+      ]
+    ]
   }
 }

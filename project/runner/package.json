@@ -1,0 +1,12 @@
+{
+  "name": "@jlongyam/studio-runner",
+  "version": "1.0.0",
+  "main": "./main.js",
+  "type": "module",
+  "bin": {
+    "runner": "./bin/cmd.js"
+  },
+  "location": {
+    "target": "$HOME/.local/bin/nwjs-sdk-v0.14.7-osx-x64/nwjs.app/Contents/Resources/app.nw"
+  }
+}
