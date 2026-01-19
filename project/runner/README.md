@@ -2,5 +2,6 @@
 
 Todo:
 
-- Check location target, it should global
-require nw-installer
+- location target should global
+- require nw-installer
+
