@@ -1,16 +1,18 @@
 {
-  "name": "@jlongyam/ts",
+  "name": "@jlongyam/studio",
   "version": "1.0.0",
-  "exports": "./src/main.ts",
+  "exports": "./src/ts/main.ts",
   "tasks": {
-    "check": "deno fmt ./src/main.ts --check",
-    "lint": "deno lint ./src/main.ts --fix",
-    "dev": "deno run ./src/main.ts",
-    "test": "deno test ./src/main.ts -A",
-    "bundle": "deno bundle ./src/main.ts --outdir dist",
-    "info": "deno info ./dist/main.js",
-    "clean": "rm -rf ./dist",
-    "clean:workflow": "gh run list --status failure --limit 200 --json databaseId -q '.[].databaseId' | xargs -I{} gh run delete {}"
+    "check": "deno fmt ./src/ts/main.ts --check",
+    "lint": "deno lint ./src/ts/main.ts --fix",
+    "dev": "deno run ./src/ts/main.ts",
+    "test": "deno test ./src/ts/main.ts -A",
+    "bundle": "deno bundle ./src/ts/main.ts --outdir ./src/js/",
+    "info": "deno info ./src/js/main.js"
+  },
+  "compilerOptions": {
+    "lib": ["deno.window"],
+    "strict": true
   },
   "fmt": {
     "useTabs": false,
@@ -18,13 +20,19 @@
     "semiColons": false,
     "singleQuote": true,
     "proseWrap": "always",
-    "exclude": ["**/logs.json"]
+    "include": ["./src/ts/"],
+    "exclude": ["*.json","./src/ts/data/**/*.ts"]
   },
   "lint": {
+    "include": ["./src/ts/"],
+    "exclude": ["./src/ts/data/**/*.ts"],
     "rules": {
       "tags": ["recommended"],
       "include": ["ban-untagged-todo"],
       "exclude": ["no-unused-vars"]
     }
-  }
+  },
+  "exclude": [
+    "./src/js/"
+  ]
 }

@@ -1,0 +1,24 @@
+{
+  "name": "@jlongyam/studio",
+  "version": "1.0.0",
+  "description": "Jlongyam Studio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlongyam/studio.git"
+  },
+  "homepage": "https://github.com/jlongyam/studio",
+  "keywords": [
+    "SDK",
+    "studio"
+  ],
+  "author": "jlongyam",
+  "license": "MIT",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "studio": "./bin/cli.js"
+  },
+  "scripts": {
+    "run": "node ."
+  }
+}
