@@ -2,6 +2,9 @@
   "name": "@local/sdk",
   "main": "osx-sdk-clean.js",
   "type": "module",
+  "scripts": {
+    "sdk": "$HOME/.local/bin/nwjs-sdk-v0.107.0-osx-arm64/nwjs.app"
+  },
   "dependencies": {
     "@local/fs": "file:../fs"
   }
