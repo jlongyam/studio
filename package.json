@@ -18,6 +18,9 @@
   "scripts": {
     "transpile": "babel src -d lib"
   },
+  "workspaces": [
+    "project/*"
+  ],
   "dependencies": {
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.28.6",

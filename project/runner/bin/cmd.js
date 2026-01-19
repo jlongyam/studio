@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import process from 'node:process'
 import fs from 'fs-extra'
 import sycn from '../lib/sync.js'
 import config from '../package.json' with { type: 'json'}
