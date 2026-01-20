@@ -1,5 +1,5 @@
 {
-  "name": "@jlongyam/nw-runner",
+  "name": "nw-runner",
   "version": "1.0.0",
   "main": "./main.js",
   "type": "module",
