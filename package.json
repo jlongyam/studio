@@ -13,22 +13,25 @@
   ],
   "author": "jlongyam",
   "license": "MIT",
-  "private": true,
+  "main": "./main.js",
   "type": "module",
-  "scripts": {
-    "transpile": "babel src -d lib"
+  "bin": {
+    "jl-studio": "./bin/cmd.js"
   },
-  "workspaces": [
-    "project/*"
-  ],
+  "scripts": {
+    "test": "vitest",
+    "es5": "babel src -d lib"
+  },
   "dependencies": {
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.28.6",
     "@babel/plugin-transform-modules-systemjs": "^7.28.5",
     "@babel/preset-env": "^7.28.6",
+    "commander": "^14.0.2",
     "fs-extra": "^11.3.3",
     "sync-directory": "^6.0.5",
-    "systemjs": "^6.15.1"
+    "systemjs": "^6.15.1",
+    "vitest": "^4.0.17"
   },
   "babel": {
     "presets": [

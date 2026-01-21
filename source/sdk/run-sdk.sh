@@ -1,1 +1,0 @@
-SDK_PATH="$HOME/.local/bin/nwjs-sdk-v0.107.0-osx-arm64/nwjs.app
