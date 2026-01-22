@@ -19,7 +19,7 @@
     "jl-studio": "./bin/cmd.js"
   },
   "scripts": {
-    "test": "vitest",
+    "test": "node --test ./tests/*",
     "es5": "babel src -d lib"
   },
   "dependencies": {
@@ -28,10 +28,12 @@
     "@babel/plugin-transform-modules-systemjs": "^7.28.5",
     "@babel/preset-env": "^7.28.6",
     "commander": "^14.0.2",
+    "download": "^8.0.0",
+    "fast-extract": "^1.14.2",
     "fs-extra": "^11.3.3",
     "sync-directory": "^6.0.5",
     "systemjs": "^6.15.1",
-    "vitest": "^4.0.17"
+    "tasuku": "^2.0.5"
   },
   "babel": {
     "presets": [
