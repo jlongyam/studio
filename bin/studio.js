@@ -3,7 +3,6 @@
 import { exec } from 'node:child_process'
 import task from 'tasuku'
 import * as config from '../src/legacy/config.js'
-import fsx from 'fs-extra'
 
 const help = `
 Usage: studio [command]
@@ -21,9 +20,9 @@ Commands:
 `
 const args = process.argv.slice(2)
 
-if(args[0] === 'help') console.log(help)
-else if(args[0] === 'install') {
-  await task('Installing Node', async ({setStatus})=> {
+if (args[0] === 'help') console.log(help)
+else if (args[0] === 'install') {
+  await task('Installing Node', async ({ setStatus }) => {
     const install = await import('../src/legacy/install.js')
     await install.createStudio()
     await install.createArchive()
@@ -34,60 +33,56 @@ else if(args[0] === 'install') {
     await install.nodeDone()
     setStatus('v5.12.0')
   })
-  await task('Installing NW', async ({setStatus})=> {
+  await task('Installing NW', async ({ setStatus }) => {
     const install_nw = await import('../src/legacy/install-nw.js')
     await install_nw.downloadNW()
     await install_nw.extractNW()
     await install_nw.legalizeNW()
-    await install_nw.nwDone() 
+    await install_nw.nwDone()
     setStatus('v0.14.7-SDK')
   })
 }
-else if(args[0] === 'sample') {
-  task('Create NW Sample', async ({setStatus})=> {
+else if (args[0] === 'sample') {
+  task('Create NW Sample', async ({ setStatus }) => {
     const sample = await import('../src/legacy/sample.js')
     sample.nwBoilerplate()
     setStatus('nw-sample')
   })
 }
-else if(args[0] === 'sync') {
+else if (args[0] === 'sync') {
   const sync = await import('../src/legacy/sync.js')
   await sync.currentFolder()
 }
-else if(args[0] === 'run') {
-  const nw_sdk = config.dir.legacy+'/'+config.nw.sdk.osx+'/nwjs.app/Contents/MacOS/nwjs'
-  try {
-    // window: trap "taskkill /F /IM nw.exe /T" EXIT
-    exec(`trap "pkill -f nwjs" EXIT; ${nw_sdk}`, (error, stdoud)=> {
-      if(error) { process.exit = 1 }
-      console.log(stdoud.trim())
-    })
-  } catch(e) {}
+else if (args[0] === 'run') {
+  if (args[0] === 'run') {
+    const run = await import('../src/legacy/run.js')
+    await run.nwSDK()
+  }
 }
-else if(args[0] === 'node') {
+else if (args[0] === 'node') {
   const arg = process.argv.slice(3).join(' ')
-  const node = config.dir.legacy+'/'+config.node.osx+'/bin/node'
-  exec(`${node} ${arg}`, (error, stdout)=> {
-    if(error) console.error(error.trim())
+  const node = config.dir.legacy + '/' + config.node.osx + '/bin/node'
+  exec(`${node} ${arg}`, (error, stdout) => {
+    if (error) console.error(error)
     console.log(stdout.trim())
   })
 }
-else if(args[0] === 'npm') {
+else if (args[0] === 'npm') {
   const arg = process.argv.slice(3).join(' ')
-  const npm = config.dir.legacy+'/'+config.node.osx+'/bin/npm'
-  exec(`${npm} ${arg}`, (error, stdout)=> {
-    if(error) console.error(error.trim())
+  const npm = config.dir.legacy + '/' + config.node.osx + '/bin/npm'
+  exec(`${npm} ${arg}`, (error, stdout) => {
+    if (error) console.error(error)
     console.log(stdout.trim())
   })
 }
-else if(args[0] === 'uninstall') {
-  await task('Uninstalling legacy SDK', async ({setStatus})=> {
+else if (args[0] === 'uninstall') {
+  await task('Uninstalling legacy SDK', async ({ setStatus }) => {
     const uninstall = await import('../src/legacy/uninstall.js')
     await uninstall.cleanDirectory('legacy')
     setStatus('legacy')
   })
 }
-else if(args[0] === 'clean') {
+else if (args[0] === 'clean') {
   const name = args[1].trim()
   const clean = await import('../src/legacy/clean.js')
   await clean.appName(name)

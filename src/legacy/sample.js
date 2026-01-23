@@ -1,10 +1,13 @@
-import appRootDir from 'app-root-dir'
 import fsx from 'fs-extra'
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 function nwBoilerplate() {
   let pwd = process.env.PWD
-  let app_root = appRootDir.get()
-  fsx.copySync(app_root+'/src/legacy/boilerplate', pwd+'/nw-sample')
+  fsx.copySync(__dirname+'/boilerplate', pwd+'/nw_sample')
 }
 
 export { nwBoilerplate }

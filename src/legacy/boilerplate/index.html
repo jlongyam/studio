@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NW-Test</title>
+  <title>NW Sample</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <h1>Hi</h1>
   <pre>LOG</pre>
   <script>
     let log = document.querySelector('pre')
-    log.textContent = JSON.stringify(process.versions)
+    if(typeof nw === 'object') {
+      log.textContent = JSON.stringify(process.versions,0,2)
+    } else {
+      log.textContent = 'This page should run in nwjs'
+    }
   </script>
 </body>
 </html>

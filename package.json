@@ -27,7 +27,6 @@
     "@babel/core": "^7.28.6",
     "@babel/plugin-transform-modules-systemjs": "^7.28.5",
     "@babel/preset-env": "^7.28.6",
-    "app-root-dir": "^1.0.2",
     "download": "^8.0.0",
     "fast-extract": "^1.14.2",
     "fs-extra": "^11.3.3",
