@@ -1,0 +1,8 @@
+{
+  "name": "nw_sample",
+  "product_string": "NW Sample",
+  "main": "index.html",
+  "window": {
+    "icon": "./AppIcon.icns"
+  }
+}

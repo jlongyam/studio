@@ -15,23 +15,23 @@
   "license": "MIT",
   "main": "./main.js",
   "type": "module",
-  "bin": {
-    "jl-studio": "./bin/cmd.js"
-  },
   "scripts": {
     "test": "node --test ./tests/*",
     "es5": "babel src -d lib"
+  },
+  "bin": {
+    "studio": "./bin/studio.js"
   },
   "dependencies": {
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.28.6",
     "@babel/plugin-transform-modules-systemjs": "^7.28.5",
     "@babel/preset-env": "^7.28.6",
-    "commander": "^14.0.2",
+    "app-root-dir": "^1.0.2",
     "download": "^8.0.0",
     "fast-extract": "^1.14.2",
     "fs-extra": "^11.3.3",
-    "sync-directory": "^6.0.5",
+    "sync-content": "^2.0.3",
     "systemjs": "^6.15.1",
     "tasuku": "^2.0.5"
   },

@@ -58,11 +58,14 @@ async function createLegacy() {
   }
 }
 async function extractNode() {
-  const target_node = archive+'/'+config.node.osx
+  const target_name = config.node.osx
+  const target_node = archive+'/'+target_name
   const target_node_src = target_node+'.'+config.node.ext
   await task('extract node archive', async ({setStatus})=> {
-    await extract( target_node_src, legacy, { force: true })
-    setStatus(legacy+'/'+config.node.osx)
+    await extract( target_node_src, legacy+'/temp', { force: true })
+    await fsx.move(legacy+'/temp/'+target_name, legacy+'/'+target_name, { overwrite: true })
+    await fsx.remove(legacy+'/temp')
+    setStatus(legacy+'/'+target_name)
   })
 }
 async function legalizeNode() {
