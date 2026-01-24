@@ -142,4 +142,5 @@ async function legalizeApp() {
     setStatus(app.name)
   })
 }
+
 export { prepareOutput, updateContent, legalizeApp }

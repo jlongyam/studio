@@ -17,7 +17,7 @@ Commands:
   build               Build current folder using nw
   open                Open current build app
   uninstall           Uninstall studio/legacy 
-  clean [name]        Delete all nw app with specific name 
+  clean [name] [id]   Delete all nw app with specific name and or ID
 `
 const args = process.argv.slice(2)
 
@@ -101,6 +101,10 @@ else if (args[0] === 'uninstall') {
 else if (args[0] === 'clean') {
   const clean = await import('../src/legacy/clean.js')
   let name = args[1]
+  let id = args[2]
   await clean.appName(name)
+  if(id) {
+    await clean.appPreference(id)
+  }
 }
 else console.log(help)
