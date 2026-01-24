@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 ## [1.1.0] - 2026-01-24
 
 ### Added
+- feat: add legacy help menu, pack command
+
+## [1.1.0] - 2026-01-24
+
+### Added
 - feat: add legacy help menu
 - feat: add pack command
 
