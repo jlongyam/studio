@@ -97,7 +97,7 @@ else if (args[0] === 'build') {
 }
 else if(args[0] === 'open') {
   if(args[1]) {
-    execSync(`open ${current.root}/build/${args[1]}/${args[1]}.app -W`)
+    execSync(`open ${current.location}/build/${args[1]}/${args[1]}.app -W`)
   } else {
     console.log(help)
   }
