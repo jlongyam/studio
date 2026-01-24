@@ -5,8 +5,9 @@ import plist from 'simple-plist'
 import { execSync } from 'node:child_process'
 import * as config from './config.js'
 import { readStringsFile, writeStringsFile } from './util.js'
+import * as current from '../current.js'
 
-const cwd = process.env.PWD // should root of project
+const cwd = current.root
 const app_location = `${config.dir.legacy}/${config.nw.sdk.osx}`
 
 async function prepareOutput(output = 'build') {  

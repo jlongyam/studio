@@ -3,21 +3,23 @@
 import { exec, execSync } from 'node:child_process'
 import task from 'tasuku'
 import * as config from '../src/legacy/config.js'
+import * as current from '../src/current.js'
 
 const help = `
 Usage: studio [command]
 
 Commands:
   install             Install legacy node and nw
-  sample              Create nw-sample folder in current folder
-  sync                Synchronize current folder to app.nw
+  template            Create nw-sample template folder in current location
+  sync [folder]       Synchronize current or specific folder app.nw
   run                 Run current folder using nw-sdk
   node <command>      Redirect command to node
   npm <command>       Redirect command to npm
   build               Build current folder using nw
-  open                Open current build app
-  uninstall           Uninstall studio/legacy 
+  open <name>         Open current build app name
   clean [name] [id]   Delete all nw app with specific name and or ID
+  pack <target>       Create DMG installer for target.app
+  uninstall           Uninstall studio/legacy 
 `
 const args = process.argv.slice(2)
 
@@ -48,7 +50,7 @@ else if (args[0] === 'install') {
     setStatus('v0.14.7-SDK')
   })
 }
-else if (args[0] === 'sample') {
+else if (args[0] === 'template') {
   task('Create NW Sample', async ({ setStatus }) => {
     const sample = await import('../src/legacy/sample.js')
     sample.nwBoilerplate()
@@ -57,7 +59,13 @@ else if (args[0] === 'sample') {
 }
 else if (args[0] === 'sync') {
   const sync = await import('../src/legacy/sync.js')
-  await sync.currentFolder()
+  if(args[1]) {
+    await sync.currentFolder({
+      source: args[1]
+    })
+  } else {
+    await sync.currentFolder()
+  }
 }
 else if (args[0] === 'run') {
   if (args[0] === 'run') {
@@ -88,15 +96,11 @@ else if (args[0] === 'build') {
   await build.legalizeApp()
 }
 else if(args[0] === 'open') {
-  let name = args[1]
-  execSync(`open ${process.env.PWD}/build/${name}/${name}.app -W`)
-}
-else if (args[0] === 'uninstall') {
-  await task('Uninstalling legacy SDK', async ({ setStatus }) => {
-    const uninstall = await import('../src/legacy/uninstall.js')
-    await uninstall.cleanDirectory('legacy')
-    setStatus('legacy')
-  })
+  if(args[1]) {
+    execSync(`open ${current.root}/build/${args[1]}/${args[1]}.app -W`)
+  } else {
+    console.log(help)
+  }
 }
 else if (args[0] === 'clean') {
   const clean = await import('../src/legacy/clean.js')
@@ -106,5 +110,16 @@ else if (args[0] === 'clean') {
   if(id) {
     await clean.appPreference(id)
   }
+}
+else if (args[0] === 'pack') {
+  const pack = await import('../src/legacy/pack.js')
+  await pack.toDMG()
+}
+else if (args[0] === 'uninstall') {
+  await task('Uninstalling legacy SDK', async ({ setStatus }) => {
+    const uninstall = await import('../src/legacy/uninstall.js')
+    await uninstall.cleanDirectory('legacy')
+    setStatus('legacy')
+  })
 }
 else console.log(help)
