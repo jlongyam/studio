@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { exec } from 'node:child_process'
+import { exec, execSync } from 'node:child_process'
 import task from 'tasuku'
 import * as config from '../src/legacy/config.js'
 
@@ -12,9 +12,10 @@ Commands:
   sample              Create nw-sample folder in current folder
   sync                Synchronize current folder to app.nw
   run                 Run current folder using nw-sdk
-  build               Build current folder using nw
   node <command>      Redirect command to node
   npm <command>       Redirect command to npm
+  build               Build current folder using nw
+  open                Open current build app
   uninstall           Uninstall studio/legacy 
   clean [name]        Delete all nw app with specific name 
 `
@@ -35,6 +36,11 @@ else if (args[0] === 'install') {
   })
   await task('Installing NW', async ({ setStatus }) => {
     const install_nw = await import('../src/legacy/install-nw.js')
+    await install_nw.downloadNW({flavour: 'default'})
+    await install_nw.extractNW({flavour: 'default'})
+    await install_nw.legalizeNW({flavour: 'default'})
+    await install_nw.nwDone()
+    setStatus('v0.14.7')
     await install_nw.downloadNW()
     await install_nw.extractNW()
     await install_nw.legalizeNW()
@@ -75,6 +81,16 @@ else if (args[0] === 'npm') {
     console.log(stdout.trim())
   })
 }
+else if (args[0] === 'build') {
+  const build = await import('../src/legacy/build.js')
+  await build.prepareOutput()
+  await build.updateContent()
+  await build.legalizeApp()
+}
+else if(args[0] === 'open') {
+  let name = args[1]
+  execSync(`open ${process.env.PWD}/build/${name}/${name}.app -W`)
+}
 else if (args[0] === 'uninstall') {
   await task('Uninstalling legacy SDK', async ({ setStatus }) => {
     const uninstall = await import('../src/legacy/uninstall.js')
@@ -83,8 +99,8 @@ else if (args[0] === 'uninstall') {
   })
 }
 else if (args[0] === 'clean') {
-  const name = args[1].trim()
   const clean = await import('../src/legacy/clean.js')
+  let name = args[1]
   await clean.appName(name)
 }
 else console.log(help)

@@ -7,7 +7,7 @@ const __dirname = dirname(__filename);
 
 function nwBoilerplate() {
   let pwd = process.env.PWD
-  fsx.copySync(__dirname+'/boilerplate', pwd+'/nw_sample')
+  fsx.copySync(__dirname+'/boilerplate', pwd+'/nw-sample')
 }
 
 export { nwBoilerplate }

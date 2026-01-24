@@ -1,8 +1,10 @@
 {
-  "name": "nw_sample",
+  "name": "nw-sample",
   "product_string": "NW Sample",
+  "product_id": "com.example.nwsample",
   "main": "index.html",
   "window": {
-    "icon": "./AppIcon.icns"
-  }
+    "icon": "AppIcon.icns"
+  },
+  "chromium-args": "--icon=favicon.ico"
 }
