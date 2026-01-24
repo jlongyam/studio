@@ -16,8 +16,7 @@
   "main": "./main.js",
   "type": "module",
   "scripts": {
-    "es5": "babel src -d lib",
-    "pack": ""
+    "es5": "babel src -d lib"
   },
   "bin": {
     "studio": "./bin/studio.js"
