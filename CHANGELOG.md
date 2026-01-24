@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-01-24
+
+### Added
+- feat: add legacy help menu
+- feat: add pack command
+
+### Fixed
+- fix: path resolve create-dmg
+- fix correct path issue
+- fix change open command to use current.location
+- fix: switch cwd to current.location
+
+### Changed
+- 1.0.1
+- docs: remove development warning and CLI docs
+
 ## [1.0.0] - 2026-01-24
 
 ### Added
