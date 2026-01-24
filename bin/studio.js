@@ -112,8 +112,12 @@ else if (args[0] === 'clean') {
   }
 }
 else if (args[0] === 'pack') {
-  const pack = await import('../src/legacy/pack.js')
-  await pack.toDMG()
+  if(args[1]) {
+    const pack = await import('../src/legacy/pack.js')
+    await pack.toDMG(args[1])
+  } else {
+    console.log(help)
+  }
 }
 else if (args[0] === 'uninstall') {
   await task('Uninstalling legacy SDK', async ({ setStatus }) => {
