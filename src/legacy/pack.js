@@ -10,8 +10,8 @@ const app_package = fsx.readFileSync(`${app_nw}/package.json`)
 const app = JSON.parse(app_package)
 
 async function toDMG() {
-  const app_target = `${current.root}/build/${app.name}/${app.name}.app`
-  const destination = `${current.root}/build`
+  const app_target = `${current.location}/build/${app.name}/${app.name}.app`
+  const destination = `${current.location}/build`
   await task('Create DMG installer', async ({setStatus})=> {
     await $`npx create-dmg ${app_target} ${destination} --overwrite --no-version-in-filename --no-code-sign --dmg-title="${app.product_string}"`
     setStatus(`${app.name}.app`)
