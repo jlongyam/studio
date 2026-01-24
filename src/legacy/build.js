@@ -7,7 +7,7 @@ import * as config from './config.js'
 import { readStringsFile, writeStringsFile } from './util.js'
 import * as current from '../current.js'
 
-const cwd = current.root
+const cwd = current.location
 const app_location = `${config.dir.legacy}/${config.nw.sdk.osx}`
 
 async function prepareOutput(output = 'build') {  
