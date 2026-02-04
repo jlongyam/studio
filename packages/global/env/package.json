@@ -23,7 +23,7 @@
   "main": "dist/env.min.js",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
     "test": "node test/env.test.mjs"

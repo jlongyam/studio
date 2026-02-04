@@ -60,9 +60,6 @@
     "test",
     "LICENSE"
   ],
-   "engines": {
-    "node": "^v5.12.0"
-  },
   "publishConfig": {
     "access": "public"
   }
