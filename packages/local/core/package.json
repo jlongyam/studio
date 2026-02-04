@@ -16,8 +16,9 @@
     "index.js"
   ],
   "dependencies": {
+    "@stdlib/stdlib": "^0.3.2",
     "ansi-colors": "^4.1.3",
-    "@stdlib/stdlib": "^0.3.2"
+    "legacy": "file:../../global/legacy"
   },
   "devDependencies": {
     "@rollup/plugin-babel": "^6.1.0",

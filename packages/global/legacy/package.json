@@ -1,0 +1,29 @@
+{
+  "name": "@jlongyam/legacy",
+  "version": "1.0.0",
+  "description": "Legacy SDK",
+  "keywords": ["legacy", "sdk", "nw"],
+  "author": "jlongyam",
+  "license": "MIT",
+  "homepage": "https://github.com/jlongyam/studio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlongyam/studio.git",
+    "directory": "packages/global/legacy"
+  },
+  "engines": {
+    "node": "25.2.1",
+    "npm": "11.6.2"
+  },
+  "main": "main.js",
+  "type": "module",
+  "bin": {
+    "legacy": "./scripts/cli.js"
+  },
+  "dependencies": {
+    "tasuku": "^2.0.5"
+  },
+  "scripts": {
+    "start": "node ."
+  }
+}
