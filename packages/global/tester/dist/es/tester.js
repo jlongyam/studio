@@ -4,7 +4,7 @@ var result = {
 };
 
 function testGroup(name, fn) {
-  console.group(`Test:\t${name}\n`), fn(), console.groupEnd();
+  console.log(`\nTest:\t${name}\n`), fn();
 }
 
 function testIt(pass) {

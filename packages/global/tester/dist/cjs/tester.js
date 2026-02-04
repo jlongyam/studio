@@ -4,7 +4,7 @@ var result = {
 };
 
 exports.group = function(name, fn) {
-  console.group(`Test:\t${name}\n`), fn(), console.groupEnd();
+  console.log(`\nTest:\t${name}\n`), fn();
 }, exports.it = function(pass) {
   var i = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "";
   pass ? (console.info(`√ ${i} : pass`), result.pass++) : (console.info(function(s) {

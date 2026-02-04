@@ -40,6 +40,7 @@
     "package:tester:build:minify": "npm run build:minify -w=@jlongyam/tester",
     "package:tester:check:iife": "node ./scripts/es-check.js ./packages/global/tester/dist/iife/tester.js ./packages/global/tester/dist/iife/assert.js",
     "package:tester:check:cjs": "node ./scripts/es-check.js ./packages/global/tester/dist/cjs/tester.js ./packages/global/tester/dist/cjs/assert.js",
+    "package:tester:server": "npm run server -w=@jlongyam/tester",
     "clean": "npm prune && npm i && clean-modules && node ./scripts/clean.cjs"
   }
 }

@@ -3,9 +3,8 @@ let result = {
   fail: 0
 }
 function testGroup(name, fn) {
-  console.group(`Test:\t${name}\n`);
+  console.log(`\nTest:\t${name}\n`);
   fn()
-  console.groupEnd()
 }
 function testIt(pass, i = '') {
   let msg = {
