@@ -1,0 +1,61 @@
+{
+  "name": "@jlongyam/tester",
+  "version": "1.0.0",
+  "description": "Tool for test",
+  "keywords": [
+    "test",
+    "tool"
+  ],
+  "author": "jlongyam",
+  "license": "MIT",
+  "homepage": "https://github.com/jlongyam/studio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlongyam/studio.git",
+    "directory": "packages/global/terser"
+  },
+  "main": "./dist/cjs/tester.js",
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.0",
+    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "es-toolkit": "^1.44.0",
+    "http-server": "^14.1.1",
+    "rollup": "^4.57.1",
+    "rollup-plugin-polyfill-node": "^0.13.0"
+  },
+  "scripts": {
+    "base": "node ./test/base.test.mjs",
+    "assert": "node ./test/assert.test.mjs",
+    "both": "node ./test/both.test.mjs",
+    "test": "npm run base && npm run assert && npm run both",
+    "build": "rollup -c",
+    "build:minify": "rollup -c --config-min",
+    "server": "http-server -c-1 --no-dotfiles",
+    "publish": "npm login && npm publish"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/es/tester.js",
+      "require": "./dist/cjs/tester.js"
+    },
+    "./assert": {
+      "import": "./dist/es/assert.js",
+      "require": "./dist/cjs/assert.js"
+    }
+  },
+  "browser": {
+    ".": "./dist/iife/tester.js",
+    "./assert": "./dist/iife/tester.js"
+  },
+  "files": [
+    "./README.md",
+    "dist",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

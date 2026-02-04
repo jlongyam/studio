@@ -1,0 +1,12 @@
+{
+  "name": "@jlongyam/ansi",
+  "version": "1.0.0",
+  "description": "ANSI escape library",
+  "main": "index.js",
+  "keywords": ["ansi"],
+  "author": "jlongyam",
+  "license": "ISC",
+  "scripts": {
+    "start": "node ."
+  }
+}

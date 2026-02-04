@@ -1,3 +1,4 @@
+REQUIRE task
 "create-dmg": "^8.0.0",
     "download": "^8.0.0",
    
