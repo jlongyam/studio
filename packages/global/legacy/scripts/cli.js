@@ -2,8 +2,8 @@
 
 import { exec, execSync } from 'node:child_process'
 import task from 'tasuku'
-import * as config from '../src/legacy/config.js'
-import * as current from '../src/current.js'
+import * as config from '../../../../src/legacy/config.js'
+import * as current from '../../../../src/current.js'
 
 const help = `
 Usage: studio [option]
@@ -36,14 +36,14 @@ if (args[0] === '-h') {
   console.log(help)
 }
 else if (args[0] === '-v') {
-  const pkg = await import('../package.json', { with: { type: 'json' } })
+  const pkg = await import('../../../../package.json', { with: { type: 'json' } })
   console.clear()
   console.log(pkg.default.version)
 }
 else if (args[0] === 'legacy') {
   if (args[1] === 'install') {
     await task('Installing Node', async ({ setStatus }) => {
-      const install = await import('../src/legacy/install.js')
+      const install = await import('../../../../src/legacy/install.js')
       await install.createStudio()
       await install.createArchive()
       await install.downloadNode()
@@ -54,7 +54,7 @@ else if (args[0] === 'legacy') {
       setStatus('v5.12.0')
     })
     await task('Installing NW', async ({ setStatus }) => {
-      const install_nw = await import('../src/legacy/install-nw.js')
+      const install_nw = await import('../../../../src/legacy/install-nw.js')
       await install_nw.downloadNW({ flavour: 'default' })
       await install_nw.extractNW({ flavour: 'default' })
       await install_nw.legalizeNW({ flavour: 'default' })
@@ -69,13 +69,13 @@ else if (args[0] === 'legacy') {
   }
   else if (args[1] === 'template') {
     task('Create NW Sample', async ({ setStatus }) => {
-      const sample = await import('../src/legacy/sample.js')
+      const sample = await import('../../../../src/legacy/sample.js')
       sample.nwBoilerplate()
       setStatus('nw-sample')
     })
   }
   else if (args[1] === 'sync') {
-    const sync = await import('../src/legacy/sync.js')
+    const sync = await import('../../../../src/legacy/sync.js')
     if (args[2]) {
       await sync.currentFolder({
         source: args[2]
@@ -85,7 +85,7 @@ else if (args[0] === 'legacy') {
     }
   }
   else if (args[1] === 'run') {
-    const run = await import('../src/legacy/run.js')
+    const run = await import('../../../../src/legacy/run.js')
     await run.nwSDK()
   }
   else if (args[1] === 'node') {
@@ -105,7 +105,7 @@ else if (args[0] === 'legacy') {
     })
   }
   else if (args[1] === 'build') {
-    const build = await import('../src/legacy/build.js')
+    const build = await import('../../../../src/legacy/build.js')
     await build.prepareOutput()
     await build.updateContent()
     await build.legalizeApp()
@@ -119,7 +119,7 @@ else if (args[0] === 'legacy') {
     }
   }
   else if (args[1] === 'clean') {
-    const clean = await import('../src/legacy/clean.js')
+    const clean = await import('../../../../src/legacy/clean.js')
     let name = args[2]
     let id = args[3]
     await clean.appName(name)
@@ -129,7 +129,7 @@ else if (args[0] === 'legacy') {
   }
   else if (args[1] === 'pack') {
     if (args[2]) {
-      const pack = await import('../src/legacy/pack.js')
+      const pack = await import('../../../../src/legacy/pack.js')
       await pack.toDMG(args[2])
     } else {
       console.clear()
@@ -138,7 +138,7 @@ else if (args[0] === 'legacy') {
   }
   else if (args[1] === 'uninstall') {
     await task('Uninstalling legacy SDK', async ({ setStatus }) => {
-      const uninstall = await import('../src/legacy/uninstall.js')
+      const uninstall = await import('../../../../src/legacy/uninstall.js')
       await uninstall.cleanDirectory('legacy')
       setStatus('legacy')
     })

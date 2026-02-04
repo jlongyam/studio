@@ -2,7 +2,11 @@
   "name": "@jlongyam/legacy",
   "version": "1.0.0",
   "description": "Legacy SDK",
-  "keywords": ["legacy", "sdk", "nw"],
+  "keywords": [
+    "legacy",
+    "sdk",
+    "nw"
+  ],
   "author": "jlongyam",
   "license": "MIT",
   "homepage": "https://github.com/jlongyam/studio",
