@@ -1,3 +1,3 @@
 # Tester
 
-See __test__ page for usage.
+See `test/` page for usage.

@@ -27,13 +27,18 @@
     "rollup-plugin-polyfill-node": "^0.13.0"
   },
   "scripts": {
-    "base": "node ./test/base.test.mjs",
-    "assert": "node ./test/assert.test.mjs",
-    "both": "node ./test/both.test.mjs",
-    "test": "npm run base && npm run assert && npm run both",
+    "test:mjs:base": "node ./test/base.test.mjs",
+    "test:mjs:assert": "node ./test/assert.test.mjs",
+    "test:mjs:both": "node ./test/both.test.mjs",
+    "test:mjs": "npm run test:mjs:base && npm run test:mjs:assert && npm run test:mjs:both",
     "build": "rollup -c",
     "build:minify": "rollup -c --config-min",
+    "test:cjs:base": "node ./test/base.test.js",
+    "test:cjs:assert": "node ./test/assert.test.js",
+    "test:cjs:both": "node ./test/both.test.js",
+    "test:cjs": "npm run test:cjs:base && npm run test:cjs:assert && npm run test:cjs:both",
     "server": "http-server -c-1 --no-dotfiles",
+    "test": "npm run test:mjs && npm run test:cjs",
     "publish": "npm login && npm publish"
   },
   "exports": {
@@ -53,8 +58,12 @@
   "files": [
     "./README.md",
     "dist",
+    "test",
     "LICENSE"
   ],
+   "engines": {
+    "node": "^v5.12.0"
+  },
   "publishConfig": {
     "access": "public"
   }
