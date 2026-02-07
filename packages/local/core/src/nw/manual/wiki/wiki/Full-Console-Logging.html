@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Full-Console-Logging.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>The following steps will allow viewing console logging from the full application, in both production and development environments. This will show console logs, JavaScript warnings/errors, and Chromium console messages from every window opened by NW.js as well as any scripts running in the Node context.</p><ol>
+<li><p>Install Node.js and ensure <code>node</code> is in your path.</p>
+</li><li><p>Install the NW.js SDK and ensure <code>nw</code> is in your path.</p>
+</li><li><p>Add the following to the package.json of the NW.js application:</p>
+<pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>&quot;chromium-args&quot;: &quot;--enable-logging=stderr&quot;,
+</code></pre>">"chromium-args": "--enable-logging=stderr",
+</code></pre>
+</li><li><p>Create the following <code>debug.js</code> script anywhere:</p>
+</li></ol><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>// Run nwjs
+const childProcess = require(&quot;child_process&quot;);
+const proc = childProcess.exec(&quot;nw .&quot;);
+
+// Keeps this wrapper process running
+let keepAlive;
+let quit = false;
+function keepAliveCallback() {
+  if(!quit) keepAlive = setTimeout(keepAliveCallback, 1000);
+}
+keepAliveCallback();
+
+// Relay stdout and stderr from process until it exits
+proc.stdout.on(&quot;data&quot;, function(data) {
+  process.stdout.write(data);
+});
+proc.stderr.on(&quot;data&quot;, function(data) {
+  process.stderr.write(data);
+});
+proc.on(&quot;exit&quot;, function() {
+  quit = true;
+});
+</code></pre>">// Run nwjs
+const childProcess = require("child_process");
+const proc = childProcess.exec("nw .");
+
+// Keeps this wrapper process running
+let keepAlive;
+let quit = false;
+function keepAliveCallback() {
+  if(!quit) keepAlive = setTimeout(keepAliveCallback, 1000);
+}
+keepAliveCallback();
+
+// Relay stdout and stderr from process until it exits
+proc.stdout.on("data", function(data) {
+  process.stdout.write(data);
+});
+proc.stderr.on("data", function(data) {
+  process.stderr.write(data);
+});
+proc.on("exit", function() {
+  quit = true;
+});
+</code></pre><ol>
+<li>Run <code>node /path/to/debug.js</code> from within the directory where package.json is located.</li></ol>
+
+
+</body>
+</html>

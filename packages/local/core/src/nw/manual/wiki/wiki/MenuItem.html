@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>MenuItem.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>MenuItem API requires node-webkit &gt;= 0.3.0</em></p><p><code>MenuItem</code> represents an item in a menu. A <code>MenuItem</code> can be a separator or a normal item which has label and icon. <code>MenuItem</code> is usually used with <code>Menu</code> together.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Load native UI library
+var gui = require('nw.gui');
+var item;
+
+// Create a separator
+item = new gui.MenuItem({ type: 'separator' });
+
+// Create a normal item with label and icon
+item = new gui.MenuItem({
+  type: &quot;normal&quot;, 
+  label: &quot;I'm a menu item&quot;,
+  icon: &quot;img/icon.png&quot;
+});
+
+// Or you can omit the 'type' field for normal items
+item = new gui.MenuItem({ label: 'Simple item' });
+
+// Bind a callback to item
+item = new gui.MenuItem({
+  label: &quot;Click me&quot;,
+  click: function() {
+    console.log(&quot;I'm clicked&quot;);
+  },
+  key: &quot;s&quot;,
+  modifiers: &quot;ctrl-alt&quot;,
+});
+
+// You can have submenu!
+var submenu = new gui.Menu();
+submenu.append(new gui.MenuItem({ label: 'Item 1' }));
+submenu.append(new gui.MenuItem({ label: 'Item 2' }));
+submenu.append(new gui.MenuItem({ label: 'Item 3' }));
+item.submenu = submenu;
+
+// And everything can be changed at runtime
+item.label = 'New label';
+item.click = function() { console.log('New click callback'); };
+</code></pre>">// Load native UI library
+var gui = require('nw.gui');
+var item;
+
+// Create a separator
+item = new gui.MenuItem({ type: 'separator' });
+
+// Create a normal item with label and icon
+item = new gui.MenuItem({
+  type: "normal", 
+  label: "I'm a menu item",
+  icon: "img/icon.png"
+});
+
+// Or you can omit the 'type' field for normal items
+item = new gui.MenuItem({ label: 'Simple item' });
+
+// Bind a callback to item
+item = new gui.MenuItem({
+  label: "Click me",
+  click: function() {
+    console.log("I'm clicked");
+  },
+  key: "s",
+  modifiers: "ctrl-alt",
+});
+
+// You can have submenu!
+var submenu = new gui.Menu();
+submenu.append(new gui.MenuItem({ label: 'Item 1' }));
+submenu.append(new gui.MenuItem({ label: 'Item 2' }));
+submenu.append(new gui.MenuItem({ label: 'Item 3' }));
+item.submenu = submenu;
+
+// And everything can be changed at runtime
+item.label = 'New label';
+item.click = function() { console.log('New click callback'); };
+</code></pre><h2 id="reference"><a name="reference" href="#reference"></a>Reference</h2><h3 id="new-menuitem(option)"><a name="new-menuitem(option)" href="#new-menuitem(option)"></a>new MenuItem(option)</h3><p>Create new <code>MenuItem</code>, <code>option</code> is an object contains initial settings for the <code>MenuItem</code>. <code>option</code> can have following fields: <code>label</code>, <code>icon</code>, <code>tooltip</code>, <code>type</code>, <code>click</code>, <code>checked</code>, <code>enabled</code>, <code>submenu</code>, <code>key</code> and <code>modifiers</code>.</p><p>Every field has its own property in the <code>MenuItem</code>, see documentation of each property for details.</p><h3 id="menuitem.type"><a name="menuitem.type" href="#menuitem.type"></a>MenuItem.type</h3><p><strong>Get</strong> the <code>type</code> of a <code>MenuItem</code>, it can be <code>separator</code>, <code>checkbox</code> and <code>normal</code> for now.</p><p>A <code>MenuItem</code>‘s type can be set only when you create it, it cannot be changed at runtime.</p><h3 id="menuitem.label"><a name="menuitem.label" href="#menuitem.label"></a>MenuItem.label</h3><p><strong>Get</strong> or <strong>Set</strong> the <code>label</code> of a <code>MenuItem</code>, it can only be plain text for now.</p><h3 id="menuitem.icon"><a name="menuitem.icon" href="#menuitem.icon"></a>MenuItem.icon</h3><p><strong>Get</strong> or <strong>Set</strong> the <code>icon</code> of a <code>MenuItem</code>, it must a path to your icon file. It can be a relative path which points to an icon in your app, or an absolute path pointing to a file in user’s system.</p><p>It has no effect on setting <code>icon</code> of a <code>separator</code> item.</p><h3 id="menuitem.iconistemplate"><a name="menuitem.iconistemplate" href="#menuitem.iconistemplate"></a>MenuItem.iconIsTemplate</h3><p><em>since v0.11.3</em></p><p>Mac OS X Only. <strong>Get</strong> or <strong>Set</strong> whether <code>icon</code> image is treated as “template” (<code>true</code> by default). When the property is set to <code>true</code> the image is treated as “template” and the system automatically ensures proper styling according to the various states of the status item (e.g. dark menu, light menu, etc.). Template images should consist only of black and clear colours and can use the alpha channel in the image to adjust the opacity of black content. It has no effects on Linux and Windows. For further information see <a href="https://github.com/rogerwang/node-webkit/pull/2775">#2775</a>.</p><h3 id="menuitem.tooltip"><a name="menuitem.tooltip" href="#menuitem.tooltip"></a>MenuItem.tooltip</h3><p><strong>Get</strong> or <strong>Set</strong> the <code>tooltip</code> of a <code>MenuItem</code>, it can only be plain text. A <code>tooltip</code> is short string that describes the menu item, it will show when you hover your mouse on the item.</p><h3 id="menuitem.checked"><a name="menuitem.checked" href="#menuitem.checked"></a>MenuItem.checked</h3><p><strong>Get</strong> or <strong>Set</strong> whether the <code>MenuItem</code> is <code>checked</code>. Usually if a <code>MenuItem</code> is checked, there will be a mark on the left side of it. It’s used mostly to indicate whether an option is on.</p><h3 id="menuitem.enabled"><a name="menuitem.enabled" href="#menuitem.enabled"></a>MenuItem.enabled</h3><p><strong>Get</strong> or <strong>Set</strong> whether the <code>MenuItem</code> is <code>enabled</code>. An disabled <code>MenuItem</code> will be greyed out and you will not be able to click on it.</p><h3 id="menuitem.submenu"><a name="menuitem.submenu" href="#menuitem.submenu"></a>MenuItem.submenu</h3><p><strong>Get</strong> or <strong>Set</strong> the <code>submenu</code> of a <code>MenuItem</code>, the <code>submenu</code> must be a <code>Menu</code> object. Developers had better set <code>submenu</code> in the <code>option</code> when creating the <code>MenuItem</code>, changing it at runtime is slow on some platforms.</p><h3 id="menuitem.click"><a name="menuitem.click" href="#menuitem.click"></a>MenuItem.click</h3><p><strong>Get</strong> or <strong>Set</strong> the <code>click</code> callback of a <code>MenuItem</code>, the <code>click</code> must be a valid function, it will be called when users activate the item.</p><h3 id="menuitem.key"><a name="menuitem.key" href="#menuitem.key"></a>MenuItem.key</h3><p><em>since v0.10.0-rc1</em><br>A single character string to specify the shortcut key for the menu item.</p><p>A valid key can be any digit (0-9), alphabet (a-z) and other useful keys, such as <code>[</code>, <code>'</code>, <code>,</code>, <code>Tab</code>, <code>Esc</code>, <code>Down</code> etc.</p><p>On Mac OS X, you can use followings special keys as shortcut key:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>key = String.fromCharCode(28); // arrow left
+key = String.fromCharCode(29); // arrow right
+key = String.fromCharCode(30); // arrow up
+key = String.fromCharCode(31); // arrow down
+key = String.fromCharCode(27); // escape
+key = String.fromCharCode(11); // Page up
+key = String.fromCharCode(12); // Page down
+</code></pre>">key = String.fromCharCode(28); // arrow left
+key = String.fromCharCode(29); // arrow right
+key = String.fromCharCode(30); // arrow up
+key = String.fromCharCode(31); // arrow down
+key = String.fromCharCode(27); // escape
+key = String.fromCharCode(11); // Page up
+key = String.fromCharCode(12); // Page down
+</code></pre><p>For full list of special keys supported on Mac, see <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSMenuItem_Class/#//apple_ref/occ/instp/NSMenuItem/keyEquivalent">NSMenuItem.keyEquivalent</a> and <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSEvent_Class/index.html#//apple_ref/doc/constant_group/Function_Key_Unicodes">NSEvent: Function-Key Unicodes</a>.</p><p>Since 0.13.0, you can use key names defined in <a href="http://www.w3.org/TR/DOM-Level-3-Events-key/">W3C DOM Level 3 KeyboardEvent Key Values</a>, such as <code>KeyA</code> (same as <code>A</code>), <code>Escape</code> (same as <code>Esc</code>), <code>F1</code>, <code>ArrowDown</code> (same as <code>Down</code>), <code>MediaPlayPause</code> etc.</p><h3 id="menuitem.modifiers"><a name="menuitem.modifiers" href="#menuitem.modifiers"></a>MenuItem.modifiers</h3><p><em>since v0.10.0-rc1</em><br>A string to specify the modifier keys for the shortcut of the menu item. e.g. <code>"cmd+shift"</code>. It should be the concatenation of the following strings: <code>cmd</code>, <code>super</code>, <code>shift</code>, <code>ctrl</code>, <code>alt</code>.</p><p>For NW.js older than 0.13.0, <code>cmd</code> is only valid for Mac OS X which represents <kbd>⌘</kbd>. <code>super</code> is only valid for Windows, which represents <kbd>Windows</kbd>.</p><p>Since 0.13.0, <code>cmd</code> represents different keys on all platforms: <kbd>Windows</kbd> for Windows and Linux, <kbd>⌘</kbd> for Mac OS X. <code>super</code> and <code>command</code> are aliases of <code>cmd</code>.</p><h2 id="events"><a name="events" href="#events"></a>Events</h2><p>Following events can be listened by using <code>MenuItem.on()</code> function, for more information on how to receive events, you can visit <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>.</p><h3 id="click"><a name="click" href="#click"></a>click</h3><p>Emitted when user activates the menu item.</p><h2 id="see-also"><a name="see-also" href="#see-also"></a>See Also</h2><ul>
+<li><a href="Menu.html">Menu</a></li></ul>
+
+
+</body>
+</html>

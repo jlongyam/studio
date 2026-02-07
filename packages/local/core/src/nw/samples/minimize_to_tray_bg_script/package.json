@@ -1,0 +1,9 @@
+{
+	"name": "nw-test",
+	"node-main": "node-main.js",
+	"main": "main.js",
+	"bg-script": "bg-script.js",
+	"window": {
+	  "position": "center"
+	}
+}

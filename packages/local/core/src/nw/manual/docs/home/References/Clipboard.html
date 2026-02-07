@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Clipboard</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="clipboard"><a name="clipboard" href="#clipboard"></a>Clipboard</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#synopsis" html="Synopsis">Synopsis</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#clipboard.get()" html="Clipboard.get()">Clipboard.get()</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#clip.set(data,-[type,-[raw]])" html="clip.set(data, [type, [raw]])">clip.set(data, [type, [raw]])</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#clip.set(clipboarddata)" html="clip.set(clipboardData)">clip.set(clipboardData)</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#clip.set(clipboarddatalist)" html="clip.set(clipboardDataList)">clip.set(clipboardDataList)</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#clip.get([type,-[raw]])" html="clip.get([type, [raw]])">clip.get([type, [raw]])</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#clip.get(clipboarddata)" html="clip.get(clipboardData)">clip.get(clipboardData)</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#clip.get(clipboarddatalist)" html="clip.get(clipboardDataList)">clip.get(clipboardDataList)</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#clip.readavailabletypes()" html="clip.readAvailableTypes()">clip.readAvailableTypes()</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+<li><span class="html">
+<a href="#clip.clear()" html="clip.clear()">clip.clear()</a>
+</span>
+<!--span class="number">
+9
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p><code>Clipboard</code> is an abstraction of clipboard for Windows, Linux and Mac.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre class="javascript hljs"><span class="hljs-comment">// get the system clipboard</span>
+<span class="hljs-keyword">var</span> clipboard = nw.Clipboard.get();
+
+<span class="hljs-comment">// Read from clipboard</span>
+<span class="hljs-keyword">var</span> text = clipboard.get(<span class="hljs-string">'text'</span>);
+<span class="hljs-built_in">console</span>.log(text);
+
+<span class="hljs-comment">// Or write something</span>
+clipboard.set(<span class="hljs-string">'I love NW.js :)'</span>, <span class="hljs-string">'text'</span>);
+
+<span class="hljs-comment">// And clear it!</span>
+clipboard.clear();
+</pre><h2 id="clipboard.get()"><a name="clipboard.get()" href="#clipboard.get()"></a>Clipboard.get()</h2><ul>
+<li>Returns <code>{Clipboard}</code> the clipboard object</li></ul><p>!!! note<br>    The Selection Clipboard in X11 is not supported.</p><h2 id="clip.set(data,-[type,-[raw]])"><a name="clip.set(data,-[type,-[raw]])" href="#clip.set(data,-[type,-[raw]])"></a>clip.set(data, [type, [raw]])</h2><ul>
+<li><code>data</code> <code>{String}</code> the data to write to the clipboard</li><li><code>type</code> <code>{String}</code> <em>Optional</em> the type of the data. Support <code>text</code>, <code>png</code>, <code>jpeg</code>, <code>html</code> and <code>rtf</code>. By default, <code>type</code> is set to <code>"text"</code>.</li><li><code>raw</code>  <code>{Boolean}</code> <em>Optional</em> requiring raw image data. This option is only valid if type is <code>png</code> or <code>jpeg</code>. By default, <code>raw</code> is set to <code>false</code>.</li></ul><p>Write <code>data</code> of <code>type</code> to the clipboard. This method will clear the clipboard and replace with the given <code>data</code>. Hence another call to this method will overwrite with the new one. To write multiple types of data to clipboard simultaneously, you will need to use <a href="#clipsetclipboarddatalist">clip.set(clipboardDataList)</a> below.</p><p>!!! tip “Format of Image”<br>    Images read or written from clipboard can be either JPEG or PNG. When <code>raw</code> is not set or set to <code>false</code>, the data is expected to be a valid <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/data_URIs">data URI</a> encoded with Base64. When <code>raw</code> is set to <code>true</code>, the data is only the Base64 encoded image data not including the <code>data:&lt;mime-type&gt;;base64,</code> part.</p><h2 id="clip.set(clipboarddata)"><a name="clip.set(clipboarddata)" href="#clip.set(clipboarddata)"></a>clip.set(clipboardData)</h2><ul>
+<li><code>clipboardData</code> <code>{Object}</code> JSON object containing <code>data</code>, <code>type</code> and <code>raw</code> to be written to clipboard. See <a href="#clipsetdata-type-raw">clip.set(data, [type, [raw]])</a> for detailed arguments specification.</li></ul><h2 id="clip.set(clipboarddatalist)"><a name="clip.set(clipboarddatalist)" href="#clip.set(clipboarddatalist)"></a>clip.set(clipboardDataList)</h2><ul>
+<li><code>clipboardDataList</code> <code>{Array}</code> Array of <code>clipboardData</code> to be written to clipboard. See <a href="#clipgetclipboarddata">clip.set(clipboardData)</a> and <a href="#clipsetdata-type-raw">clip.set(data, [type, [raw]])</a> for detailed arguments specification.</li></ul><p>Multiple types of data can be written to clipboard simultaneously with this method.</p><p>Example: write an image and a <code>&lt;img&gt;</code> pointing to the image to the clipboard</p><pre class="javascript hljs"><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+<span class="hljs-keyword">var</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
+
+<span class="hljs-comment">// resolve path as absolute path in order to be used by other applications</span>
+<span class="hljs-keyword">var</span> pngPath = path.resolve(<span class="hljs-string">'nw.png'</span>);
+<span class="hljs-comment">// read the image from file system as base64 encoded string</span>
+<span class="hljs-keyword">var</span> data = fs.readFileSync(pngPath).toString(<span class="hljs-string">'base64'</span>);
+<span class="hljs-comment">// transform file path to URL</span>
+<span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;img src="file:///'</span> + <span class="hljs-built_in">encodeURI</span>(data.replace(<span class="hljs-regexp">/^\//</span>, <span class="hljs-string">''</span>)) + <span class="hljs-string">'"&gt;'</span>;
+
+<span class="hljs-keyword">var</span> clip = nw.Clipboard.get();
+<span class="hljs-comment">// write both PNG and HTML to clipboard</span>
+clip.set([
+  {type: <span class="hljs-string">'png'</span>, data: data, raw: <span class="hljs-literal">true</span>},
+  {type: <span class="hljs-string">'html'</span>, data: html}
+]);
+</pre><h2 id="clip.get([type,-[raw]])"><a name="clip.get([type,-[raw]])" href="#clip.get([type,-[raw]])"></a>clip.get([type, [raw]])</h2><ul>
+<li><code>type</code> <code>{String}</code> <em>Optional</em> the type of the data. Support <code>text</code>, <code>png</code>, <code>jpeg</code>, <code>html</code> and <code>rtf</code>. By default, <code>type</code> is set to <code>"text"</code>.</li><li><code>raw</code>  <code>{Boolean}</code> <em>Optional</em> requiring raw image data. This option is only valid if type is <code>png</code> or <code>jpeg</code>.</li><li>Returns <code>{String}</code> the data retrieved from the clipboard</li></ul><p>Get the data of <code>type</code> from clipboard.</p><h2 id="clip.get(clipboarddata)"><a name="clip.get(clipboarddata)" href="#clip.get(clipboarddata)"></a>clip.get(clipboardData)</h2><ul>
+<li><code>clipboardData</code> <code>{Object}</code> JSON object containing <code>type</code> and <code>raw</code> argument for reading data from clipboard. See <a href="#clipgettype-raw">clip.get([type, [raw]])</a> for detailed arguments specification.</li><li>Returns <code>{String}</code> the data retrieved from the clipboard</li></ul><h2 id="clip.get(clipboarddatalist)"><a name="clip.get(clipboarddatalist)" href="#clip.get(clipboarddatalist)"></a>clip.get(clipboardDataList)</h2><ul>
+<li><code>clipboardDataList</code> <code>{Array}</code> Array of <code>clipboardData</code> for reading data from clipboard. Multiple types of data can be read from clipboard simultaneously with this method. See <a href="#clipgetclipboarddata">clip.get(clipboardData)</a> and <a href="#clipgettype-raw">clip.get([type, [raw]])</a> for detailed arguments specification.</li><li>Returns <code>{Array}</code> array of <code>clipboardData</code> retrieved from the clipboard. Each item contains <code>type</code>, <code>data</code> and <code>raw</code> (optional) attributes.</li></ul><h2 id="clip.readavailabletypes()"><a name="clip.readavailabletypes()" href="#clip.readavailabletypes()"></a>clip.readAvailableTypes()</h2><ul>
+<li>Returns <code>{Array}</code> list of available types of data in clipboard currently. Each item is one of following types:<ul>
+<li><code>text</code>: plain text. Can be read by <code>clip.get('text')</code>.</li><li><code>html</code>: HTML text. Can be read by <code>clip.get('html')</code>.</li><li><code>rtf</code>: RTF (Rich Text Format). Can be read by <code>clip.get('rtf')</code>.</li><li><code>png</code>: PNG image. Can be read by <code>clip.get('png')</code>.</li><li><code>jpeg</code>: JPEG image. Can be read by <code>clip.get('jpeg')</code>.</li></ul>
+</li></ul><p>You can use the returned list as a suggestion to get the right data from clipboard.</p><h2 id="clip.clear()"><a name="clip.clear()" href="#clip.clear()"></a>clip.clear()</h2><p>Clear the clipboard.</p>
+
+
+</body>
+</html>

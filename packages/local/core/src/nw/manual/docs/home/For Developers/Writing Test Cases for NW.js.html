@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Writing Test Cases for NW.js</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="writing-test-cases-for-nw.js"><a name="writing-test-cases-for-nw.js" href="#writing-test-cases-for-nw.js"></a>Writing Test Cases for NW.js</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#test-framework" html="Test Framework">Test Framework</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#write-test-cases" html="Write Test Cases">Write Test Cases</a>
+</span>
+<!--span class="number">
+1
+</span-->
+<ul>
+<li><span class="html">
+<a href="#auto-test-case" html="Auto Test Case">Auto Test Case</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#remoting-test-case" html="Remoting Test Case">Remoting Test Case</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#run-nightly-test-cases" html="Run Nightly Test Cases">Run Nightly Test Cases</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="test-framework"><a name="test-framework" href="#test-framework"></a>Test Framework</h2><p>NW.js is using a tiny Python based framework only in three files. You can read the source code in <a href="https://github.com/nwjs/nw.js/tree/nw13/test"><code>test</code> directory</a>.</p><p>Each test case in NW.js is a runnable app, so that you can manually run the case without the framework.</p><p>In NW.js, there are two types of test cases: <code>auto</code> and <code>remoting</code>. See <a href="#write-test-cases">Write Test Cases</a> sections below to see the instructions.</p><p>To run the test cases, use the following command:</p><pre class="bash hljs">python <span class="hljs-built_in">test</span>/test.py -t <span class="hljs-number">80</span> auto
+python <span class="hljs-built_in">test</span>/test.py -t <span class="hljs-number">80</span> remoting
+</pre><h2 id="write-test-cases"><a name="write-test-cases" href="#write-test-cases"></a>Write Test Cases</h2><h3 id="auto-test-case"><a name="auto-test-case" href="#auto-test-case"></a>Auto Test Case</h3><p><strong>TODO</strong></p><h3 id="remoting-test-case"><a name="remoting-test-case" href="#remoting-test-case"></a>Remoting Test Case</h3><p>The remoting test cases are driven by ChromeDriver. Usually these test cases involves user interaction. See <a href="../For Users/Advanced/Test with ChromeDriver.html">Test with ChromeDriver</a> for the usage of ChromeDriver.</p><p>A remoting test case requires a <code>test.py</code> file in the root of the application folder.</p><p>Here is the template of <code>test.py</code> file:</p><pre class="python hljs"><span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">import</span> os
+
+<span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver
+<span class="hljs-keyword">from</span> selenium.webdriver.chrome.options <span class="hljs-keyword">import</span> Options
+chrome_options = Options()
+chrome_options.add_argument(<span class="hljs-string">"nwapp="</span> + os.path.dirname(os.path.abspath(__file__)))
+
+driver = webdriver.Chrome(executable_path=os.environ[<span class="hljs-string">'CHROMEDRIVER'</span>], chrome_options=chrome_options)
+time.sleep(<span class="hljs-number">1</span>)
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-keyword">print</span> driver.current_url
+    <span class="hljs-comment"># Put your test code here using `assert`</span>
+<span class="hljs-keyword">finally</span>:
+    driver.quit()
+</pre><p>The real case is an NW.js app. With ChromeDriver, you can simulate mouse clicks and inputs and then get the content of some DOM element. For example, with following code, when you click the button of “Click Me”, a new DOM element will be added to the document with content of “success”:</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">button</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"clickme"</span> <span class="hljs-attribute">onclick</span>=<span class="hljs-value">"success()"</span>&gt;</span>Click Me<span class="hljs-tag">&lt;/<span class="hljs-html">button</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">script</span>&gt;</span><span class="javascript">
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-html">success</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">var</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+    el.id = <span class="hljs-string">'result'</span>;
+    el.innerHTML = <span class="hljs-string">'success'</span>;
+    <span class="hljs-built_in">document</span>.body.appendChild(el);
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-html">script</span>&gt;</span>
+</pre><p>Then you can test it in <code>test.py</code> script:</p><pre class="python hljs">driver.implicitly_wait(<span class="hljs-number">10</span>) <span class="hljs-comment"># 10s timeout when finding an element</span>
+
+clickme = driver.find_element_by_id(<span class="hljs-string">'clickme'</span>)
+clickme.click() <span class="hljs-comment"># click the button</span>
+
+result = driver.find_element_by_id(<span class="hljs-string">'result'</span>)
+<span class="hljs-keyword">assert</span>(<span class="hljs-string">"success"</span> <span class="hljs-keyword">in</span> result.get_attribute(<span class="hljs-string">'innerHTML'</span>)) <span class="hljs-comment"># assert "success" is in the element</span>
+</pre><h2 id="run-nightly-test-cases"><a name="run-nightly-test-cases" href="#run-nightly-test-cases"></a>Run Nightly Test Cases</h2><p>Here are some preparations before testing.</p><p>1.Download NW SDK version.</p><p>2.Downloading selenium python library for NW with git.<br>The repo address and the git commit id is in <a href="https://github.com/nwjs/nw.js/blob/nw35/DEPS">manage dependencies</a>(replace nw35 with the proper branch name if you are not testing 0.35).<br>Look for ‘third_party/webdriver/pylib’ in deps part of that file. The form you will see is as follows:</p><pre class="javascript hljs"> <span class="hljs-string">'src/third_party/webdriver/pylib'</span>:
+    Var(<span class="hljs-string">'chromium_git'</span>) + <span class="hljs-string">'/external/selenium/py.git'</span> + <span class="hljs-string">'@'</span> + <span class="hljs-string">'expected commit id'</span>,
+</pre><p>Then look for the value of Var(e.g.<code>chromium_git</code>) in vars part of that file. After you clone the pylib repo, make sure the git tip commit id is the same as expected.</p><p>3.Set environment variables.<br>Set <code>CHROMEDRIVER</code> to the path of chromedriver.exe in NW SDK; set <code>PYTHONPATH</code> to the ‘py’ folder you cloned.</p><p>4.Install Python 2.7 if needed.</p><p>5.Clone nw source repo: <a href="https://github.com/nwjs/nw.js">nwjs</a>.</p><p>Then you can change directory to nw repo/test;<br>run <code>python test.py -d &lt;path to NW SDK&gt; -t 60 sanity</code></p>
+
+
+</body>
+</html>

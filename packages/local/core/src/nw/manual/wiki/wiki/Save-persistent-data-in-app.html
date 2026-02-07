@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Save-persistent-data-in-app.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>It’s very common to store persistent data in native apps, people usually do it by embedding external databases or manipulating plain text files. In NW.js, you have much better choices than that, you can use <code>Web SQL Database</code>, <code>embedded databases</code>, <code>Web Storage</code> or <code>Application Cache</code> without headaches of any extra dependencies.</p><h2 id="saving-a-plain-text-file-directly-to-disk"><a name="saving-a-plain-text-file-directly-to-disk" href="#saving-a-plain-text-file-directly-to-disk"></a>Saving a plain text file directly to disk</h2><p>NW.js provides <a href="https://github.com/nwjs/nw.js/wiki/App"><code>App.dataPath</code></a> which will give you a system dependent path where you can store application data. For example, on Windows this would typically be <code>C:\Users\username\AppData\Local\YourAppName</code>, on Linux it would be here <code>/home/username/.config/YourAppName</code>.</p><p><strong>Real World Example:</strong></p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>var nw = require('nw.gui'); // This line is only required for NW.js 0.12.x and below
+var fs = require('fs');
+var path = require('path');
+
+var helpers = {
+  file: 'my-settings-file.json',
+  filePath: path.join(nw.App.dataPath, this.file),
+  saveSettings: function (settings, callback) {
+    fs.writeFile(this.filePath, JSON.stringify(settings), function (err) {
+      if (err) {
+        console.info('There was an error attempting to save your settings.');
+        console.warn(err.message);
+        return;
+      } else if (typeof(callback) === 'function') {
+        callback();
+      }
+    });
+  },
+  loadSettings: function (callback) {
+    fs.readFile(this.filePath, function (err, data) {
+      if (err) {
+        console.info('There was an error attempting to read your settings.');
+        console.warn(err.message);
+      } else if (typeof(callback) === 'function') {
+        try {
+          data = JSON.parse(data);
+          callback(data);
+        } catch (error) {
+          console.info('There was a problem parsing the data in your settings.');
+          console.warn(error);
+        }
+      }
+    });
+  }
+};
+
+var mySettings = {
+  language: 'en',
+  theme: 'dark'
+};
+
+helpers.saveSettings(mySettings, function () {
+  console.log('Settings saved');
+});
+
+helpers.loadSettings(function (data) {
+  mySettings = data;
+});
+</code></pre>">var nw = require('nw.gui'); // This line is only required for NW.js 0.12.x and below
+var fs = require('fs');
+var path = require('path');
+
+var helpers = {
+  file: 'my-settings-file.json',
+  filePath: path.join(nw.App.dataPath, this.file),
+  saveSettings: function (settings, callback) {
+    fs.writeFile(this.filePath, JSON.stringify(settings), function (err) {
+      if (err) {
+        console.info('There was an error attempting to save your settings.');
+        console.warn(err.message);
+        return;
+      } else if (typeof(callback) === 'function') {
+        callback();
+      }
+    });
+  },
+  loadSettings: function (callback) {
+    fs.readFile(this.filePath, function (err, data) {
+      if (err) {
+        console.info('There was an error attempting to read your settings.');
+        console.warn(err.message);
+      } else if (typeof(callback) === 'function') {
+        try {
+          data = JSON.parse(data);
+          callback(data);
+        } catch (error) {
+          console.info('There was a problem parsing the data in your settings.');
+          console.warn(error);
+        }
+      }
+    });
+  }
+};
+
+var mySettings = {
+  language: 'en',
+  theme: 'dark'
+};
+
+helpers.saveSettings(mySettings, function () {
+  console.log('Settings saved');
+});
+
+helpers.loadSettings(function (data) {
+  mySettings = data;
+});
+</code></pre><h2 id="web-sql-database"><a name="web-sql-database" href="#web-sql-database"></a>Web SQL Database</h2><p>The <code>Web SQL Database</code> API isn’t actually part of the HTML5 specification but it is a separate specification which introduces a set of APIs to manipulate client-side databases using SQL. I’ll assume you’re familiar with basic database operations and SQL language in following guides.</p><p>The <code>Web SQL Database</code> API in NW.js is implemented with <code>sqlite</code>, and operations are basically the same:</p><ul>
+<li><code>openDatabase</code>: This method creates the database object either using existing database or creating new one.</li><li><code>transaction</code>: This method give us the ability to control a transaction and performing either commit or rollback based on the situation.</li><li><code>executeSql</code>: This method is used to execute an actual SQL query.</li></ul><p>To create and open a database, use the following code:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var databaseName = 'mydb';
+var versionNumber = '1.0';
+var textDescription = 'my first database';
+var estimatedSizeOfDatabase = 2 * 1024 * 1024;
+
+var db = openDatabase(
+  databaseName,
+  versionNumber,
+  textDescription,
+  estimatedSizeOfDatabase
+);
+</code></pre>">var databaseName = 'mydb';
+var versionNumber = '1.0';
+var textDescription = 'my first database';
+var estimatedSizeOfDatabase = 2 * 1024 * 1024;
+
+var db = openDatabase(
+  databaseName,
+  versionNumber,
+  textDescription,
+  estimatedSizeOfDatabase
+);
+</code></pre><p>If you try to open a database that doesn’t exist, the API will create it on the fly for you. You also don’t have to worry about closing databases.</p><p>To create a table, insert data or query data, use <code>executeSql</code> in <code>transaction</code>:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Create table and insert one line
+db.transaction(function (transaction) {
+  transaction.executeSql('CREATE TABLE IF NOT EXISTS foo (id unique, text)');
+  transaction.executeSql('INSERT INTO foo (id, text) VALUES (1, &quot;synergies&quot;)');
+  transaction.executeSql('INSERT INTO foo (id, text) VALUES (2, &quot;luyao&quot;)');
+});
+
+// Query out the data
+db.transaction(function (transaction) {
+  transaction.executeSql('SELECT * FROM foo', [], function (transaction, results) {
+    var i;
+    var length = results.rows.length;
+    for (i = 0; i &amp;lt; length; i++) {
+      alert(results.rows.item(i).text);
+    }
+  });
+});
+</code></pre>">// Create table and insert one line
+db.transaction(function (transaction) {
+  transaction.executeSql('CREATE TABLE IF NOT EXISTS foo (id unique, text)');
+  transaction.executeSql('INSERT INTO foo (id, text) VALUES (1, "synergies")');
+  transaction.executeSql('INSERT INTO foo (id, text) VALUES (2, "luyao")');
+});
+
+// Query out the data
+db.transaction(function (transaction) {
+  transaction.executeSql('SELECT * FROM foo', [], function (transaction, results) {
+    var i;
+    var length = results.rows.length;
+    for (i = 0; i &lt; length; i++) {
+      alert(results.rows.item(i).text);
+    }
+  });
+});
+</code></pre><p>For more information, you can read tutorials like <a href="http://html5doctor.com/introducing-web-sql-databases">Introducing Web SQL Databases</a>.</p><h2 id="indexeddb"><a name="indexeddb" href="#indexeddb"></a>IndexedDB</h2><p><a href="https://developer.mozilla.org/en-US/docs/IndexedDB">IndexedDB</a> is considered the NoSQL successor of WebSQL. It is supported by the latest versions of Chromium and therefore by NW.js - the implementation is based on the key-value storage LevelDB.</p><p>IndexedDB’s API is asynchronous and relatively low-level and verbose, so you might prefer using an abstraction, like PouchDB.</p><h2 id="pouchdb"><a name="pouchdb" href="#pouchdb"></a>PouchDB</h2><p><a href="http://pouchdb.com">PouchDB</a> is an embedded database engine inspired by CouchDB. In NW.js, it can be used as an abstraction over IndexedDB or WebSQL (via the Chromium implementations) or directly on LevelDB (via the node.js module).</p><p>As with CouchDB, there are no dynamic index-based queries, but you can dynamically aggregate a view via map/reduce. It can directly replicate to/from CouchDB, which gives it an advantage if you are building an application that has to sync with the cloud.</p><p><strong>To get started with PouchDB and NW.js</strong>, check out <a href="https://github.com/nolanlawson/pouchdb-nw">pouchdb-nw</a>.</p><p>Additional links you may find useful:</p><ul>
+<li><a href="https://github.com/pouchdb-community/relational-pouch">https://github.com/pouchdb-community/relational-pouch</a></li><li><a href="https://www.npmjs.com/package/pouchdb-find">https://www.npmjs.com/package/pouchdb-find</a></li></ul><h2 id="ejdb"><a name="ejdb" href="#ejdb"></a>EJDB</h2><p><a href="https://github.com/Softmotions/ejdb">EJDB</a> (Embedded JSON Database engine) is a simple &amp; fast database engine based on Tokyo Cabinet. Its usage copies MongoDB - you can easily make dynamic queries and sort/paginate the result.</p><p>The fast queries and easy-to-use API make it a very good choice for NW.js.</p><p><strong>Note:</strong> An extra step is required to use EJDB in an NW.js application. Please refer to <a href="https://nwjs.readthedocs.io/en/latest/For%20Users/Advanced/Use%20Native%20Node%20Modules/">3rd party modules with C/C++ addons</a> for information.</p><h2 id="nedb"><a name="nedb" href="#nedb"></a>NeDB</h2><p><a href="https://github.com/louischatriot/nedb">NeDB</a> (Node embedded database) is a pure JavaScript database for Node.js (unlike EJDB, you don’t need to compile anything). It implements the most common subset of MongoDB and can be used to persist data or simply as an in-memory datastore. Even though it’s not native, it’s still fast enough for desktop apps (40k reads/s, 10k writes/s).</p><h2 id="linvodb"><a name="linvodb" href="#linvodb"></a>LinvoDB</h2><p><a href="https://github.com/Ivshti/linvodb3">LinvoDB</a> is a persistent embedded database for Node.js / NW.js. It can be used on top of LevelDB, but it can also be used on top of Medea with no need to compile anything. It has MongoDB+Mongoose-like features and API. Performance is comparable to MongoDB.</p><h2 id="marsdb"><a name="marsdb" href="#marsdb"></a>MarsDB</h2><p><a href="https://github.com/c58/marsdb">MarsDB</a> is a lightweight database for any kind of JS-environment (Browser, Node, NW.js), based on Meteor’s minimongo. It uses Promises almost everywhere, carefully written on ES6. It can be in-memory (by default) or persisted with any kind of storage (LocalStorage implemented for now), and it’s easy to implement your own storage manager (thanks to Promises).</p><h2 id="sqlite3"><a name="sqlite3" href="#sqlite3"></a>SQLite3</h2><p>Use <a href="https://www.npmjs.com/package/better-sqlite3">better-sqlite3</a> for NW.js compatibility. Example of it in use in an <a href="https://github.com/vatsalkgor/nw-sqlite3-error">Angular project</a>.</p><h2 id="lowdb"><a name="lowdb" href="#lowdb"></a>LowDB</h2><p><a href="https://github.com/typicode/lowdb">LowDB</a> is a flat JSON file database for Node. It uses a functional programming API provided by Lodash.</p><h2 id="storedb"><a name="storedb" href="#storedb"></a>StoreDB</h2><p><a href="https://github.com/djyde/StoreDB">StoreDB</a> is a local database <strong>based on localStorage</strong>. It allows the use of localStorage to store complex data by providing MongoDB-Style APIs and using concepts like <code>collection</code>, <code>document</code>, etc.</p><p>It is super simple and friendly to store data as below:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// insert data
+
+var player = { name: 'Randy', sex: 'male', score: 20 };
+storedb('players').insert(player, function (err, result) {
+  if (err) {
+    console.info('Error inserting data in StoreDB');
+    console.warn(err);
+  } else {
+    console.log('Data was inserted into StoreDB');
+  }
+})
+
+//update data
+var player = { name: 'Randy' };
+var instructions = { '$inc': { score: 10 } };
+storedb('players').update(player, instructions, function (err) {
+  if (err) {
+    console.info('Error updating data in StoreDB');
+    console.warn(err);
+  } else {
+    console.log('Data was updated in StoreDB');
+  }
+})
+</code></pre>">// insert data
+
+var player = { name: 'Randy', sex: 'male', score: 20 };
+storedb('players').insert(player, function (err, result) {
+  if (err) {
+    console.info('Error inserting data in StoreDB');
+    console.warn(err);
+  } else {
+    console.log('Data was inserted into StoreDB');
+  }
+})
+
+//update data
+var player = { name: 'Randy' };
+var instructions = { '$inc': { score: 10 } };
+storedb('players').update(player, instructions, function (err) {
+  if (err) {
+    console.info('Error updating data in StoreDB');
+    console.warn(err);
+  } else {
+    console.log('Data was updated in StoreDB');
+  }
+})
+</code></pre><h2 id="web-storage"><a name="web-storage" href="#web-storage"></a>Web Storage</h2><p>Web storage is a easy to use key-value database. You can use it like normal JS objects but everything will be saved to disk for you.</p><p>There are two types of web storage:</p><ul>
+<li><code>localStorage</code> - stores data with no expiration date</li><li><code>sessionStorage</code> - stores data for one session</li></ul><p>The <code>localStorage</code> object stores the data with no expiration date. The data will not be deleted when the browser is closed, and will be available the next day, week, or year.</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>localStorage.love = 'luyao';
+
+// Love lasts forever
+console.log(localStorage.love);
+</code></pre>">localStorage.love = 'luyao';
+
+// Love lasts forever
+console.log(localStorage.love);
+</code></pre><p>The <code>sessionStorage</code> object is equal to the <code>localStorage</code> object, except that it stores the data for only one session. The data is deleted when the user closes the window.</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>sessionStorage.life = '';
+
+// But life will have an end
+console.log(sessionStorage.life);
+</code></pre>">sessionStorage.life = '';
+
+// But life will have an end
+console.log(sessionStorage.life);
+</code></pre><p><strong>Warning:</strong> For large data sets web storage is incredibly impractical, since the API is synchronous, there is no advanced indexing/queries (only one key-value store) and the value can only be a string.</p><h2 id="application-cache"><a name="application-cache" href="#application-cache"></a>Application Cache</h2><p>HTML5 introduces application cache, which means that a web application is cached, and accessible without an internet connection.</p><p>Application cache gives an application three advantages:</p><ul>
+<li>Offline browsing - users can use the application when they’re offline</li><li>Speed - cached resources load faster</li><li>Reduced server load - the browser will only download updated/changed resources from the server</li></ul><p>However, application cache is designed for browser use, for apps using NW.js, it’s less useful than other methods, read <a href="http://www.w3schools.com/html/html5_app_cache.asp">HTML5 Application Cache</a> if you want to use it.</p>
+
+
+</body>
+</html>

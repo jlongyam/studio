@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>FAQ.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<h3 id="how-to-get-the-location-of-nw.exe-(or-application-path)?"><a name="how-to-get-the-location-of-nw.exe-(or-application-path)?" href="#how-to-get-the-location-of-nw.exe-(or-application-path)?"></a>How to get the location of nw.exe (or application path)?</h3><p>See <a href="https://github.com/rogerwang/node-webkit/issues/1197">https://github.com/rogerwang/node-webkit/issues/1197</a></p><h3 id="windows-flags-nw.js-as-trojan.-i-am-unable-to-run-my-application."><a name="windows-flags-nw.js-as-trojan.-i-am-unable-to-run-my-application." href="#windows-flags-nw.js-as-trojan.-i-am-unable-to-run-my-application."></a>Windows flags NW.js as trojan. I am unable to run my application.</h3><p>This is a false positive. Please submit the file to Windows to report it as such:</p><p><code>https://www.microsoft.com/en-us/wdsi/filesubmission</code></p><h3 id="application-window-does-not-launch-or-is-unstable-on-linux"><a name="application-window-does-not-launch-or-is-unstable-on-linux" href="#application-window-does-not-launch-or-is-unstable-on-linux"></a>Application window does not launch or is unstable on Linux</h3><p>There can be many reasons for this.</p><pre><code class="lang-shell" data-origin="<pre><code class=&quot;lang-shell&quot;>libva error: vaGetDriverNameByIndex() failed with unknown libva error, driver_name = (null)
+</code></pre>">libva error: vaGetDriverNameByIndex() failed with unknown libva error, driver_name = (null)
+</code></pre><p>If you get this error, enable the <code>--disable-gpu</code> flag:</p><p>Via <code>package.json</code>:</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>{
+  &quot;chromium-args&quot;: &quot;--disable-gpu&quot;
+}
+</code></pre>">{
+  "chromium-args": "--disable-gpu"
+}
+</code></pre><p>Via command line:</p><pre><code class="lang-shell" data-origin="<pre><code class=&quot;lang-shell&quot;>/path/to/nw . --disable-gpu
+</code></pre>">/path/to/nw . --disable-gpu
+</code></pre><h3 id="gui-does-not-launch-with-`opening-in-existing-browser-session.`-message-on-linux"><a name="gui-does-not-launch-with-`opening-in-existing-browser-session.`-message-on-linux" href="#gui-does-not-launch-with-`opening-in-existing-browser-session.`-message-on-linux"></a>GUI does not launch with <code>Opening in existing browser session.</code> message on Linux</h3><p>NW.js based apps are singletons. This means that successive launches will terminate immediately.</p><p>To kill the existing NW.js process:</p><ol>
+<li><code>ps aux</code> to find the <code>pid</code></li><li><code>kill XXXX</code> where XXXX is the <code>pid</code>.</li></ol><p>Refs: <a href="https://github.com/streamlink/streamlink-twitch-gui/issues/695#issuecomment-565476126">https://github.com/streamlink/streamlink-twitch-gui/issues/695#issuecomment-565476126</a></p>
+
+
+</body>
+</html>

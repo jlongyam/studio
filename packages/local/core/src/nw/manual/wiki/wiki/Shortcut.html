@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Shortcut.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>Shortcut API requires node-webkit &gt;= 0.10.0</em></p><p><code>Shortcut</code> represents a global keyboard shortcut, also known as system-wide hotkey. If registered successfully, it works even if your app does <em>not</em> have focus. Every time the user presses the registered shortcut, your app will receive an “active” event of the shortcut object.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>// Load native UI library.
+var gui = require('nw.gui');
+
+var option = {
+  key : &quot;Ctrl+Shift+A&quot;,
+  active : function() {
+    console.log(&quot;Global desktop keyboard shortcut: &quot; + this.key + &quot; active.&quot;); 
+  },
+  failed : function(msg) {
+    // :(, fail to register the |key| or couldn't parse the |key|.
+    console.log(msg);
+  }
+};
+
+// Create a shortcut with |option|.
+var shortcut = new gui.Shortcut(option);
+
+// Register global desktop shortcut, which can work without focus.
+gui.App.registerGlobalHotKey(shortcut);
+
+// If register |shortcut| successfully and user struck &quot;Ctrl+Shift+A&quot;, |shortcut|
+// will get an &quot;active&quot; event.
+
+// You can also add listener to shortcut's active and failed event.
+shortcut.on('active', function() {
+  console.log(&quot;Global desktop keyboard shortcut: &quot; + this.key + &quot; active.&quot;); 
+});
+
+shortcut.on('failed', function(msg) {
+  console.log(msg);
+});
+
+// Unregister the global desktop shortcut.
+gui.App.unregisterGlobalHotKey(shortcut);
+</code></pre>">// Load native UI library.
+var gui = require('nw.gui');
+
+var option = {
+  key : "Ctrl+Shift+A",
+  active : function() {
+    console.log("Global desktop keyboard shortcut: " + this.key + " active."); 
+  },
+  failed : function(msg) {
+    // :(, fail to register the |key| or couldn't parse the |key|.
+    console.log(msg);
+  }
+};
+
+// Create a shortcut with |option|.
+var shortcut = new gui.Shortcut(option);
+
+// Register global desktop shortcut, which can work without focus.
+gui.App.registerGlobalHotKey(shortcut);
+
+// If register |shortcut| successfully and user struck "Ctrl+Shift+A", |shortcut|
+// will get an "active" event.
+
+// You can also add listener to shortcut's active and failed event.
+shortcut.on('active', function() {
+  console.log("Global desktop keyboard shortcut: " + this.key + " active."); 
+});
+
+shortcut.on('failed', function(msg) {
+  console.log(msg);
+});
+
+// Unregister the global desktop shortcut.
+gui.App.unregisterGlobalHotKey(shortcut);
+</code></pre><h2 id="reference"><a name="reference" href="#reference"></a>Reference</h2><h3 id="new-shortcut(option)"><a name="new-shortcut(option)" href="#new-shortcut(option)"></a>new Shortcut(option)</h3><p>Create new <code>Shortcut</code>, <code>option</code> is an object contains initial settings for the <code>Shortcut</code>. <code>option</code> can have following fields: <code>key</code>, <code>active</code>, <code>failed</code>.</p><p>Every field has its own property in the <code>Shortcut</code>, see documentation of each property for details.</p><h3 id="shortcut.key"><a name="shortcut.key" href="#shortcut.key"></a>Shortcut.key</h3><p><strong>Get</strong> or <strong>Set</strong> the <code>key</code> of a <code>Shortcut</code>. It is a string to specify the shortcut key, like “Ctrl+Alt+A”.</p><p>Supported keys: A-Z, 0-9, Comma, Period, Home, End, PageUp, PageDown, Insert, Delete, Arrow keys (Up, Down, Left, Right) and the Media Keys (MediaNextTrack, MediaPlayPause, MediaPrevTrack, MediaStop). Note that <code>Shortcut.key</code>  has to have exactly one keycode, multiple aren’t supported.</p><p>Since 0.13.0, NW.js supports most of <a href="http://www.w3.org/TR/DOM-Level-3-Events-code/">DOM Level 3 W3C KeyboardEvent Code Values</a>. And also supports following key aliases:</p><ul>
+<li><code>Backquote</code> == “`”</li><li><code>Tab</code> == <code>\t</code></li><li><code>Enter</code> == <code>\n</code></li><li><code>Minus</code> == <code>-</code></li><li><code>Equal</code> == <code>=</code></li><li><code>Backslash</code> == <code>\</code></li><li><code>Comma</code> == <code>,</code></li><li><code>Period</code> == <code>.</code></li><li><code>Slash</code> == <code>/</code></li><li><code>Semicolon</code> == <code>;</code></li><li><code>Quote</code> == <code>'</code></li><li><code>BracketLeft</code> == <code>[</code></li><li><code>BracketRight</code> == <code>]</code></li></ul><p>Modifiers: <kbd>Ctrl</kbd>, <kbd>Alt</kbd>, <kbd>Shift</kbd>. <code>Shortcut.key</code> takes zero or more modifiers.</p><p>For version &lt; 0.13.0, <code>Ctrl</code> maps to <kbd>⌘</kbd> on Mac OS X. But it’s no longer true since NW 0.13.0. Starting from 0.13.0, <code>Command</code> modifier is supported across all platforms. On Mac OS X, <code>Command</code> maps to <kbd>⌘</kbd> key. On Windows and Linux, it maps to <kbd>Win</kbd> key for US 101 Layout keyboard.</p><p>Please use zero modifier only when you are knowing what your are doing. The API <code>App.registerGlobalHotKey</code> can support applications intercepting a single key (like <code>{ key: "A"}</code>), but please don’t do this since users will not be able to use “A” normally any more until the app unregisters it. However, the API doesn’t limit this usage, and it would be useful if the applications wants to listen Media Keys.</p><h3 id="shortcut.active"><a name="shortcut.active" href="#shortcut.active"></a>Shortcut.active</h3><p><strong>Get</strong> or <strong>Set</strong> the <code>active</code> callback of a <code>Shortcut</code>, the <code>active</code> must be a valid function, it will be called when user presses the shortcut.</p><h3 id="shortcut.failed"><a name="shortcut.failed" href="#shortcut.failed"></a>Shortcut.failed</h3><p><strong>Get</strong> or <strong>Set</strong> the <code>failed</code> callback of a <code>Shortcut</code>, the <code>failed</code> must be a valid function, it will be called when application passes an invalid <code>Shortcut.key</code>, or when the shortcut registration (<code>App.registerGlobalHotKey</code>) has failed.</p><h2 id="events"><a name="events" href="#events"></a>Events</h2><p>Following events can be listened to by using <code>Shortcut.on()</code> method, for more information on how to receive events, you can visit <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>.</p><h3 id="active"><a name="active" href="#active"></a>active</h3><p>Emitted when the users pressed the registered shortcut.</p><h3 id="failed"><a name="failed" href="#failed"></a>failed</h3><p>Emitted when the application passed an invalid <code>Shortcut.key</code>, or when the shortcut registration (<code>App.registerGlobalHotKey</code>) has failed.</p><h2 id="see-also"><a name="see-also" href="#see-also"></a>See Also</h2><ul>
+<li><a href="App#registerglobalhotkeyshortcut">App.registerGlobalHotKey</a></li><li><a href="App#unregisterglobalhotkeyshortcut">App.unregisterGlobalHotKey</a></li></ul>
+
+
+</body>
+</html>

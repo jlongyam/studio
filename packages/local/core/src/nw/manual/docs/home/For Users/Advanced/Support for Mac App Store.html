@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Support for Mac App Store</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="support-for-mac-app-store"><a name="support-for-mac-app-store" href="#support-for-mac-app-store"></a>Support for Mac App Store</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#overview" html="Overview">Overview</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#prerequisits" html="Prerequisits">Prerequisits</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#build-the-app" html="Build the App">Build the App</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#sign-the-app" html="Sign the App">Sign the App</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#configuration-file-format" html="Configuration File Format">Configuration File Format</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="overview"><a name="overview" href="#overview"></a>Overview</h2><p>You can distribute your macOS apps through official Mac App Store or outside the store. But the apps should always be signed before distribution. Unsigned apps are refused to be launched by the <a href="https://support.apple.com/en-us/HT202491">Gatekeeper</a>.</p><p>This guide will show you how to sign NW.js based apps for macOS.</p><h2 id="prerequisits"><a name="prerequisits" href="#prerequisits"></a>Prerequisits</h2><ul>
+<li>Create a macOS app through <a href="https://itunesconnect.apple.com">iTunesConnect</a></li><li>Obtain Application &amp; Installer certificates from <a href="https://developer.apple.com">Apple Developer</a>.<ul>
+<li>If you distribute your app through <strong>Mac App Store</strong>:<ul>
+<li>3rd Party Mac Developer Application: Foo (XXXXXXXXXX)</li><li>3rd Party Mac Developer Installer: Foo (XXXXXXXXXX)</li></ul>
+</li><li>If you distribute your app <strong>outside the store</strong>:<ul>
+<li>Developer ID Application: Foo (XXXXXXXXXX)</li><li>Developer ID Installer: Foo (XXXXXXXXXX)</li></ul>
+</li></ul>
+</li></ul><h2 id="build-the-app"><a name="build-the-app" href="#build-the-app"></a>Build the App</h2><p>Download NW.js MAS build from <a href="http://dl.nwjs.io/v0.19.5-mas-beta/">nwjs.io</a> and build your app as described in <a href="../Package and Distribute.html">Package and Distribute</a>.</p><h2 id="sign-the-app"><a name="sign-the-app" href="#sign-the-app"></a>Sign the App</h2><p><code>build_mas.py</code> is used to sign your app for macOS. And the script can generate an uploadable <code>.pkg</code> file for Mac App Store after signing by giving <code>--pkg</code> argument.</p><p><strong>Basic Usage</strong></p><pre class="bash hljs">python build_mas.py -C build.cfg -I myapp-dev.app -O MyApp.app
+</pre><h2 id="configuration-file-format"><a name="configuration-file-format" href="#configuration-file-format"></a>Configuration File Format</h2><p>Configuration file (<code>build.cfg</code>) is a human readable text file. It contains important settings for signing and packaging the app.</p><p><code>ApplicationIdentity</code> and <code>InstallerIdentity</code> are the names of the certificates used for signing and packaging your app. See <a href="#prerequisits">Prerequisits</a> for which certificates you need.</p><p><code>NWTeamID</code> is used to establish IPC channels for launch NW.js based app. It can be obtained from Apple Developer -&gt; Membership -&gt; Team ID.</p><p><code>ParentEnhtmlments</code> and <code>ChildEnhtmlments</code> should be valid <a href="https://developer.apple.com/library/content/documentation/Miscellaneous/Reference/EnhtmlmentKeyReference/Chapters/AboutEnhtmlments.html">enhtmlments files</a>. By default, your app is signed with minimal privileges as below.</p><p><strong>enhtmlments-parent.plist</strong></p><pre class="xml hljs"><span class="hljs-pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="hljs-doctype">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">plist</span> <span class="hljs-attribute">version</span>=<span class="hljs-value">"1.0"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">dict</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">key</span>&gt;</span>com.apple.security.app-sandbox<span class="hljs-tag">&lt;/<span class="hljs-html">key</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">true</span>/&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">key</span>&gt;</span>com.apple.security.application-groups<span class="hljs-tag">&lt;/<span class="hljs-html">key</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">string</span>&gt;</span>NWTeamID.your.app.bundle.id<span class="hljs-tag">&lt;/<span class="hljs-html">string</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">dict</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">plist</span>&gt;</span>
+</pre><p><strong>enhtmlments-child.plist</strong></p><pre class="xml hljs"><span class="hljs-pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="hljs-doctype">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">plist</span> <span class="hljs-attribute">version</span>=<span class="hljs-value">"1.0"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">dict</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">key</span>&gt;</span>com.apple.security.app-sandbox<span class="hljs-tag">&lt;/<span class="hljs-html">key</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">true</span>/&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">key</span>&gt;</span>com.apple.security.inherit<span class="hljs-tag">&lt;/<span class="hljs-html">key</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">true</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">dict</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">plist</span>&gt;</span>
+</pre><p>Read the sample <code>build.cfg</code> for detailed meanings all fields.</p>
+
+
+</body>
+</html>

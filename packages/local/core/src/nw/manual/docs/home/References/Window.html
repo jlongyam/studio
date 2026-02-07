@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Window</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="window"><a name="window" href="#window"></a>Window</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#synopsis" html="Synopsis">Synopsis</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#window.get([window_object])" html="Window.get([window_object])">Window.get([window_object])</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#window.getall(callback)" html="Window.getAll(callback)">Window.getAll(callback)</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#window.open(url,-[options],-[callback])" html="Window.open(url, [options], [callback])">Window.open(url, [options], [callback])</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.window" html="win.window">win.window</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.x" html="win.x">win.x</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.y" html="win.y">win.y</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.width" html="win.width">win.width</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.height" html="win.height">win.height</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.html" html="win.html">win.html</a>
+</span>
+<!--span class="number">
+9
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.menu" html="win.menu">win.menu</a>
+</span>
+<!--span class="number">
+10
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.isalwaysontop" html="win.isAlwaysOnTop">win.isAlwaysOnTop</a>
+</span>
+<!--span class="number">
+11
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.isfullscreen" html="win.isFullscreen">win.isFullscreen</a>
+</span>
+<!--span class="number">
+12
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.istransparent" html="win.isTransparent">win.isTransparent</a>
+</span>
+<!--span class="number">
+13
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.iskioskmode" html="win.isKioskMode">win.isKioskMode</a>
+</span>
+<!--span class="number">
+14
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.zoomlevel" html="win.zoomLevel">win.zoomLevel</a>
+</span>
+<!--span class="number">
+15
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.cookies.*" html="win.cookies.*">win.cookies.*</a>
+</span>
+<!--span class="number">
+16
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.moveto(x,-y)" html="win.moveTo(x, y)">win.moveTo(x, y)</a>
+</span>
+<!--span class="number">
+17
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.moveby(x,-y)" html="win.moveBy(x, y)">win.moveBy(x, y)</a>
+</span>
+<!--span class="number">
+18
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.resizeto(width,-height)" html="win.resizeTo(width, height)">win.resizeTo(width, height)</a>
+</span>
+<!--span class="number">
+19
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setinnerwidth(width)" html="win.setInnerWidth(width)">win.setInnerWidth(width)</a>
+</span>
+<!--span class="number">
+20
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setinnerheight(height)" html="win.setInnerHeight(height)">win.setInnerHeight(height)</a>
+</span>
+<!--span class="number">
+21
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.resizeby(width,-height)" html="win.resizeBy(width, height)">win.resizeBy(width, height)</a>
+</span>
+<!--span class="number">
+22
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.focus()" html="win.focus()">win.focus()</a>
+</span>
+<!--span class="number">
+23
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.blur()" html="win.blur()">win.blur()</a>
+</span>
+<!--span class="number">
+24
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.show([is_show])" html="win.show([is_show])">win.show([is_show])</a>
+</span>
+<!--span class="number">
+25
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.hide()" html="win.hide()">win.hide()</a>
+</span>
+<!--span class="number">
+26
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.close([force])" html="win.close([force])">win.close([force])</a>
+</span>
+<!--span class="number">
+27
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.reload()" html="win.reload()">win.reload()</a>
+</span>
+<!--span class="number">
+28
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.reloaddev()" html="win.reloadDev()">win.reloadDev()</a>
+</span>
+<!--span class="number">
+29
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.reloadignoringcache()" html="win.reloadIgnoringCache()">win.reloadIgnoringCache()</a>
+</span>
+<!--span class="number">
+30
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.maximize()" html="win.maximize()">win.maximize()</a>
+</span>
+<!--span class="number">
+31
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.unmaximize()" html="win.unmaximize()">win.unmaximize()</a>
+</span>
+<!--span class="number">
+32
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.minimize()" html="win.minimize()">win.minimize()</a>
+</span>
+<!--span class="number">
+33
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.restore()" html="win.restore()">win.restore()</a>
+</span>
+<!--span class="number">
+34
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.enterfullscreen()" html="win.enterFullscreen()">win.enterFullscreen()</a>
+</span>
+<!--span class="number">
+35
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.leavefullscreen()" html="win.leaveFullscreen()">win.leaveFullscreen()</a>
+</span>
+<!--span class="number">
+36
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.togglefullscreen()" html="win.toggleFullscreen()">win.toggleFullscreen()</a>
+</span>
+<!--span class="number">
+37
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.enterkioskmode()" html="win.enterKioskMode()">win.enterKioskMode()</a>
+</span>
+<!--span class="number">
+38
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.leavekioskmode()" html="win.leaveKioskMode()">win.leaveKioskMode()</a>
+</span>
+<!--span class="number">
+39
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.togglekioskmode()" html="win.toggleKioskMode()">win.toggleKioskMode()</a>
+</span>
+<!--span class="number">
+40
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.settransparent(transparent)" html="win.setTransparent(transparent)">win.setTransparent(transparent)</a>
+</span>
+<!--span class="number">
+41
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setshadow(shadow)-(mac)" html="win.setShadow(shadow) (Mac)">win.setShadow(shadow) (Mac)</a>
+</span>
+<!--span class="number">
+42
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.showdevtools([iframe],-[callback])" html="win.showDevTools([iframe], [callback])">win.showDevTools([iframe], [callback])</a>
+</span>
+<!--span class="number">
+43
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.closedevtools()" html="win.closeDevTools()">win.closeDevTools()</a>
+</span>
+<!--span class="number">
+44
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.getprinters(callback)" html="win.getPrinters(callback)">win.getPrinters(callback)</a>
+</span>
+<!--span class="number">
+45
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.isdevtoolsopen()" html="win.isDevToolsOpen()">win.isDevToolsOpen()</a>
+</span>
+<!--span class="number">
+46
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.print(options)" html="win.print(options)">win.print(options)</a>
+</span>
+<!--span class="number">
+47
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setmaximumsize(width,-height)" html="win.setMaximumSize(width, height)">win.setMaximumSize(width, height)</a>
+</span>
+<!--span class="number">
+48
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setminimumsize(width,-height)" html="win.setMinimumSize(width, height)">win.setMinimumSize(width, height)</a>
+</span>
+<!--span class="number">
+49
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setresizable(resizable)" html="win.setResizable(resizable)">win.setResizable(resizable)</a>
+</span>
+<!--span class="number">
+50
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setalwaysontop(top)" html="win.setAlwaysOnTop(top)">win.setAlwaysOnTop(top)</a>
+</span>
+<!--span class="number">
+51
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setvisibleonallworkspaces(visible)-(mac-and-linux)" html="win.setVisibleOnAllWorkspaces(visible) (Mac and Linux)">win.setVisibleOnAllWorkspaces(visible) (Mac and Linux)</a>
+</span>
+<!--span class="number">
+52
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.cansetvisibleonallworkspaces()-(mac-and-linux)" html="win.canSetVisibleOnAllWorkspaces() (Mac and Linux)">win.canSetVisibleOnAllWorkspaces() (Mac and Linux)</a>
+</span>
+<!--span class="number">
+53
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setposition(position)" html="win.setPosition(position)">win.setPosition(position)</a>
+</span>
+<!--span class="number">
+54
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setshowintaskbar(show)" html="win.setShowInTaskbar(show)">win.setShowInTaskbar(show)</a>
+</span>
+<!--span class="number">
+55
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.requestattention(attension)" html="win.requestAttention(attension)">win.requestAttention(attension)</a>
+</span>
+<!--span class="number">
+56
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.capturepage(callback-[,-config-])" html="win.capturePage(callback [, config ])">win.capturePage(callback [, config ])</a>
+</span>
+<!--span class="number">
+57
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.capturescreenshot(options-[,-callback])" html="win.captureScreenshot(options [, callback])">win.captureScreenshot(options [, callback])</a>
+</span>
+<!--span class="number">
+58
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setprogressbar(progress)" html="win.setProgressBar(progress)">win.setProgressBar(progress)</a>
+</span>
+<!--span class="number">
+59
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.setbadgelabel(label)" html="win.setBadgeLabel(label)">win.setBadgeLabel(label)</a>
+</span>
+<!--span class="number">
+60
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.eval(frame,-script)" html="win.eval(frame, script)">win.eval(frame, script)</a>
+</span>
+<!--span class="number">
+61
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.evalnwbin(frame,-path)" html="win.evalNWBin(frame, path)">win.evalNWBin(frame, path)</a>
+</span>
+<!--span class="number">
+62
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.evalnwbinmodule(frame,-path,-module_path)" html="win.evalNWBinModule(frame, path, module_path)">win.evalNWBinModule(frame, path, module_path)</a>
+</span>
+<!--span class="number">
+63
+</span-->
+</li>
+<li><span class="html">
+<a href="#win.removealllisteners([eventname])" html="win.removeAllListeners([eventName])">win.removeAllListeners([eventName])</a>
+</span>
+<!--span class="number">
+64
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-close" html="Event: close">Event: close</a>
+</span>
+<!--span class="number">
+65
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-closed" html="Event: closed">Event: closed</a>
+</span>
+<!--span class="number">
+66
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-loading" html="Event: loading">Event: loading</a>
+</span>
+<!--span class="number">
+67
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-loaded" html="Event: loaded">Event: loaded</a>
+</span>
+<!--span class="number">
+68
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-document-start(frame)" html="Event: document-start(frame)">Event: document-start(frame)</a>
+</span>
+<!--span class="number">
+69
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-document-end(frame)" html="Event: document-end(frame)">Event: document-end(frame)</a>
+</span>
+<!--span class="number">
+70
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-focus" html="Event: focus">Event: focus</a>
+</span>
+<!--span class="number">
+71
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-blur" html="Event: blur">Event: blur</a>
+</span>
+<!--span class="number">
+72
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-minimize" html="Event: minimize">Event: minimize</a>
+</span>
+<!--span class="number">
+73
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-restore" html="Event: restore">Event: restore</a>
+</span>
+<!--span class="number">
+74
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-maximize" html="Event: maximize">Event: maximize</a>
+</span>
+<!--span class="number">
+75
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-move(x,-y)" html="Event: move(x, y)">Event: move(x, y)</a>
+</span>
+<!--span class="number">
+76
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-resize(width,-height)" html="Event: resize(width, height)">Event: resize(width, height)</a>
+</span>
+<!--span class="number">
+77
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-enter-fullscreen" html="Event: enter-fullscreen">Event: enter-fullscreen</a>
+</span>
+<!--span class="number">
+78
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-leave-fullscreen" html="Event: leave-fullscreen">Event: leave-fullscreen</a>
+</span>
+<!--span class="number">
+79
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-zoom" html="Event: zoom">Event: zoom</a>
+</span>
+<!--span class="number">
+80
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-capturepagedone" html="Event: capturepagedone">Event: capturepagedone</a>
+</span>
+<!--span class="number">
+81
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-devtools-opened(url)" html="Event: devtools-opened(url)">Event: devtools-opened(url)</a>
+</span>
+<!--span class="number">
+82
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-devtools-closed" html="Event: devtools-closed">Event: devtools-closed</a>
+</span>
+<!--span class="number">
+83
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-new-win-policy-(frame,-url,-policy)" html="Event: new-win-policy (frame, url, policy)">Event: new-win-policy (frame, url, policy)</a>
+</span>
+<!--span class="number">
+84
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-navigation-(frame,-url,-policy)" html="Event: navigation (frame, url, policy)">Event: navigation (frame, url, policy)</a>
+</span>
+<!--span class="number">
+85
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p><code>Window</code> is a wrapper of the DOM’s topmost <code>window</code> object. It has extended operations and can receive various window events.</p><p>Every <code>Window</code> is an instance of the EventEmitter class, and you’re able to use <code>Window.on(...)</code> to respond to native window’s events.</p><p>!!! warning “Behavior Changed”<br>    There are some changes of <code>Window</code> since 0.13.0. Please see <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre class="javascript hljs"><span class="hljs-comment">// Get the current window</span>
+<span class="hljs-keyword">var</span> win = nw.Window.get();
+
+<span class="hljs-comment">// Listen to the minimize event</span>
+win.on(<span class="hljs-string">'minimize'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Window is minimized'</span>);
+});
+
+<span class="hljs-comment">// Minimize the window</span>
+win.minimize();
+
+<span class="hljs-comment">// Unlisten the minimize event</span>
+win.removeAllListeners(<span class="hljs-string">'minimize'</span>);
+
+<span class="hljs-comment">// Create a new window and get it</span>
+nw.Window.open(<span class="hljs-string">'https://github.com'</span>, {}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">new_win</span>) </span>{
+  <span class="hljs-comment">// And listen to new window's focus event</span>
+  new_win.on(<span class="hljs-string">'focus'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'New window is focused'</span>);
+  });
+
+});
+</pre><h2 id="window.get([window_object])"><a name="window.get([window_object])" href="#window.get([window_object])"></a>Window.get([window_object])</h2><ul>
+<li><code>window_object</code> <code>{DOM Window}</code> <em>Optional</em> is the DOM window</li><li>Returns <code>{Window}</code> the native <code>Window</code> object</li></ul><p>If <code>window_object</code> is not specifed, then return current window’s <code>Window</code> object, otherwise return <code>window_object</code>‘s <code>Window</code> object.</p><p>!!! note<br>    If <code>window_object</code> is <code>iframe</code>‘s, the function will still return topmost window’s <code>Window</code> object.</p><pre class="javascript hljs"><span class="hljs-comment">// Get the current window</span>
+<span class="hljs-keyword">var</span> win = nw.Window.get();
+
+<span class="hljs-comment">// Get iframe's window</span>
+<span class="hljs-keyword">var</span> iframeWin = nw.Window.get(iframe.contentWindow);
+
+<span class="hljs-comment">//This will return true</span>
+<span class="hljs-built_in">console</span>.log(iframeWin === win);
+
+<span class="hljs-comment">// Create a new window and get it</span>
+nw.Window.open(<span class="hljs-string">'https://github.com/nwjs/nw.js'</span>, {}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">new_win</span>) </span>{
+  <span class="hljs-comment">// do something with the newly created window</span>
+});
+</pre><h2 id="window.getall(callback)"><a name="window.getall(callback)" href="#window.getall(callback)"></a>Window.getAll(callback)</h2><p>Get all windows with a callback function whose parameter is an array of nw.Window object. This function is supported since 0.42.6.</p><h2 id="window.open(url,-[options],-[callback])"><a name="window.open(url,-[options],-[callback])" href="#window.open(url,-[options],-[callback])"></a>Window.open(url, [options], [callback])</h2><p>!!! warning “Behavior Changed”<br>    The behavior of the function is changed since 0.13.0. Please see <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>url</code> <code>{String}</code> URL to be loaded in the opened window</li><li><code>options</code> <code>{Object}</code> <em>Optional</em> see <a href="Manifest Format.html#window-subfields">Window subfields</a> in manifest format. And following extra fields can also be used in options.<ul>
+<li><code>new_instance</code> <code>{Boolean}</code> <em>Optional</em> whether to open a new window in a separate render process.</li><li><code>mixed_context</code> <code>{Boolean}</code> <em>Optional</em> If true, the Node context and DOM context are merged in the new window’s process. Use only when <code>new_instance</code> is true.</li><li><code>inject_js_start</code> <code>{String}</code> <em>Optional</em> the script to be injected before any DOM is constructed and any script is run. See <a href="Manifest Format.html#inject_js_start">Manifest format</a></li><li><code>inject_js_end</code> <code>{String}</code> <em>Optional</em> the script to be injected after the document object is loaded, before onload event is fired. See <a href="Manifest Format.html#inject_js_end">Manifest format</a></li><li><code>id</code> <code>{String}</code> <em>Optional</em> the <code>id</code> used to identify the window. This will be used to remember the size and position of the window and restore that geometry when a window with the same id is later opened. <a href="https://developer.chrome.com/apps/app_window#type-CreateWindowOptions">See also the Chrome App documentation</a></li></ul>
+</li><li><code>callback(win)</code> <code>{Function}</code> <em>Optional</em> callback when with the opened native <code>Window</code> object</li></ul><p>Open a new window and load <code>url</code> in it.</p><p>!!! note<br>    You should wait for the Window’s <code>loaded</code> event before interacting with any of its components.</p><p>!!! note “Focus”<br>    The opened window is not focused by default. If you want it to be focused by default, you can set <code>focus</code> to <code>true</code> in <code>options</code>.</p><h2 id="win.window"><a name="win.window" href="#win.window"></a>win.window</h2><p>Get the corresponding DOM window object of the native window.</p><h2 id="win.x"><a name="win.x" href="#win.x"></a>win.x</h2><h2 id="win.y"><a name="win.y" href="#win.y"></a>win.y</h2><p>Get or set left/top offset from window frame to screen.</p><h2 id="win.width"><a name="win.width" href="#win.width"></a>win.width</h2><h2 id="win.height"><a name="win.height" href="#win.height"></a>win.height</h2><p>Get or set window’s size, including the window’s frame.</p><h2 id="win.html"><a name="win.html" href="#win.html"></a>win.html</h2><p>Get or set window’s html.</p><h2 id="win.menu"><a name="win.menu" href="#win.menu"></a>win.menu</h2><p>Get or set window’s menubar. Set with a Menu with type <code>menubar</code>. When <code>win.menu</code> is set to <code>null</code>, the menubar is completely removed for Windows and Linux, and the menubar is cleared out on Mac.</p><p>See <a href="../For Users/Advanced/Customize Menubar.html">Customize Menubar</a> for the usage of menubars. And see <a href="Menu.html">Menu</a> and <a href="MenuItem.html">MenuItem</a> for detailed APIs.</p><h2 id="win.isalwaysontop"><a name="win.isalwaysontop" href="#win.isalwaysontop"></a>win.isAlwaysOnTop</h2><p>Get whether the window is always on top of other windows.</p><h2 id="win.isfullscreen"><a name="win.isfullscreen" href="#win.isfullscreen"></a>win.isFullscreen</h2><p>Get whether we’re in fullscreen mode.</p><h2 id="win.istransparent"><a name="win.istransparent" href="#win.istransparent"></a>win.isTransparent</h2><p>Get whether transparency is turned on</p><h2 id="win.iskioskmode"><a name="win.iskioskmode" href="#win.iskioskmode"></a>win.isKioskMode</h2><p>Get whether we’re in kiosk mode.</p><h2 id="win.zoomlevel"><a name="win.zoomlevel" href="#win.zoomlevel"></a>win.zoomLevel</h2><p>Get or set the page zoom. <code>0</code> for normal size; positive value for zooming in; negative value for zooming out.</p><h2 id="win.cookies.*"><a name="win.cookies.*" href="#win.cookies.*"></a>win.cookies.*</h2><p>This includes multiple functions to manipulate the cookies. The API is defined in the same way as <a href="http://developer.chrome.com/extensions/cookies.html">Chrome Extensions</a>. NW.js supports the <code>get</code>, <code>getAll</code>, <code>remove</code> and <code>set</code> methods; <code>onChanged</code> event (supporting both <code>addListener</code> and <code>removeListener</code> function on this event).</p><p>And anything related to <code>CookieStore</code> in the Chrome extension API is not supported, because there is only one global cookie store in NW.js apps.</p><h2 id="win.moveto(x,-y)"><a name="win.moveto(x,-y)" href="#win.moveto(x,-y)"></a>win.moveTo(x, y)</h2><ul>
+<li><code>x</code> <code>{Integer}</code> offset to the left of the screen</li><li><code>y</code> <code>{Integer}</code> offset to the top of the screen</li></ul><p>Moves a window’s left and top edge to the specified coordinates.</p><h2 id="win.moveby(x,-y)"><a name="win.moveby(x,-y)" href="#win.moveby(x,-y)"></a>win.moveBy(x, y)</h2><ul>
+<li><code>x</code> <code>{Integer}</code> horizontal offset</li><li><code>y</code> <code>{Integer}</code> vertical offset</li></ul><p>Moves a window a specified number of pixels relative to its current coordinates.</p><h2 id="win.resizeto(width,-height)"><a name="win.resizeto(width,-height)" href="#win.resizeto(width,-height)"></a>win.resizeTo(width, height)</h2><ul>
+<li><code>width</code> <code>{Integer}</code> the inner width of the window</li><li><code>height</code> <code>{Integer}</code> the inner height of the window</li></ul><p>Resizes a window to the specified <code>width</code> and <code>height</code>.</p><h2 id="win.setinnerwidth(width)"><a name="win.setinnerwidth(width)" href="#win.setinnerwidth(width)"></a>win.setInnerWidth(width)</h2><ul>
+<li><code>width</code> <code>{Integer}</code> the inner width of the window</li></ul><h2 id="win.setinnerheight(height)"><a name="win.setinnerheight(height)" href="#win.setinnerheight(height)"></a>win.setInnerHeight(height)</h2><ul>
+<li><code>height</code> <code>{Integer}</code> the inner height of the window</li></ul><h2 id="win.resizeby(width,-height)"><a name="win.resizeby(width,-height)" href="#win.resizeby(width,-height)"></a>win.resizeBy(width, height)</h2><ul>
+<li><code>width</code> <code>{Integer}</code> the offset width of the window</li><li><code>height</code> <code>{Integer}</code> the offset height of the window</li></ul><p>Resizes a window by the specified amount.</p><h2 id="win.focus()"><a name="win.focus()" href="#win.focus()"></a>win.focus()</h2><p>Focus on the window.</p><h2 id="win.blur()"><a name="win.blur()" href="#win.blur()"></a>win.blur()</h2><p>Move focus away. Usually it will move focus to other windows of your app, since on some platforms there is no concept of blur.</p><h2 id="win.show([is_show])"><a name="win.show([is_show])" href="#win.show([is_show])"></a>win.show([is_show])</h2><ul>
+<li><code>is_show</code> <code>{Boolean}</code> <em>Optional</em> specify whether the window should be shown or hidden. It’s set to <code>true</code> by default.</li></ul><p>Show the window if it’s not shown.</p><p><code>show(false)</code> has the same effect with <code>hide()</code>.</p><p>!!! note “Focus”<br>    <code>show</code> will not focus on the window on some platforms, so you need to call <code>focus</code> if you want to.</p><h2 id="win.hide()"><a name="win.hide()" href="#win.hide()"></a>win.hide()</h2><p>Hide the window. User will not be able to find the window once it’s hidden.</p><h2 id="win.close([force])"><a name="win.close([force])" href="#win.close([force])"></a>win.close([force])</h2><ul>
+<li><code>force</code> <code>{Boolean}</code> specify whether to close the window forcefully and bypass the <code>close</code> event.</li></ul><p>Closes the current window. You can prevent the closing by listening to the <code>close</code> event. If <code>force</code> is specified and equals <code>true</code>, then the <code>close</code> event will be ignored.</p><p>Usually you would like to listen to the <code>close</code> event and do some shutdown work and then do a <code>close(true)</code> to really close the window.</p><pre class="javascript hljs">win.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">this</span>.hide(); <span class="hljs-comment">// Pretend to be closed already</span>
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"We're closing..."</span>);
+  <span class="hljs-keyword">this</span>.close(<span class="hljs-literal">true</span>); <span class="hljs-comment">// then close it forcefully</span>
+});
+
+win.close(); <span class="hljs-comment">// Would be detected by the above close event. To skip the above close event use win.close(true);</span>
+</pre><h2 id="win.reload()"><a name="win.reload()" href="#win.reload()"></a>win.reload()</h2><p>Reloads the current window.</p><h2 id="win.reloaddev()"><a name="win.reloaddev()" href="#win.reloaddev()"></a>win.reloadDev()</h2><p>Reloads the current page by starting a new renderer process from scratch.</p><h2 id="win.reloadignoringcache()"><a name="win.reloadignoringcache()" href="#win.reloadignoringcache()"></a>win.reloadIgnoringCache()</h2><p>Like <code>reload()</code>, but don’t use caches (aka “shift-reload”).</p><h2 id="win.maximize()"><a name="win.maximize()" href="#win.maximize()"></a>win.maximize()</h2><p>Maximize the window on GTK and Windows, and zoom the window on Mac OS X.</p><h2 id="win.unmaximize()"><a name="win.unmaximize()" href="#win.unmaximize()"></a>win.unmaximize()</h2><p>!!! warning “Deprecated”<br>    This feature is deprecated since 0.13.0. It’s now replaced by <a href="#event-restore"><code>restore</code> event</a>. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><p>Unmaximize the window, i.e. the reverse of <code>maximize()</code>.</p><h2 id="win.minimize()"><a name="win.minimize()" href="#win.minimize()"></a>win.minimize()</h2><p>Minimize the window to task bar on Windows, iconify the window on GTK, and miniaturize the window on Mac OS X.</p><h2 id="win.restore()"><a name="win.restore()" href="#win.restore()"></a>win.restore()</h2><p>Restore window to previous state after the window is minimized, i.e. the reverse of <code>minimize()</code>. It’s not named <code>unminimize</code> since <code>restore</code> is used commonly.</p><h2 id="win.enterfullscreen()"><a name="win.enterfullscreen()" href="#win.enterfullscreen()"></a>win.enterFullscreen()</h2><p>Make the window fullscreen.</p><p>!!! note<br>    This function is different with HTML5 FullScreen API, which can make part of the page fullscreen, <code>Window.enterFullscreen()</code> will only fullscreen the whole window.</p><h2 id="win.leavefullscreen()"><a name="win.leavefullscreen()" href="#win.leavefullscreen()"></a>win.leaveFullscreen()</h2><p>Leave the fullscreen mode.</p><h2 id="win.togglefullscreen()"><a name="win.togglefullscreen()" href="#win.togglefullscreen()"></a>win.toggleFullscreen()</h2><p>Toggle the fullscreen mode.</p><h2 id="win.enterkioskmode()"><a name="win.enterkioskmode()" href="#win.enterkioskmode()"></a>win.enterKioskMode()</h2><p>Enter the Kiosk mode. In Kiosk mode, the app will be fullscreen and try to prevent users from leaving the app, so you should remember to provide a way in app to leave Kiosk mode. This mode is mainly used for presentation on public displays.</p><h2 id="win.leavekioskmode()"><a name="win.leavekioskmode()" href="#win.leavekioskmode()"></a>win.leaveKioskMode()</h2><p>Leave the Kiosk mode.</p><h2 id="win.togglekioskmode()"><a name="win.togglekioskmode()" href="#win.togglekioskmode()"></a>win.toggleKioskMode()</h2><p>Toggle the kiosk mode.</p><h2 id="win.settransparent(transparent)"><a name="win.settransparent(transparent)" href="#win.settransparent(transparent)"></a>win.setTransparent(transparent)</h2><p>!!! warning “Deprecated”<br>    This feature is deprecated since 0.13.0. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>transparent</code> <code>{Boolean}</code> whether to set the window to be transparent</li></ul><p>Turn on/off the transparency support. See more info on <a href="../For Users/Advanced/Transparent Window.html">Transparent Window</a>.</p><h2 id="win.setshadow(shadow)-(mac)"><a name="win.setshadow(shadow)-(mac)" href="#win.setshadow(shadow)-(mac)"></a>win.setShadow(shadow) (Mac)</h2><ul>
+<li><code>shadow</code> <code>{Boolean}</code> whether the window has a shadow</li></ul><p>Turn the window’s native shadow on/off. Useful for frameless, transparent windows.</p><h2 id="win.showdevtools([iframe],-[callback])"><a name="win.showdevtools([iframe],-[callback])" href="#win.showdevtools([iframe],-[callback])"></a>win.showDevTools([iframe], [callback])</h2><p>!!! note<br>    This API is only available on SDK build flavor.</p><p>!!! warning “Behavior Changed”<br>    The behavior of the function is changed since 0.13.0. Please see <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>iframe</code> <code>{String} or {HTMLIFrameElement}</code> <em>Optional</em> the id or the element of the <code>&lt;iframe&gt;</code> to be jailed on. By default, the DevTools is shown for entire window.</li><li><code>callback(dev_win)</code> <code>{Function}</code> callback with the native window of the DevTools window.</li></ul><p>Open the devtools to inspect the window.</p><p>The optional <code>iframe</code> as <code>String</code> should be the value of <code>id</code> attribute of any <code>&lt;iframe&gt;</code> element in the window. It jails the DevTools to inspect the <code>&lt;iframe&gt;</code> only. If it is an empty string, this feature has no effect.</p><p>The optional <code>iframe</code> as <code>HTMLIFrameElement</code> should be the iframe object. And it serves the same purpose with the <code>id</code> argument.</p><p>This function returns a <code>Window</code> object via the callback. You can use any properties and methods of <code>Window</code> except the events.</p><p>See also in <a href="webview Tag.html">webview reference</a> on how to open DevTools for webview or open DevTools in a webview.</p><h2 id="win.closedevtools()"><a name="win.closedevtools()" href="#win.closedevtools()"></a>win.closeDevTools()</h2><p>!!! note<br>    This API is only available on SDK build flavor.</p><p>Close the devtools window.</p><h2 id="win.getprinters(callback)"><a name="win.getprinters(callback)" href="#win.getprinters(callback)"></a>win.getPrinters(callback)</h2><p>Enumerate the printers in the system. The callback function will receive an array of JSON objects for the printer information. The device name of the JSON object can be used as parameter in <code>nw.Window.print()</code>.</p><h2 id="win.isdevtoolsopen()"><a name="win.isdevtoolsopen()" href="#win.isdevtoolsopen()"></a>win.isDevToolsOpen()</h2><p>!!! note<br>    This API is only available on SDK build flavor.</p><p>Query the status of devtools window.</p><p>See also <a href="#winshowdevtoolsiframe-callback"><code>win.showDevTools()</code></a>.</p><h2 id="win.print(options)"><a name="win.print(options)" href="#win.print(options)"></a>win.print(options)</h2><p>Print the web contents in the window with or without the need for user’s interaction. <code>options</code> is a JSON object with the following fields:</p><ul>
+<li><code>autoprint</code> <code>{Boolean}</code> whether to print without the need for user’s interaction; optional, true by default</li><li><code>silent</code> <code>{Boolean}</code> hide the flashing print preview dialog; optional, false by default</li><li><code>printer</code> <code>{String}</code> the device name of the printer returned by <code>nw.Window.getPrinters()</code>; No need to set this when printing to PDF</li><li><code>pdf_path</code> <code>{String}</code> the path of the output PDF when printing to PDF</li><li><code>headerFooterEnabled</code> <code>{Boolean}</code> whether to enable header and footer</li><li><code>landscape</code> <code>{Boolean}</code> whether to use landscape or portrait</li><li><code>mediaSize</code> <code>{JSON Object}</code> the paper size spec</li><li><code>shouldPrintBackgrounds</code> <code>{Boolean}</code> whether to print CSS backgrounds</li><li><code>marginsType</code> <code>{Integer}</code> 0 - Default; 1 - No margins; 2 - minimum; 3 - Custom, see <code>marginsCustom</code>.</li><li><code>marginsCustom</code> <code>{JSON Object}</code> the custom margin setting; units are points.</li><li><code>copies</code> <code>{Integer}</code> the number of copies to print.</li><li><code>scaleFactor</code> <code>{Integer}</code> the scale factor; <code>100</code> is the default.</li><li><code>headerString</code> <code>{String}</code> string to replace the URL in the header.</li><li><code>footerString</code> <code>{String}</code> string to replace the URL in the footer.</li></ul><p><code>marginsCustom</code> example: <code>"marginsCustom":{"marginBottom":54,"marginLeft":70,"marginRight":28,"marginTop":32}</code><br><code>mediaSize</code> example: <code>'mediaSize':{'name': 'CUSTOM', 'width_microns': 279400, 'height_microns': 215900, 'custom_display_name':'Letter', 'is_default': true}</code></p><p><em>NOTE: If no options are being passed, <code>win.print({})</code> is what should be called.</em></p><h2 id="win.setmaximumsize(width,-height)"><a name="win.setmaximumsize(width,-height)" href="#win.setmaximumsize(width,-height)"></a>win.setMaximumSize(width, height)</h2><ul>
+<li><code>width</code> <code>{Integer}</code> the maximum width of the window</li><li><code>height</code> <code>{Integer}</code> the maximum height of the window</li></ul><p>Set window’s maximum size.</p><h2 id="win.setminimumsize(width,-height)"><a name="win.setminimumsize(width,-height)" href="#win.setminimumsize(width,-height)"></a>win.setMinimumSize(width, height)</h2><ul>
+<li><code>width</code> <code>{Integer}</code> the minimum width of the window</li><li><code>height</code> <code>{Integer}</code> the minimum height of the window</li></ul><p>Set window’s minimum size.</p><h2 id="win.setresizable(resizable)"><a name="win.setresizable(resizable)" href="#win.setresizable(resizable)"></a>win.setResizable(resizable)</h2><ul>
+<li><code>resizable</code> <code>{Boolean}</code> whether the window can be resized</li></ul><p>Set whether window is resizable.</p><h2 id="win.setalwaysontop(top)"><a name="win.setalwaysontop(top)" href="#win.setalwaysontop(top)"></a>win.setAlwaysOnTop(top)</h2><ul>
+<li><code>top</code> <code>{Boolean}</code> whether the window should always be on top</li></ul><p>Sets the widget to be on top of all other windows in the window system.</p><h2 id="win.setvisibleonallworkspaces(visible)-(mac-and-linux)"><a name="win.setvisibleonallworkspaces(visible)-(mac-and-linux)" href="#win.setvisibleonallworkspaces(visible)-(mac-and-linux)"></a>win.setVisibleOnAllWorkspaces(visible) (Mac and Linux)</h2><ul>
+<li><code>visible</code> <code>{Boolean}</code> whether the window should be visible on all workspaces</li></ul><p>For platforms that support multiple workspaces (currently Mac OS X and Linux), this allows NW.js windows to be visible on all workspaces simultaneously.</p><h2 id="win.cansetvisibleonallworkspaces()-(mac-and-linux)"><a name="win.cansetvisibleonallworkspaces()-(mac-and-linux)" href="#win.cansetvisibleonallworkspaces()-(mac-and-linux)"></a>win.canSetVisibleOnAllWorkspaces() (Mac and Linux)</h2><p>Returns a a boolean indicating if the platform (currently Mac OS X and Linux) support Window API method <code>setVisibleOnAllWorkspace(Boolean)</code>.</p><h2 id="win.setposition(position)"><a name="win.setposition(position)" href="#win.setposition(position)"></a>win.setPosition(position)</h2><ul>
+<li><code>position</code> <code>{String}</code> the position of the window. There are three valid positions: <code>null</code> or <code>center</code> or <code>mouse</code></li></ul><p>Move window to specified position. Currently only <code>center</code> is supported on all platforms, which will put window in the middle of the screen.</p><h2 id="win.setshowintaskbar(show)"><a name="win.setshowintaskbar(show)" href="#win.setshowintaskbar(show)"></a>win.setShowInTaskbar(show)</h2><ul>
+<li><code>show</code> <code>{Boolean}</code> whether show in task bar</li></ul><p>Control whether to show window in taskbar or dock. See also <code>show_in_taskbar</code> in <a href="Manifest Format.html#show_in_taskbar">Manifest-format</a>.</p><h2 id="win.requestattention(attension)"><a name="win.requestattention(attension)" href="#win.requestattention(attension)"></a>win.requestAttention(attension)</h2><ul>
+<li><code>attension</code> <code>{Boolean} or {Integer}</code> If a Boolean, it indicates to request or cancel user’s attension. If an Integer, it indicates the number of times the window flashes.</li></ul><p>Request the user’s attension by making the window flashes in the task bar.</p><p>!!! note “Mac”<br>    On Mac, value &lt; 0 will trigger <code>NSInformationalRequest</code>, while value &gt; 0 will trigger <code>NSCriticalRequest</code>.</p><h2 id="win.capturepage(callback-[,-config-])"><a name="win.capturepage(callback-[,-config-])" href="#win.capturepage(callback-[,-config-])"></a>win.capturePage(callback [, config ])</h2><ul>
+<li><code>callback</code> <code>{Function}</code> the callback when finished capturing the window</li><li><code>config</code> <code>{String} or {Object}</code> <em>Optional</em> if a String, see <code>config.format</code> for valid values.<ul>
+<li><code>format</code> <code>{String}</code> <em>optional</em> the image format used to generate the image. It supports two formats: <code>"png"</code> and <code>"jpeg"</code>. If ignored, it’s <code>"jpeg"</code> by default.</li><li><code>datatype</code> <code>{String}</code> it supports three types: <code>"raw"</code>, <code>"buffer"</code> and <code>"datauri"</code>. If ignored, it’s <code>"datauri"</code> by default.</li></ul>
+</li></ul><p>Captures the visible area of the window. To capture the full page, see <code>win.captureScreenshot</code>.</p><p>!!! note “<code>raw</code> or <code>datauri</code>“<br>    The <code>"raw"</code> only contains the Base64 encoded image. But <code>"datauri"</code> contains the mime type headers as well, and it can be directly assigned to <code>src</code> of <code>Image</code> to load the image.</p><p>Example usage:</p><pre class="javascript hljs"><span class="hljs-comment">// png as base64string</span>
+win.capturePage(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">base64string</span>)</span>{
+ <span class="hljs-comment">// do something with the base64string</span>
+}, { format : <span class="hljs-string">'png'</span>, datatype : <span class="hljs-string">'raw'</span>} );
+
+<span class="hljs-comment">// png as node buffer</span>
+win.capturePage(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">buffer</span>)</span>{
+ <span class="hljs-comment">// do something with the buffer</span>
+}, { format : <span class="hljs-string">'png'</span>, datatype : <span class="hljs-string">'buffer'</span>} );
+</pre><h2 id="win.capturescreenshot(options-[,-callback])"><a name="win.capturescreenshot(options-[,-callback])" href="#win.capturescreenshot(options-[,-callback])"></a>win.captureScreenshot(options [, callback])</h2><p>When <code>callback</code> is omitted, a Promise is returned and it will resolve with <code>data</code> argument of the callback.</p><ul>
+<li><code>callback</code> <code>{Function}</code> <em>optional</em> the callback when finished capturing the window. It’s called with:<ul>
+<li><code>err</code> <code>null</code> for success; <code>{String}</code> with the error message for failure.</li><li><code>data</code> <code>{String}</code> base64 encoded image</li></ul>
+</li><li><code>options</code> <code>{Object}</code><ul>
+<li><code>fullSize</code> <code>{Boolean}</code> <em>optional</em> Capture the whole page beyond the visible area. Currently the height of captured image is capped at 16384 pixels by Chromium.</li><li><code>format</code> <code>{String}</code> <em>optional</em> the image format used to generate the image. It supports two formats: <code>"png"</code> and <code>"jpeg"</code>. <code>"png"</code> is the default.</li><li><code>quality</code> <code>{Integer}</code> <em>optional</em> Compression quality from range [0..100] (jpeg only).</li><li><code>clip</code> <code>{Object}</code> <em>optional</em> Capture the screenshot of a given region only. The object’s properties are:<ul>
+<li><code>x</code>: <code>{Number}</code> X offset in device independent pixels (dip).</li><li><code>y</code>: <code>{Number}</code> Y offset in device independent pixels (dip).</li><li><code>width</code>: <code>{Number}</code> Rectangle width in device independent pixels (dip).</li><li><code>height</code>: <code>{Number}</code> Rectangle height in device independent pixels (dip).</li><li><code>scale</code>: <code>{Number}</code> Page scale factor.</li></ul>
+</li></ul>
+</li></ul><p>Captures the the window. It can be used to capture the full page beyond the visible area.</p><p>!!! note Experimental<br>    This API is experimental and subject to change in the future.</p><p>Example usage:</p><pre class="javascript hljs">          win.captureScreenshot({fullSize: <span class="hljs-literal">true</span>}, (err, data) =&gt; {
+            <span class="hljs-keyword">if</span> (err) {
+              alert(err.message);
+              <span class="hljs-keyword">return</span>;
+            }
+            <span class="hljs-keyword">var</span> image = <span class="hljs-keyword">new</span> Image();
+            image.src = <span class="hljs-string">'data:image/jpg;base64,'</span> + data;
+            <span class="hljs-built_in">document</span>.body.appendChild(image);
+          });
+</pre><h2 id="win.setprogressbar(progress)"><a name="win.setprogressbar(progress)" href="#win.setprogressbar(progress)"></a>win.setProgressBar(progress)</h2><ul>
+<li><code>progress</code> <code>{Float}</code> valid values within [0, 1]. Setting to negative value (&lt;0) removes the progress bar.</li></ul><p>!!! note “Linux”<br>    Only Ubuntu is supported, and you’ll need to specify the application <code>.desktop</code> file through <code>NW_DESKTOP</code> env. If <code>NW_DESKTOP</code> env variable is not found, it uses <code>nw.desktop</code> by default.</p><h2 id="win.setbadgelabel(label)"><a name="win.setbadgelabel(label)" href="#win.setbadgelabel(label)"></a>win.setBadgeLabel(label)</h2><p>Set the badge label on the window icon in taskbar or dock.</p><p>!!! note “Linux”<br>    This API is only supported on Ubuntu and the label is restricted to a string number only. You’ll also need to specify the <code>.desktop</code> file for your application (see the note on <a href="#winsetprogressbar"><code>setProgressBar</code></a>)</p><h2 id="win.eval(frame,-script)"><a name="win.eval(frame,-script)" href="#win.eval(frame,-script)"></a>win.eval(frame, script)</h2><ul>
+<li><code>frame</code> <code>{HTMLIFrameElement}</code> the frame to execute in. If <code>iframe</code> is <code>null</code>, it assumes in current window / frame.</li><li><code>script</code> <code>{String}</code> the source code of the script to be executed</li></ul><p>Execute a piece of JavaScript in the frame.</p><h2 id="win.evalnwbin(frame,-path)"><a name="win.evalnwbin(frame,-path)" href="#win.evalnwbin(frame,-path)"></a>win.evalNWBin(frame, path)</h2><ul>
+<li><code>frame</code> <code>{HTMLIFrameElement}</code> the frame to execute in. If <code>iframe</code> is <code>null</code>, it assumes in current window / frame.</li><li><code>path</code> <code>{String|ArrayBuffer|Buffer}</code> the path or <code>Buffer</code> or <code>ArrayBuffer</code> of the binary file generated by <code>nwjc</code></li></ul><p>Load and execute the compiled binary in the frame. See <a href="../For Users/Advanced/Protect JavaScript Source Code.html">Protect JavaScript Source Code</a>.</p><h2 id="win.evalnwbinmodule(frame,-path,-module_path)"><a name="win.evalnwbinmodule(frame,-path,-module_path)" href="#win.evalnwbinmodule(frame,-path,-module_path)"></a>win.evalNWBinModule(frame, path, module_path)</h2><p>!!! warning “experimental”<br>    This API is subject to change in future versions as we’re exploring ways to support this feature better. <a href="https://github.com/nwjs/nw.js/issues/6303">Discuss here</a>.</p><ul>
+<li><code>frame</code> <code>{HTMLIFrameElement}</code> the frame to execute in. If <code>iframe</code> is <code>null</code>, it assumes in current window / frame.</li><li><code>path</code> <code>{String|ArrayBuffer|Buffer}</code> the path or <code>Buffer</code> or <code>ArrayBuffer</code> of the binary file generated by <code>nwjc</code></li><li><code>module_path</code> <code>{String}</code> the module URL related to the current document. It will be used to <a href="https://html.spec.whatwg.org/multipage/webappapis.html#resolve-a-module-specifier">resolve the module specifier</a>.</li></ul><p>Load and execute the compiled binary for Modules in the frame. The binary should be compiled with <code>nwjc --nw-module</code>. The following code will load lib.bin as module and other modules can refer to it with something like <code>import * from './lib.js'</code>:</p><pre class="javascript hljs">nw.Window.get().evalNWBinModule(<span class="hljs-literal">null</span>, <span class="hljs-string">'lib.bin'</span>, <span class="hljs-string">'lib.js'</span>);
+</pre><h2 id="win.removealllisteners([eventname])"><a name="win.removealllisteners([eventname])" href="#win.removealllisteners([eventname])"></a>win.removeAllListeners([eventName])</h2><p>Removes all listeners, or those of the specified <code>eventName</code>.</p><h2 id="event:-close"><a name="event:-close" href="#event:-close"></a>Event: close</h2><p>The <code>close</code> event is a special event that will affect the result of the <code>Window.close()</code> function. If developer is listening to the <code>close</code> event of a window, the <code>Window.close()</code> emit the <code>close</code> event without closing the window.</p><p>Usually you would do some shutdown work in the callback of <code>close</code> event, and then call <code>this.close(true)</code> to really close the window, which will not be caught again. Forgetting to add <code>true</code> when calling <code>this.close()</code> in the callback will result in infinite loop.</p><p>And if the shutdown work takes some time, users may feel that the app is exiting slowly, which is bad experience, so you could just hide the window in the <code>close</code> event before really closing it to make a smooth user experience.</p><p>See example code of <a href="#wincloseforce"><code>win.close(true)</code> above</a> for the usage of <code>close</code> event.</p><p>!!! note “Mac”<br>    On Mac, there is an argument passed to the callback indicating whether it’s being closed by <kbd>⌘</kbd>+<kbd>Q</kbd>. It will be set to string <code>quit</code> if that’s true, otherwise <code>undefined</code>.</p><h2 id="event:-closed"><a name="event:-closed" href="#event:-closed"></a>Event: closed</h2><p>The <code>closed</code> event is emitted after the corresponding window is closed. Normally you will not be able to get this event since after the window is closed all js objects will be released. But it is useful when listening to the window’s events in another window, whose objects will not be released.</p><pre class="javascript hljs"><span class="hljs-comment">// Open a new window.</span>
+nw.Window.open(<span class="hljs-string">'popup.html'</span>, {}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">win</span>) </span>{
+  <span class="hljs-comment">// Release the 'win' object here after the new window is closed.</span>
+  win.on(<span class="hljs-string">'closed'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    win = <span class="hljs-literal">null</span>;
+  });
+
+  <span class="hljs-comment">// Listen to main window's close event</span>
+  nw.Window.get().on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// Hide the window to give user the feeling of closing immediately</span>
+    <span class="hljs-keyword">this</span>.hide();
+
+    <span class="hljs-comment">// If the new window is still open then close it.</span>
+    <span class="hljs-keyword">if</span> (win !== <span class="hljs-literal">null</span>) {
+      win.close(<span class="hljs-literal">true</span>);
+    }
+
+    <span class="hljs-comment">// After closing the new window, close the main window.</span>
+    <span class="hljs-keyword">this</span>.close(<span class="hljs-literal">true</span>);
+  });
+});
+</pre><h2 id="event:-loading"><a name="event:-loading" href="#event:-loading"></a>Event: loading</h2><p>Emitted when the window starts to reload, normally you cannot catch this event because usually it’s emitted before you actually setup the callback.</p><p>The only situation that you can catch this event is when you refresh the window and listen to this event in another window.</p><h2 id="event:-loaded"><a name="event:-loaded" href="#event:-loaded"></a>Event: loaded</h2><p>Emitted when the window is fully loaded, this event behaves the same with <code>window.onload</code>, but doesn’t rely on the DOM.</p><h2 id="event:-document-start(frame)"><a name="event:-document-start(frame)" href="#event:-document-start(frame)"></a>Event: document-start(frame)</h2><ul>
+<li><code>frame</code> <code>{HTMLIFrameElement}</code> is the iframe object, or <code>null</code> if the event is for the window. </li></ul><p>Emitted when the document object in this window or a child iframe is available, after all files are loaded, but before DOM is constructed or any script is run.<br>It will not be fired on the new window being created with nw.Window.open(): the callback of that function will be fired at the same point of this event.</p><p>See <code>inject_js_start</code> in <a href="Manifest Format.html#inject_js_start">Manifest-format</a>.</p><h2 id="event:-document-end(frame)"><a name="event:-document-end(frame)" href="#event:-document-end(frame)"></a>Event: document-end(frame)</h2><ul>
+<li><code>frame</code> <code>{HTMLIFrameElement}</code> is the iframe object, or <code>null</code> if the event is for the window. </li></ul><p>Emitted when the document object in this window or a child iframe is unloaded, but before the <code>onunload</code> event is emitted.</p><p>See <code>inject_js_end</code> in <a href="Manifest Format.html#inject_js_end">Manifest-format</a></p><h2 id="event:-focus"><a name="event:-focus" href="#event:-focus"></a>Event: focus</h2><p>Emitted when window gets focus.</p><h2 id="event:-blur"><a name="event:-blur" href="#event:-blur"></a>Event: blur</h2><p>Emitted when window loses focus.</p><h2 id="event:-minimize"><a name="event:-minimize" href="#event:-minimize"></a>Event: minimize</h2><p>Emitted when window is minimized.</p><h2 id="event:-restore"><a name="event:-restore" href="#event:-restore"></a>Event: restore</h2><p>!!! warning “Behavior Changed”<br>    The behavior of the function is changed since 0.13.0. Please see <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><p>Emitted when window is restored from minimize, maximize and fullscreen state.</p><h2 id="event:-maximize"><a name="event:-maximize" href="#event:-maximize"></a>Event: maximize</h2><p>Emitted when window is maximized.</p><h2 id="event:-move(x,-y)"><a name="event:-move(x,-y)" href="#event:-move(x,-y)"></a>Event: move(x, y)</h2><p>Emitted after window is moved. The callback is called with 2 arguments: <code>(x, y)</code> for the new location of the left / top corner of the window.</p><h2 id="event:-resize(width,-height)"><a name="event:-resize(width,-height)" href="#event:-resize(width,-height)"></a>Event: resize(width, height)</h2><p>Emitted after window is resized. The callback is called with 2 arguments: <code>(width, height)</code> for the new size of the window.</p><h2 id="event:-enter-fullscreen"><a name="event:-enter-fullscreen" href="#event:-enter-fullscreen"></a>Event: enter-fullscreen</h2><p>Emitted when window enters fullscreen state.</p><h2 id="event:-leave-fullscreen"><a name="event:-leave-fullscreen" href="#event:-leave-fullscreen"></a>Event: leave-fullscreen</h2><p>!!! warning “Deprecated”<br>    This feature is deprecated since 0.13.0. It’s now replaced by <a href="#event-restore"><code>restore</code> event</a>. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><p>Emitted when window leaves fullscreen state.</p><h2 id="event:-zoom"><a name="event:-zoom" href="#event:-zoom"></a>Event: zoom</h2><p>Emitted when window zooming changed. It has a parameter indicating the new zoom level. See <a href="#winzoomlevel"><code>win.zoom()</code> method</a> for the parameter’s value definition.</p><h2 id="event:-capturepagedone"><a name="event:-capturepagedone" href="#event:-capturepagedone"></a>Event: capturepagedone</h2><p>!!! warning “Deprecated”<br>    This feature is deprecated since 0.13.0. Use the callback with <code>win.capturePage()</code> instead. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><p>Emitted after the capturePage method is called and image data is ready. See <code>win.capturePage()</code> callback function for the parameter’s value definition.</p><h2 id="event:-devtools-opened(url)"><a name="event:-devtools-opened(url)" href="#event:-devtools-opened(url)"></a>Event: devtools-opened(url)</h2><p>!!! warning “Deprecated”<br>    This feature is deprecated since 0.13.0. Use the <code>callback</code> passed to <a href="#winshowdevtoolsiframe-callback"><code>win.showDevtools</code></a> instead. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><p>See <a href="#winshowdevtoolsiframe-callback"><code>win.showDevTools()</code> method</a> for more details.</p><h2 id="event:-devtools-closed"><a name="event:-devtools-closed" href="#event:-devtools-closed"></a>Event: devtools-closed</h2><p>Emitted after Devtools is closed.</p><p>See <a href="#winclosedevtools"><code>win.closeDevTools()</code> method</a> for more details.</p><h2 id="event:-new-win-policy-(frame,-url,-policy)"><a name="event:-new-win-policy-(frame,-url,-policy)" href="#event:-new-win-policy-(frame,-url,-policy)"></a>Event: new-win-policy (frame, url, policy)</h2><ul>
+<li><code>frame</code> <code>{HTMLIFrameElement}</code> is the object of the child iframe where the request is from, or <code>null</code> if it’s from the top window.</li><li><code>url</code> <code>{String}</code> is the address of the requested link</li><li><code>policy</code> <code>{Object}</code> is an object with the following methods:<ul>
+<li><code>ignore()</code> : ignore the request, navigation won’t happen.</li><li><code>forceCurrent()</code> : force the link to be opened in the same frame</li><li><code>forceDownload()</code> : force the link to be a downloadable, or open by external program</li><li><code>forceNewWindow()</code> : force the link to be opened in a new window</li><li><code>forceNewPopup()</code> : force the link to be opened in a new popup window</li><li><code>setNewWindowManifest(m)</code> : control the options for the new popup window. The object <code>m</code> is in the same format as the <a href="Manifest Format.html#window-subfields">Window subfields</a> in manifest format.</li></ul>
+</li></ul><p>Emitted when a new window is requested from this window or a child iframe. You can call <code>policy.*</code> methods in the callback to change the default behavior of opening new windows.</p><p>For example, you can open the URL in system brower when user tries to open in a new window:</p><pre class="javascript hljs">nw.Window.get().on(<span class="hljs-string">'new-win-policy'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">frame, url, policy</span>) </span>{
+  <span class="hljs-comment">// do not open the window</span>
+  policy.ignore();
+  <span class="hljs-comment">// and open it in external browser</span>
+  nw.Shell.openExternal(url);
+});
+</pre><h2 id="event:-navigation-(frame,-url,-policy)"><a name="event:-navigation-(frame,-url,-policy)" href="#event:-navigation-(frame,-url,-policy)"></a>Event: navigation (frame, url, policy)</h2><ul>
+<li><code>frame</code> <code>{HTMLIFrameElement}</code> is the object of the child iframe where the request is from, or <code>null</code> if it’s from the top window.</li><li><code>url</code> <code>{String}</code> is the address of the requested link</li><li><code>policy</code> <code>{Object}</code> is an object with the following methods:<ul>
+<li><code>ignore()</code> : ignore the request, navigation won’t happen.</li></ul>
+</li></ul><p>Emitted when navigating to another page. Similar to <a href="#event-new-win-policy-frame-url-policy"><code>new-win-policy</code></a>, you can call <code>policy.ignore()</code> within the callback to ignore the navigation.</p>
+
+
+</body>
+</html>

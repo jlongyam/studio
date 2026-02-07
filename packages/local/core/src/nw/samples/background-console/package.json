@@ -1,0 +1,16 @@
+{
+	"name": "nw-test",
+	"main": "js.js",
+	"chromium-args": "--enable-logging=stderr",
+	"window": {
+	  "position": "center"
+	},
+	"webview": {
+    "partitions": [{
+       "name": "trusted",
+       "accessible_resources": [
+          "<all_urls>"
+       ]
+    }]
+  }
+}

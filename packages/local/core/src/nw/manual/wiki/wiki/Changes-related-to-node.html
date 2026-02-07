@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Changes-related-to-node.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>This document is still under construction</em></p><h2 id="console"><a name="console" href="#console"></a>console</h2><p>Since node-webkit supports GUI applications instead of console applications, the output of <code>console.log()</code> (and other similar methods such as <code>console.warn()</code> and <code>console.error()</code>) is redirected to WebKit’s console. You may see it in your “<a href="Debugging-with-devtools">Developer Tools</a>” window (on its “Console” tab).</p><h2 id="process"><a name="process" href="#process"></a>process</h2><p>A couple of new fields is added to the global <code>process</code> object:</p><ul>
+<li><code>process.versions['node-webkit']</code> is set with node-webkit’s version.</li><li><code>process.versions['chromium']</code> is set with the chromium version which node-webkit is based on. <em>(since v0.7.3)</em></li><li><code>process.mainModule</code> is set for the start page (such as <code>index.html</code>) as specified in the manifest’s <a href="Manifest-format#main"><code>main</code></a> field. However, when the <a href="Manifest-format#node-main"><code>node-main</code></a> field is also specified in the manifest, <code>process.mainModule</code> points to the file specified in the <code>node-main</code> field.</li></ul><h2 id="global"><a name="global" href="#global"></a>global</h2><p>The following names are inserted to the global object in Node’s context:</p><ul>
+<li><code>require</code> - this is the <code>require()</code> function within the main module.</li></ul><h2 id="require"><a name="require" href="#require"></a>require</h2><p>Behaviour of relative paths in Node’s <code>require()</code> method depends on how the parent file is used in the application (where “the parent file” is the file in which the <code>require()</code> method is called):</p><ul>
+<li>If the parent file was also required by Node (using <code>require()</code>), then the child’s relative path is treated as relative to its parent.</li><li>If the parent file is included by WebKit (using any web technology: classic DOM <code>window.open()</code>, node-webkit’s <a href="Window#openurl-options"><code>Window.open()</code></a>, classic DOM <a href="https://developer.mozilla.org/en/docs/DOM/XMLHttpRequest"><code>XMLHttpRequest</code></a>, jQuery’s <a href="http://api.jquery.com/jQuery.getScript/"><code>$.getScript()</code></a>, HTML <code>&lt;script src="..."&gt;</code> element, etc.), then the child’s relative path is treated as relative to the application’s root directory.</li></ul><h2 id="crypto"><a name="crypto" href="#crypto"></a>crypto</h2><p>WebKit (Chrome) has its own DOM <code>crypto</code> object. When you <code>require()</code> the Node API module of the same name (see <a href="http://nodejs.org/docs/latest/api/crypto.html">http://nodejs.org/docs/latest/api/crypto.html</a> for details), you have to use some other name (see <a href="https://github.com/rogerwang/node-webkit/issues/540">issue 540</a> for example).</p><h2 id="__dirname"><a name="__dirname" href="#__dirname"></a>__dirname</h2><p>Only Node modules (called by <code>require()</code> method) can use the <code>__dirname</code> global to read the path to their file’s directory.</p><p>This global is not available in WebKit’s context (including the “Developer Tools” window).</p><h3 id="workaround"><a name="workaround" href="#workaround"></a>Workaround</h3><p>Put <code>exports.dirname = __dirname;</code> in a <code>util.js</code> file and require it in your main JS file:</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>var dirname = require('./util').dirname;
+
+console.log(dirname);
+//=&amp;gt; /Users/johndoe/dev/project/
+</code></pre>">var dirname = require('./util').dirname;
+
+console.log(dirname);
+//=&gt; /Users/johndoe/dev/project/
+</code></pre><h2 id="require('child_process')"><a name="require('child_process')" href="#require('child_process')"></a>require(‘child_process’)</h2><p>Currently <code>child_process.fork</code> <del><a href="https://github.com/rogerwang/node-webkit/issues/213">is broken</a> in node-webkit</del><br>works fine after 0.10.3 on Linux and 0.10.4 on Windows.</p>
+
+
+</body>
+</html>

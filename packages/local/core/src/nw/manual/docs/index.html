@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>Documentation</title>
+    <meta name="author" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		* { box-sizing: border-box; }
+		body {
+			margin: 0;
+			overflow: hidden;
+			}
+		.parent {
+			display: flex;
+			flex-direction: row;
+			grid-template-columns: minmax(350px, 35%) 1fr;
+			}
+		html,
+		body,
+		iframe,
+		.parent,
+		.section {
+			height: 100%;
+			width: 100%;
+			}
+		iframe {
+			border: 0;
+			}
+		#div_left {
+		  width: 70%;
+		}
+	</style>
+  </head>
+  <body>
+	<div class="parent">
+		<div id="div_left" class="section">
+		<iframe src="Home/index.html" target="doc"></iframe>
+		</div>
+		<div class="section">
+			<iframe src="Home/For Users/Getting Started.html" name="doc"></iframe>
+		</div>
+	</div>
+  </body>
+</html>

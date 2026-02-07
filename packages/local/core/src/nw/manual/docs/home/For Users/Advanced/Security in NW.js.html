@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Security in NW.js</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="security-in-nw.js"><a name="security-in-nw.js" href="#security-in-nw.js"></a>Security in NW.js</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#node-and-normal-frames" html="Node and Normal Frames">Node and Normal Frames</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="node-and-normal-frames"><a name="node-and-normal-frames" href="#node-and-normal-frames"></a>Node and Normal Frames</h2><p>There are two kinds of frames in NW.js: node frame and normal frame.</p><p><strong>Node frames</strong> have following extra capabilities than <strong>normal frames</strong>:</p><ul>
+<li>Access Node.js / NW.js APIs</li><li>Access extended DOM features, such as <a href="../../References/Changes to DOM.html#attribute-nwsaveas">save as dialog</a>, <a href="../../References/Changes to DOM.html#attribute-nwuseragent">nwUserAgent attribute</a> etc.</li><li>Bypass all security restrictions, such as sandboxing, same origin policy etc. For example, you can make cross origin XHR to any remote sites, or access to <code>&lt;iframe&gt;</code> element whose <code>src</code> points to remote sites in node frames.</li></ul><p>In NW.js, frames matching <strong>ALL</strong> of the following criterias will be a <strong>node frame</strong>:</p><ul>
+<li><code>nodejs</code> set to <code>true</code> in <a href="../../References/Manifest Format.html#nodejs">manifest file</a></li><li>URL of windows and frames matching <code>node-remote</code> patterns in <a href="../../References/Manifest Format.html#node-remote">manifest file</a> or <code>chrome-extension://</code> protocol.</li><li>Frames or parent frames <strong>NOT</strong> having <a href="../../References/Changes to DOM.html#attribute-nwdisable"><code>nwdisable</code> attribute</a>.</li><li>Frames or parent frames <strong>NOT</strong> in <a href="../../References/webview Tag.html"><code>&lt;webview&gt;</code> tag</a></li></ul>
+
+
+</body>
+</html>

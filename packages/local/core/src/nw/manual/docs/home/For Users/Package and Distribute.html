@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Package and Distribute</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="package-and-distribute"><a name="package-and-distribute" href="#package-and-distribute"></a>Package and Distribute</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#quick-start" html="Quick Start">Quick Start</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#prepare-your-app" html="Prepare Your App">Prepare Your App</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#prepare-nw.js" html="Prepare NW.js">Prepare NW.js</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#package-your-app" html="Package Your App">Package Your App</a>
+</span>
+<!--span class="number">
+3
+</span-->
+<ul>
+<li><span class="html">
+<a href="#package-option-1.-plain-files-(recommended)" html="Package Option 1. Plain Files (Recommended)">Package Option 1. Plain Files (Recommended)</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#package-option-2.-zip-file" html="Package Option 2. Zip File">Package Option 2. Zip File</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#platform-specific-steps" html="Platform Specific Steps">Platform Specific Steps</a>
+</span>
+<!--span class="number">
+6
+</span-->
+<ul>
+<li><span class="html">
+<a href="#windows" html="Windows">Windows</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#linux" html="Linux">Linux</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+<li><span class="html">
+<a href="#mac-os-x" html="Mac OS X">Mac OS X</a>
+</span>
+<!--span class="number">
+9
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#references" html="References">References</a>
+</span>
+<!--span class="number">
+10
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p>This document guides you how to package and distribute NW.js based app.</p><h2 id="quick-start"><a name="quick-start" href="#quick-start"></a>Quick Start</h2><p>You can use following tools to automatically package your NW.js based app for distribution.</p><ul>
+<li><a href="https://github.com/nwjs-community/nw-builder">nw-builder</a></li></ul><p>Or your can build your app manually with the instructions below.</p><h2 id="prepare-your-app"><a name="prepare-your-app" href="#prepare-your-app"></a>Prepare Your App</h2><p>Before packaging, you should prepare all necessary files on hands. Check out following checklist to make sure you didn’t miss anything:</p><ul>
+<li style="list-style: none"><input type="checkbox" class="task-list-item" data-task-index="0"> Source code and resources</li><li style="list-style: none"><input type="checkbox" class="task-list-item" data-task-index="1"> Install NPM modules with <code>npm install</code></li><li style="list-style: none"><input type="checkbox" class="task-list-item" data-task-index="2"> <a href="Advanced/Use Native Node Modules.html">Rebuild native Node modules</a></li><li style="list-style: none"><input type="checkbox" class="task-list-item" data-task-index="3"> <a href="Advanced/Use NaCl in NW.js.html">Build NaCl binaries</a></li><li style="list-style: none"><input type="checkbox" class="task-list-item" data-task-index="4"> <a href="Advanced/Protect JavaScript Source Code.html">Compile source code</a> and remove the original files</li><li style="list-style: none"><input type="checkbox" class="task-list-item" data-task-index="5"> Icon used in <a href="../References/Manifest Format.html#icon">manifest file</a></li></ul><p>!!! warning<br>    Do not assume your <code>node_modules</code> that target one platform work <em>as is</em> in all platforms. For instance <code>node-email-templates</code> has specific Windows &amp; Mac OS X<code>npm install</code> commands. Besides, it requires python to install properly, which is not installed by default on Windows.<br>    As a rule of thumb <strong><code>npm install</code> your <code>package.json</code> on each platform you target</strong> to ensure everything works as expected.</p><p>!!! note “Filename and Path”<br>    On most Linux and some Mac OS X, the file system is <strong>case sensitive</strong>. That means <code>test.js</code> and <code>Test.js</code> are different files. Make sure the paths and filenames used in your app have the right case. Otherwise your app may look bad or crash on those file systems.</p><p>!!! note “Long Path on Windows”<br>    The length of path used in your app may exceed the maximum length (260 characters) on Windows. That will cause various build failures. This usually happens during installing dependencies with <code>npm install</code> using older version of NPM (&lt;3.0). Please build your app in the root directory, like <code>C:\build\</code>, to avoid this issue as much as possible.</p><h2 id="prepare-nw.js"><a name="prepare-nw.js" href="#prepare-nw.js"></a>Prepare NW.js</h2><p>You have to redistribute NW.js with your app to get your app running. NW.js provided multiple <a href="Advanced/Build Flavors.html">build flavors</a> for different requirements and package size. Choose the proper build flavor for your product or <a href="../For Developers/Building NW.js.html">build it from source code</a>.</p><p>All files in the downloaded package should be redistributed with your product, except tools in SDK flavor including <code>nwjc</code>, <code>payload</code> and <code>chromedriver</code>.</p><h2 id="package-your-app"><a name="package-your-app" href="#package-your-app"></a>Package Your App</h2><p>There two options to pack your app: plain files or zip file.</p><h3 id="package-option-1.-plain-files-(recommended)"><a name="package-option-1.-plain-files-(recommended)" href="#package-option-1.-plain-files-(recommended)"></a>Package Option 1. Plain Files (Recommended)</h3><p>On Windows and Linux, you can put the files of your app in the same folder of NW.js binaries and then ship them to your users. Make sure <code>nw</code> (or <code>nw.exe</code>) is in the same folder as <code>package.json</code>. Or you can put the files of your app in a folder named <code>package.nw</code> in the same folder as <code>nw</code> (or <code>nw.exe</code>).</p><p>On Mac, put the files of your app into a folder named <code>app.nw</code> in <code>nwjs.app/Contents/Resources/</code> and done.</p><p>It’s the recommended way to pack your app.</p><h3 id="package-option-2.-zip-file"><a name="package-option-2.-zip-file" href="#package-option-2.-zip-file"></a>Package Option 2. Zip File</h3><p>You can package all the files into a zip file and rename it as <code>package.nw</code>. And put it along with NW.js binaries for Windows and Linux. For Mac, name it <code>app.nw</code> and put it in <code>nwjs.app/Contents/Resources/</code>.</p><p>!!! warning “Start Slow with Big Package or Too Many Files”<br>    At starting time, NW.js will unzip the package into temp folder and load it from there. So it will start slower if your package is big or contains too many files.</p><p>On Windows and Linux, you can even hide the zip file by appending the zip file to the end of <code>nw</code> or <code>nw.exe</code>.<br>You can run following command on Windows to achieve this:</p><pre><code class="batch">copy /b nw.exe+package.nw app.exe
+</code></pre><p>or following command on Linux:</p><pre class="bash hljs">cat nw package.nw &gt; app &amp;&amp; chmod +x app
+</pre><h2 id="platform-specific-steps"><a name="platform-specific-steps" href="#platform-specific-steps"></a>Platform Specific Steps</h2><h3 id="windows"><a name="windows" href="#windows"></a>Windows</h3><p>Icon for <code>nw.exe</code> can be replaced with tools like <a href="http://www.angusj.com/resourcehacker/">Resource Hacker</a>, <a href="https://github.com/mllrsohn/node-webkit-builder">nw-builder</a> and <a href="https://github.com/felicienfrancois/node-winresourcer">node-winresourcer</a>.</p><p>You can create a installer to deploy all necessary files onto end user’s system. You can use <a href="https://msdn.microsoft.com/en-us/library/cc185688(VS.85">Windows Installer</a>.aspx), <a href="http://nsis.sourceforge.net/Main_Page">NSIS</a> or <a href="http://www.jrsoftware.org/isinfo.php">Inno Setup</a>.</p><h3 id="linux"><a name="linux" href="#linux"></a>Linux</h3><p>On Linux, you need to create proper <a href="https://wiki.archlinux.org/index.php/Desktop_Entries"><code>.desktop</code> file</a>.</p><p>To create a self-extractable installer script, you can use scripts like <a href="https://en.wikipedia.org/wiki/Shar"><code>shar</code></a> or <a href="http://stephanepeter.com/makeself/"><code>makeself</code></a>.</p><p>To distribute your app through the package management system, like <code>apt</code>, <code>yum</code>, <code>pacman</code> etc, please follow their official documents to create the packages.</p><h3 id="mac-os-x"><a name="mac-os-x" href="#mac-os-x"></a>Mac OS X</h3><p>On Mac OS X, you need to modify following files to have your own icon and bundle id:</p><ul>
+<li><code>Contents/Resources/nw.icns</code>: icon of your app. <code>nw.icns</code> is in <a href="https://en.wikipedia.org/wiki/Apple_Icon_Image_format">Apple Icon Image Format</a>. You can convert your icon in PNG/JPEG format into ICNS by using tools like <a href="http://www.img2icnsapp.com/">Image2Icon</a>.</li><li><code>Contents/Info.plist</code>: the apple package description file. You can view <a href="http://cocoadevcentral.com/articles/000071.php">Implementing Cocoa’s Standard About Panel</a> on how this file will influence your app and what fields you should modify.</li></ul><p>To rename the application, the following files should be modified:</p><ul>
+<li><code>Contents/Info.plist</code> - CFBundleDisplayName</li><li><code>Contents/Resources/en.lproj/InfoPlist.strings</code> - CFBundleDisplayName</li><li><code>Contents/MacOS/nwjs</code> - rename the file to the value of <code>CFBundleExecutable</code> if you changed it</li><li><code>package.json</code> – add a string field <code>product_string</code> (e.g. foobar); the helper application will be shown as ‘foobar Helper’. (since v0.24.4)<ul>
+<li><code>Contents/Frameworks/nwjs Framework.framework/Versions/n.n.n.n/nwjs Helper.app/Contents/MacOS/nwjs Helper.app</code> - rename the directory to ‘foobar Helper.app’, and also the three other helpers</li><li><code>Contents/Frameworks/nwjs Framework.framework/Versions/n.n.n.n/nwjs Helper.app/Contents/MacOS/nwjs Helper.app/Contents/Info.plist</code> - change CFBundleDisplayName, and also the three other helpers</li></ul>
+</li></ul><p>You should sign your Mac app, or the user won’t launch the app if Gatekeeper is turned on. See <a href="Advanced/Support for Mac App Store.html">Support for Mac App Store</a> for details.</p><h2 id="references"><a name="references" href="#references"></a>References</h2><p>See <a href="https://github.com/nwjs/nw.js/wiki/How-to-package-and-distribute-your-apps">wiki of NW.js</a> for more tools of packaging your app.</p>
+
+
+</body>
+</html>

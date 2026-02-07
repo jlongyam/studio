@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Troubleshooting.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>What doesn’t work on your side?</p><h2 id="audio"><a name="audio" href="#audio"></a>Audio</h2><p>Audio should work. The problem should be the codec for mp3 or other non-free media formats. See <a href="https://github.com/nwjs/nw.js/wiki/Using-MP3-%26-MP4-%28H.264%29-using-the--video--%26--audio--tags.">Support mp3 and H264 in video and audio tag</a></p><h2 id="webgl"><a name="webgl" href="#webgl"></a>WebGL</h2><p>2 extra DLL files from DirectX are needed, or your GFX card/driver is on Chromium’s black list. See <a href="https://github.com/rogerwang/node-webkit/issues/185">https://github.com/rogerwang/node-webkit/issues/185</a></p><p>Sometimes the css doesn’t display correctly, such as <code>-webkit-transform:translateZ(-1000px);</code>. Maybe it’s the problem with the WebGL.</p><h2 id="running-javascript-blocks-css-defined-animations"><a name="running-javascript-blocks-css-defined-animations" href="#running-javascript-blocks-css-defined-animations"></a>Running JavaScript blocks CSS-defined animations</h2><p>By default they are running in the same thread.</p><p>You may change it if you add <code>--enable-threaded-compositing</code> flag to the <a href="https://github.com/rogerwang/node-webkit/wiki/Manifest-format#chromium-args"><code>chromium-args</code></a> section of your application’s <a href="https://github.com/rogerwang/node-webkit/wiki/Manifest-format">manifest file</a>.</p><h2 id="lack-of-libudev.so.0"><a name="lack-of-libudev.so.0" href="#lack-of-libudev.so.0"></a>Lack of libudev.so.0</h2><p>Maybe node-webkit doesn’t work on your computer with the error.</p><pre><code data-origin="<pre><code>nw: error while loading shared libraries: libudev.so.0: cannot open shared object file: No such file or directory
+</code></pre>">nw: error while loading shared libraries: libudev.so.0: cannot open shared object file: No such file or directory
+</code></pre><p>See issues <a href="https://github.com/rogerwang/node-webkit/issues/136">#136</a>, <a href="https://github.com/rogerwang/node-webkit/issues/770">#770</a>, and the temporary solution [[The solution of lacking libudev.so.0]]</p>
+
+
+</body>
+</html>

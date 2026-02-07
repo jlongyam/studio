@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Node-main.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><code>node-main</code> is a field in the <a href="Manifest-format">manifest format</a>, with which you can specify the path to a Javascript file to run on startup. It is treated in the same way as the ‘main module’ you would run in Node.js.</p><p>The script will be running in Node’s context which won’t be destroyed across page navigation in Webkit, so it can be used to write some ‘background’ or ‘daemon’ like code.</p><p>Besides Node’s symbols, the following symbols are available in Node’s context:</p><ul>
+<li><strong>window</strong>: defined as a property of ‘global’, points to the DOM window global object. Note that it would be updated upon page navigation. This symbol is not available at the time the script is loaded, because the script is executed before the DOM window load.</li></ul><p>Since the <code>node-main</code> script is the main module of Node.js, it can be referred from DOM context with <code>process.mainModule</code>.</p><h1 id="example"><a name="example" href="#example"></a>Example</h1><p><em>the following code works with node-webkit</em> <strong>&gt;=0.3.3</strong></p><p>After refreshing the page you can see that the number is increased.</p><p>index.html</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;title&amp;gt;Hello World!&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body onload=&quot;process.mainModule.exports.callback0()&quot;&amp;gt;
+&amp;lt;h1&amp;gt;Hello World!&amp;lt;/h1&amp;gt;
+We are using node.js &amp;lt;script&amp;gt;document.write(process.version); &amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Hello World!&lt;/title&gt;
+&lt;/head&gt;
+&lt;body onload="process.mainModule.exports.callback0()"&gt;
+&lt;h1&gt;Hello World!&lt;/h1&gt;
+We are using node.js &lt;script&gt;document.write(process.version); &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>index.js</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>(function(){
+  var i = 0;
+  exports.callback0 = function () {
+    console.log(i + &quot;: &quot; + window.location);
+    window.alert (&quot;i = &quot; + i);
+    i = i + 1;
+  }
+})();
+</code></pre>">(function(){
+  var i = 0;
+  exports.callback0 = function () {
+    console.log(i + ": " + window.location);
+    window.alert ("i = " + i);
+    i = i + 1;
+  }
+})();
+</code></pre><p>package.json</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>{
+  &quot;name&quot;: &quot;nw-demo&quot;,
+  &quot;node-main&quot;: &quot;index.js&quot;,
+  &quot;main&quot;: &quot;index.html&quot;
+}
+</code></pre>">{
+  "name": "nw-demo",
+  "node-main": "index.js",
+  "main": "index.html"
+}
+</code></pre>
+
+
+</body>
+</html>

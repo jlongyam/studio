@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Faq-name-conflict.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>If your project already has a function called <code>require()</code> it will conflict with Node’s built-in <code>require()</code> which has been integrated into the DOM <code>window</code> object. In this case you can either disable Node support with the <code>nodejs</code> field in the <a href="Manifest-format">manifest</a>, or use this trick at the beginning of your code:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+    window.requireNode = window.require;
+    window.require = undefined; 
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;script type="text/javascript"&gt;
+    window.requireNode = window.require;
+    window.require = undefined; 
+&lt;/script&gt;
+</code></pre><p><strong>NOTE:</strong> If you are using Angular app use the following script.</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+     window.nw_global = window.global;
+     window.global = undefined;
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;script type="text/javascript"&gt;
+     window.nw_global = window.global;
+     window.global = undefined;
+&lt;/script&gt;
+</code></pre><p><strong>NOTE:</strong> If you are using the text! plugin of requirejs you also need to add some code before the require.config (or another place once the require object is fully loaded)</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>require.nodeRequire = window.requireNode;
+</code></pre>">require.nodeRequire = window.requireNode;
+</code></pre><p><strong>NOTE:</strong> If you use <code>nw.gui</code> module, you need to keep the function name as <code>require()</code> as code in the module will call <code>require()</code>. A solution is to rename it back before loading <code>nw.gui</code> and rename it again after the loading is done.</p><p>RequireJS now supports the namespace <code>requirejs</code> instead of <code>require</code>.</p>
+
+
+</body>
+</html>

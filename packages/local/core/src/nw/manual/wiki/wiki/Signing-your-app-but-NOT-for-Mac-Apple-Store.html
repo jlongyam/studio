@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Signing-your-app-but-NOT-for-Mac-Apple-Store-(MAS).html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><em>This relates to the OSX version only.</em></p><p>Sometimes you want to give your app to someone directly or via a download from your website. In that case it is preferable that you sign it so the recipient can more easily install it without running foul of Gatekeeper.</p><p>The requirements in this case are less than the ones necessary for delivery via the Mac App Store (MAS).</p><p><em>Prior to signing your app, you have to request and install certificates from the Apple Member Center. To do so, you can check [[this page|MAS: Requesting certificates]]. NOTE: Choose the <strong>Production &gt; Developer ID</strong> certificate.</em></p><p>Open Applications &gt; Keychain Access, and look for your new certificate under the “My Certificates” side panel. You’ll notice it says “Developer ID Application: YOUR NAME (XXXXXXXXXX)”. The confidential string between the <code>(XXXXXXXXXX)</code> is the ID you’ll use later.</p><hr class="section"><p>The following assumes you have <a href="http://docs.nwjs.io/en/latest/For%20Users/Package%20and%20Distribute/">packaged</a> your .app file and you have your Mac Developer ID Application certificate installed.</p><h3 id="signing-the-.app"><a name="signing-the-.app" href="#signing-the-.app"></a>Signing the .app</h3><ol>
+<li><p><code>cd</code> to the folder containing your .app</p>
+<pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;> cd path/to/folder
+</code></pre>"> cd path/to/folder
+</code></pre>
+</li><li><p>Perform the codesign</p>
+<p> <em>NOTE: Replace MAC_CERTIFICATE with the string <code>(XXXXXXXXXX)</code> from your developer certificate, and replace APP_NAME with the name of your app.</em></p>
+<pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;> codesign --force --deep --verbose --sign  &quot;MAC_CERTIFICATE&quot; APP_NAME.app
+</code></pre>"> codesign --force --deep --verbose --sign  "MAC_CERTIFICATE" APP_NAME.app
+</code></pre>
+</li><li><p>Verify it worked</p>
+<p> <em>NOTE: Replace APP_NAME with the name of your app.</em></p>
+<pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;> codesign --verify -vvvv APP_NAME.app &amp;amp; spctl -a -vvvv APP_NAME.app
+</code></pre>"> codesign --verify -vvvv APP_NAME.app &amp; spctl -a -vvvv APP_NAME.app
+</code></pre>
+</li><li><p>You should see the following messages:</p>
+</li></ol><ul>
+<li>APP_NAME: signed app bundle with Mach-O thin (x86_64)</li><li>APP_NAME: valid on disk</li><li>APP_NAME: satisfies its Designated Requirement</li><li>APP_NAME: accepted</li></ul><ol>
+<li>Congrats, you’re all set to distribute your Mac app!</li></ol><hr class="section"><p>For convenience, you may create a .command file to keep these commands for later:</p><ol>
+<li><p>Create the .command file</p>
+<pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;> touch my-script.command
+</code></pre>"> touch my-script.command
+</code></pre>
+</li><li><p>Set permissions to run the .command file</p>
+<pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;> chmod u+x /path/to/file.command
+</code></pre>"> chmod u+x /path/to/file.command
+</code></pre>
+</li><li><p>Edit your .command file, adding in:</p>
+<p> <em>NOTE: Replace the two variables with your own information.</em></p>
+<pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;> # Automatically change to current directory
+ cd &quot;$(dirname &quot;$0&quot;)&quot;
+
+ # CHANGE ME: Relative path to your .app from where this 
+ # .command file is (include &quot;.app&quot; after the name of your app)
+ APP_PATH=&quot;My-app.app&quot;
+
+ # CHANGE ME: Developer certificate
+ CERTIFICATE=XXXXXXXXXX
+
+ # CodeSign
+ codesign --force --deep --verbose --sign &quot;$CERTIFICATE&quot; $APP_PATH
+
+ # Verify
+ codesign --verify -vvvv $APP_PATH &amp;amp; spctl -a -vvvv $APP_PATH
+</code></pre>"> # Automatically change to current directory
+ cd "$(dirname "$0")"
+
+ # CHANGE ME: Relative path to your .app from where this 
+ # .command file is (include ".app" after the name of your app)
+ APP_PATH="My-app.app"
+
+ # CHANGE ME: Developer certificate
+ CERTIFICATE=XXXXXXXXXX
+
+ # CodeSign
+ codesign --force --deep --verbose --sign "$CERTIFICATE" $APP_PATH
+
+ # Verify
+ codesign --verify -vvvv $APP_PATH &amp; spctl -a -vvvv $APP_PATH
+</code></pre>
+</li></ol><hr class="section"><p>From there, you can package into a .dmg using whatever tool you use:<br>eg <a href="https://github.com/LinusU/node-appdmg">appdmg</a> (free)<br>or <a href="https://c-command.com/dropdmg/">DropDmg</a> (not free)<br>or <em>(please add other solutions you are using)</em></p>
+
+
+</body>
+</html>

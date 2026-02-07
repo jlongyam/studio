@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Show-window-after-page-is-ready.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><em>This example needs node-webkit &gt;= v0.3.0</em></p><p>Normally when node-webkit loads an app, it would: 1. show the browser; 2. unzip your app; 3. create renderer process; 4. initialize WebKit; 5. finally open your app. This progress would take some time, and your user may see the empty browser becoming a full loaded app.</p><p>To make your app seem to start smoothly, you should show the main window after everything is ready. There are some tips to achieve this.</p><p>First you need to specify <code>"show": false</code> in the <code>package.json</code>, so node-webkit will not show the window on startup:</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>{
+  &quot;window&quot;: {
+    &quot;show&quot;: false
+  }
+}
+</code></pre>">{
+  "window": {
+    "show": false
+  }
+}
+</code></pre><p>Then after everything is fully loaded, you can use the [[Window]] API to show your app’s window:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;script&amp;gt;
+var gui = require('nw.gui');
+
+onload = function() {
+  gui.Window.get().show();
+}
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;script&gt;
+var gui = require('nw.gui');
+
+onload = function() {
+  gui.Window.get().show();
+}
+&lt;/script&gt;
+</code></pre>
+
+
+</body>
+</html>

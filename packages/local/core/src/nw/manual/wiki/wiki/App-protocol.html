@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>App-protocol.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><strong>This feature is deprecated since 0.13.0. See <a href="http://docs.nwjs.io/en/latest/For%20Users/Migration/From%200.12%20to%200.13/">migration note</a> for details.</strong></p><p><em>since v0.7.0</em></p><p>The app protocol is defined like http protocol: <code>app://&lt;host&gt;/path</code>. The host part is essential. You can define it to anything you want. The root of <code>path</code> refers to the application’s directory, which is the directory where the manifest file resides.</p><p>It’s provided for the ease of migrating files from your web site, e.g. repackage your web site as a node-webkit application.</p><p>Regarding <a href="Security">security</a>, it’s treated as local file protocol and has access to Node functionality. </p><p><em>Example:</em></p><p>If you use absolute paths in the project and move the project directory to different path, you can just set a global ‘app://xyz’ in package’s manifest.json to avoid of path modification in each file. Well, if you only use relative paths, you don’t need to use it.</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;> {
+  &quot;name&quot;: &quot;ParleysDesktop&quot;,
+  &quot;main&quot;: &quot;app://whatever/index.html&quot;,
+  &quot;window&quot;: {
+    &quot;toolbar&quot;: true,
+    &quot;frame&quot;: true,
+    &quot;width&quot;: 1000,
+    &quot;height&quot;: 800,
+    &quot;position&quot;: &quot;mouse&quot;,
+    &quot;min_width&quot;: 400,
+    &quot;min_height&quot;: 200,
+    &quot;max_width&quot;: 8000,
+    &quot;max_height&quot;: 8000
+  }
+ }
+</code></pre>"> {
+  "name": "ParleysDesktop",
+  "main": "app://whatever/index.html",
+  "window": {
+    "toolbar": true,
+    "frame": true,
+    "width": 1000,
+    "height": 800,
+    "position": "mouse",
+    "min_width": 400,
+    "min_height": 200,
+    "max_width": 8000,
+    "max_height": 8000
+  }
+ }
+</code></pre>
+
+
+</body>
+</html>

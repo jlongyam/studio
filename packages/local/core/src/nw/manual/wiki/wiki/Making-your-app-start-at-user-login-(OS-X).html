@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Making-your-app-start-at-user-login-(OS-X).html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>One way to make your packaged application automatically launch on user login in OS X is to define a <code>launchd</code> job and use <code>child_process.exec</code> to run a series of system commands in order to configure launchd to run your app when the user logs in.</p><p>Let’s assume we’ve already created a packaged OS X app called <code>sleep.app</code> and placed it in <code>/Applications/sleep.app</code>.</p><p>First, we’ll define a job in the form of a .plist (XML) file and place it in our app directory at <code>./com.capablemonkey.sleepApp.plist</code></p><pre><code data-origin="<pre><code>&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;
+&amp;lt;plist version=&quot;1.0&quot;&amp;gt;
+  &amp;lt;dict&amp;gt;
+    &amp;lt;key&amp;gt;Label&amp;lt;/key&amp;gt;
+    &amp;lt;string&amp;gt;com.capablemonkey.sleepApp&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;ProgramArguments&amp;lt;/key&amp;gt;
+      &amp;lt;array&amp;gt;
+          &amp;lt;string&amp;gt;/usr/bin/open&amp;lt;/string&amp;gt;
+          &amp;lt;string&amp;gt;-W&amp;lt;/string&amp;gt;
+          &amp;lt;string&amp;gt;/Applications/sleep.app&amp;lt;/string&amp;gt;
+      &amp;lt;/array&amp;gt;
+    &amp;lt;key&amp;gt;RunAtLoad&amp;lt;/key&amp;gt;
+    &amp;lt;true/&amp;gt;
+  &amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;
+</code></pre>">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+  &lt;dict&gt;
+    &lt;key&gt;Label&lt;/key&gt;
+    &lt;string&gt;com.capablemonkey.sleepApp&lt;/string&gt;
+    &lt;key&gt;ProgramArguments&lt;/key&gt;
+      &lt;array&gt;
+          &lt;string&gt;/usr/bin/open&lt;/string&gt;
+          &lt;string&gt;-W&lt;/string&gt;
+          &lt;string&gt;/Applications/sleep.app&lt;/string&gt;
+      &lt;/array&gt;
+    &lt;key&gt;RunAtLoad&lt;/key&gt;
+    &lt;true/&gt;
+  &lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre><p>Then, we need our nw.js app to run the following commands:</p><p><code>cp com.capablemonkey.sleepApp.plist ~/Library/LaunchAgents/</code> in order to move the plist into a directory where <code>launchd</code> will check for jobs to run at login.</p><p><code>launchctl load ~/Library/LaunchAgents/com.capablemonkey.sleepApp.plist</code> which will tell <code>launchd</code> (via <code>launchctl</code>) to load our job.  With each login, our app, <code>/Applications/sleep.app</code> should be launched.</p><p>To achieve this, we’ll run those commands from node using <code>child_process.exec</code>:</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>var async = require('async');
+var exec = require('child_process').exec;
+
+function enableRunOnLogin(callback) {
+  async.waterfall([
+    function(callback) {
+      exec('cp ./com.capablemonkey.sleepApp.plist ~/Library/LaunchAgents/', 
+        function(error, stdout, stderr) {
+          if (stderr) { return callback(stderr); }
+          if (error !== null) { return callback(error); }
+
+          return callback(null); 
+        }
+      );
+    },
+    function(callback) {
+      exec('launchctl load ~/Library/LaunchAgents/com.capablemonkey.sleepApp.plist', 
+        function(error, stdout, stderr) {
+          if (stderr) { return callback(stderr); }
+          if (error !== null) { return callback(error); }
+
+          return callback(null); 
+        }
+      );
+    }
+
+  ], function(err, result) {
+    if (err) {
+      console.error(&quot;Exec error&quot;, err);
+      return callback(err);
+    }
+
+    return callback(null);
+  });
+}
+</code></pre>">var async = require('async');
+var exec = require('child_process').exec;
+
+function enableRunOnLogin(callback) {
+  async.waterfall([
+    function(callback) {
+      exec('cp ./com.capablemonkey.sleepApp.plist ~/Library/LaunchAgents/', 
+        function(error, stdout, stderr) {
+          if (stderr) { return callback(stderr); }
+          if (error !== null) { return callback(error); }
+
+          return callback(null); 
+        }
+      );
+    },
+    function(callback) {
+      exec('launchctl load ~/Library/LaunchAgents/com.capablemonkey.sleepApp.plist', 
+        function(error, stdout, stderr) {
+          if (stderr) { return callback(stderr); }
+          if (error !== null) { return callback(error); }
+
+          return callback(null); 
+        }
+      );
+    }
+
+  ], function(err, result) {
+    if (err) {
+      console.error("Exec error", err);
+      return callback(err);
+    }
+
+    return callback(null);
+  });
+}
+</code></pre><p>See <a href="http://blog.gordn.org/2015/03/implementing-run-on-login-for-your-node.html">this guide</a> for more info.</p>
+
+
+</body>
+</html>

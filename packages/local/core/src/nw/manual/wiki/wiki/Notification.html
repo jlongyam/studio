@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Notification.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>Notification API requires node-webkit &gt;= v0.10.1</em></p><p><code>Notification</code> specification is based from <a href="http://www.w3.org/TR/notifications/">http://www.w3.org/TR/notifications/</a></p><p>Here is the API specification:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>[Constructor(DOMString title, optional NotificationOptions options)]
+interface Notification : EventTarget {
+
+  attribute EventHandler onclick;
+  attribute EventHandler onshow;
+  attribute EventHandler onerror;
+  attribute EventHandler onclose;
+
+  readonly attribute DOMString body;
+  readonly attribute DOMString icon;
+
+  void close();
+};
+
+dictionary NotificationOptions {
+  DOMString body;
+  DOMString icon;
+};
+</code></pre>">[Constructor(DOMString title, optional NotificationOptions options)]
+interface Notification : EventTarget {
+
+  attribute EventHandler onclick;
+  attribute EventHandler onshow;
+  attribute EventHandler onerror;
+  attribute EventHandler onclose;
+
+  readonly attribute DOMString body;
+  readonly attribute DOMString icon;
+
+  void close();
+};
+
+dictionary NotificationOptions {
+  DOMString body;
+  DOMString icon;
+};
+</code></pre><h1 id="sample-code"><a name="sample-code" href="#sample-code"></a>Sample code</h1><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>
+var options = {
+  icon: &quot;http://yourimage.jpg&quot;,
+  body: &quot;Here is the notification text&quot;
+ };
+
+var notification = new Notification(&quot;Notification Title&quot;,options);
+notification.onclick = function () {
+  document.getElementById(&quot;output&quot;).innerHTML += &quot;Notification clicked&quot;;
+}
+
+notification.onshow = function () {
+  // play sound on show
+  myAud=document.getElementById(&quot;audio1&quot;);
+  myAud.play();
+
+  // auto close after 1 second
+  setTimeout(function() {notification.close();}, 1000);
+}
+</code></pre>">
+var options = {
+  icon: "http://yourimage.jpg",
+  body: "Here is the notification text"
+ };
+
+var notification = new Notification("Notification Title",options);
+notification.onclick = function () {
+  document.getElementById("output").innerHTML += "Notification clicked";
+}
+
+notification.onshow = function () {
+  // play sound on show
+  myAud=document.getElementById("audio1");
+  myAud.play();
+
+  // auto close after 1 second
+  setTimeout(function() {notification.close();}, 1000);
+}
+</code></pre><h1 id="general-notes"><a name="general-notes" href="#general-notes"></a>General Notes</h1><p>you can use <code>http://</code> or <code>file://</code> for the <code>icon</code>. node-webkit supports jpg / png files</p><h2 id="windows"><a name="windows" href="#windows"></a>Windows</h2><h3 id="balloon-notification"><a name="balloon-notification" href="#balloon-notification"></a>Balloon Notification</h3><p>if no icon is specified, it will use the app’s icon.</p><p>icon size must be &gt;= 32x32</p><h3 id="toast-notification-(requires-node-webkit->=-v0.11)"><a name="toast-notification-(requires-node-webkit->=-v0.11)" href="#toast-notification-(requires-node-webkit-&gt;=-v0.11)"></a>Toast Notification (requires node-webkit &gt;= v0.11)</h3><ul>
+<li>Only for Win8 (or newer)</li><li>The icon must be using <code>file://</code></li><li>A shortcut to your app, with a System.AppUserModel.ID, must be installed to the Start screen. Note, however, that it does not need to be pinned to the Start screen. For more information, see How to enable desktop toast notifications through an AppUserModelID (<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh802762(v=vs.85).aspx">http://msdn.microsoft.com/en-us/library/windows/desktop/hh802762(v=vs.85).aspx</a>).</li></ul><p>The shortcut, ideally should be created by the application installer, but we have the API to create this, recommended to run this once during the application startup (in case the user deleted the shortcut link)</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var gui = require('nw.gui');
+gui.App.createShortcut(process.env.APPDATA + &quot;\\Microsoft\\Windows\\Start Menu\\Programs\\node-webkit.lnk&quot;);
+</code></pre>">var gui = require('nw.gui');
+gui.App.createShortcut(process.env.APPDATA + "\\Microsoft\\Windows\\Start Menu\\Programs\\node-webkit.lnk");
+</code></pre><p>the command will create / update the shortcut link with AppUserModelID</p><p>The AppUserModelID can be specified in package.json file</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>{
+&quot;app-id&quot;: &quot;com.node.webkit.notification.test&quot;
+}
+</code></pre>">{
+"app-id": "com.node.webkit.notification.test"
+}
+</code></pre><p>if it is not, it will use the application name as the AppUserModelID</p><p>for complete sample code, go here <a href="https://github.com/rogerwang/node-webkit/tree/master/tests/manual_tests/notification">https://github.com/rogerwang/node-webkit/tree/master/tests/manual_tests/notification</a></p><h2 id="linux"><a name="linux" href="#linux"></a>Linux</h2><p>onclick event is not supported</p>
+
+
+</body>
+</html>

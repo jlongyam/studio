@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Livereload-nw.js-on-changes.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>When you are working on a prototype it’s faster to reload the nw.js window<br>automatically on file changes.</p><h2 id="drop-in-library-solution"><a name="drop-in-library-solution" href="#drop-in-library-solution"></a>Drop-in library solution</h2><p><a href="https://www.npmjs.com/package/nw-dev">nw-dev</a></p><h2 id="basic-solution"><a name="basic-solution" href="#basic-solution"></a>Basic solution</h2><p>You can add this script tag to the end of your main file:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;script&amp;gt;
+  var path = './';
+  var fs = require('fs');
+
+  var reloadWatcher=fs.watch(path, function() {
+    location.reload();
+    reloadWatcher.close();
+  });
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;script&gt;
+  var path = './';
+  var fs = require('fs');
+
+  var reloadWatcher=fs.watch(path, function() {
+    location.reload();
+    reloadWatcher.close();
+  });
+&lt;/script&gt;
+</code></pre><h3 id="reloading-nodejs-modules"><a name="reloading-nodejs-modules" href="#reloading-nodejs-modules"></a>Reloading NodeJS modules</h3><p>NodeJS modules loaded with require() will be cached in require.cache.<br>If these modules ought to be reloaded along with the page, add the following to the reloadWatcher listener:</p><pre><code data-origin="<pre><code>    for(var i in require.cache) {
+      delete require.cache[i];
+    }
+</code></pre>">    for(var i in require.cache) {
+      delete require.cache[i];
+    }
+</code></pre><p>It will be limited to watching files directly within the current directory.</p><h2 id="recursive-solution"><a name="recursive-solution" href="#recursive-solution"></a>Recursive solution</h2><p>You can add an option to the previous example to watch all subdirectories: <code>fs.watch(path, { recursive: true }, listener)</code>. The recursive option is only currently supported on OS X and Windows. For a more robust solution, first you need to install “gaze”, “chokidar” or “gulp”, and then change the script tag content:</p><h3 id="gaze"><a name="gaze" href="#gaze"></a>gaze</h3><p><code>npm install gaze</code></p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>  &amp;lt;script&amp;gt;
+   var Gaze = require('gaze').Gaze;
+   var gaze = new Gaze('**/*');
+
+   gaze.on('all', function(event, filepath) {
+     if (location)
+       location.reload();
+   });
+  &amp;lt;/script&amp;gt;
+</code></pre>">  &lt;script&gt;
+   var Gaze = require('gaze').Gaze;
+   var gaze = new Gaze('**/*');
+
+   gaze.on('all', function(event, filepath) {
+     if (location)
+       location.reload();
+   });
+  &lt;/script&gt;
+</code></pre><h3 id="chokidar"><a name="chokidar" href="#chokidar"></a>chokidar</h3><p><code>npm install chokidar</code></p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>  &amp;lt;script&amp;gt;
+    var chokidar = require('chokidar');
+    var watcher  = chokidar.watch('.', {ignored: /[\/\\]\./});
+    watcher.on('all', function(event, path) {
+      if (location &amp;amp;&amp;amp; event == &quot;change&quot;)
+        location.reload();
+    });
+  &amp;lt;/script&amp;gt;
+</code></pre>">  &lt;script&gt;
+    var chokidar = require('chokidar');
+    var watcher  = chokidar.watch('.', {ignored: /[\/\\]\./});
+    watcher.on('all', function(event, path) {
+      if (location &amp;&amp; event == "change")
+        location.reload();
+    });
+  &lt;/script&gt;
+</code></pre><h3 id="gulp"><a name="gulp" href="#gulp"></a>gulp</h3><p><code>npm install gulp</code></p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;script&amp;gt;
+  var gulp = require('gulp');
+  gulp.task('reload', function () {
+    if (location) location.reload();
+  });
+
+  gulp.watch('**/*', ['reload']);
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;script&gt;
+  var gulp = require('gulp');
+  gulp.task('reload', function () {
+    if (location) location.reload();
+  });
+
+  gulp.watch('**/*', ['reload']);
+&lt;/script&gt;
+</code></pre><p>Or if you don’t want to reload the entire app when editing styles, you can attach a style task<br>in gulp only to css files.</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;script&amp;gt;
+  var gulp = require('gulp');
+
+  gulp.task('html', function () {
+    if (location) location.reload();
+  });
+
+  gulp.task('css', function () {
+    var styles = document.querySelectorAll('link[rel=stylesheet]');
+
+    for (var i = 0; i &amp;lt; styles.length; i++) {
+      // reload styles
+      var restyled = styles[i].getAttribute('href') + '?v='+Math.random(0,10000);
+      styles[i].setAttribute('href', restyled);
+    };
+  });
+
+  gulp.watch(['**/*.css'], ['css']);
+  gulp.watch(['**/*.html'], ['html']);
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;script&gt;
+  var gulp = require('gulp');
+
+  gulp.task('html', function () {
+    if (location) location.reload();
+  });
+
+  gulp.task('css', function () {
+    var styles = document.querySelectorAll('link[rel=stylesheet]');
+
+    for (var i = 0; i &lt; styles.length; i++) {
+      // reload styles
+      var restyled = styles[i].getAttribute('href') + '?v='+Math.random(0,10000);
+      styles[i].setAttribute('href', restyled);
+    };
+  });
+
+  gulp.watch(['**/*.css'], ['css']);
+  gulp.watch(['**/*.html'], ['html']);
+&lt;/script&gt;
+</code></pre><h3 id="livereload-script-src-format"><a name="livereload-script-src-format" href="#livereload-script-src-format"></a>Livereload script src format</h3><p>Use format allowing file: URLs.<br><a href="https://github.com/livereload/livereload-js#using-livereloadjs">https://github.com/livereload/livereload-js#using-livereloadjs</a></p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>[
+  'http://',
+  (location.host || 'localhost').split(':')[0],
+  ':35729/livereload.js'
+].join('')
+</code></pre>">[
+  'http://',
+  (location.host || 'localhost').split(':')[0],
+  ':35729/livereload.js'
+].join('')
+</code></pre><h2 id="clearing-the-node-modules-cache"><a name="clearing-the-node-modules-cache" href="#clearing-the-node-modules-cache"></a>Clearing the node modules cache</h2><p>If you want to reload and re-run your node modules, you’ll need to delete the global require cache (<code>global.require.cache</code>). <a href="http://stackoverflow.com/questions/25143532/node-webkit-clear-cache">See this StackOverflow question</a>. Note that this will remove ALL modules from the cache, possibly including the <code>node-main</code> module:</p><pre><code class="lang-coffee" data-origin="<pre><code class=&quot;lang-coffee&quot;># Define a new `reload` task in Gulp that simply refreshes the current page
+gulp.task 'reload', -&amp;gt;
+    # Log that we're reloading the app
+    console.log 'Reloading app...'
+    # Clear and delete node-webkit's global required modules cache.
+    # See: http://stackoverflow.com/q/25143532/
+    for module_name, module of global.require.cache
+        delete global.require.cache[module_name]
+    # Refresh the page
+    window.location.reload()
+
+# Set Gulp to watch all files, and reload the page when it detects a change.
+gulp.watch '**/*', ['reload']
+</code></pre>"># Define a new `reload` task in Gulp that simply refreshes the current page
+gulp.task 'reload', -&gt;
+    # Log that we're reloading the app
+    console.log 'Reloading app...'
+    # Clear and delete node-webkit's global required modules cache.
+    # See: http://stackoverflow.com/q/25143532/
+    for module_name, module of global.require.cache
+        delete global.require.cache[module_name]
+    # Refresh the page
+    window.location.reload()
+
+# Set Gulp to watch all files, and reload the page when it detects a change.
+gulp.watch '**/*', ['reload']
+</code></pre>
+
+
+</body>
+</html>

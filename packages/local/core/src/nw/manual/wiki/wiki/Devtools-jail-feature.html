@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Devtools-jail-feature.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><h2 id="devtools-jail"><a name="devtools-jail" href="#devtools-jail"></a>Devtools Jail</h2><p>With the feature <code>Devtools jail</code> you can limit the functions of devtools inside an iframe of your window. That means the user can only inspect the DOM elements and JavaScript files in the iframe.</p><p>To do that, call <code>Window.showDevTools(id)</code> where <code>id</code> is the value of <code>id</code> attribute of the iframe element. Since v0.7.2, you can also call <code>Window.showDevTools(iframe)</code> where <code>iframe</code> is the object of the iframe element.</p><p>This feature is useful for developing IDE with node-webkit: the IDE developers want their users (application developers) to be able to debug their application with Devtools. The UI of the user’s application is shown in an iframe in an simulator window, the outer parts of which is used for decoration or control buttons.</p><h2 id="headless"><a name="headless" href="#headless"></a>Headless</h2><p>If you want to show Devtools in an iframe of your window, you can use this feature:</p><p><strong>NOTE: it’s not supposed to use a single iframe for both Jail and showing the Devtools UI.</strong></p><p>Call <code>Window.showDevTools(id, headless)</code>. When <code>headless</code> is <code>true</code>, there will be no new window popped up to show Devtools. A <code>devtools-opened</code> event will be sent to the <code>Window</code> object with a <code>url</code> parameter, which is the URL for showing Devtools UI.</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var win = nwgui.Window.get();
+win.showDevTools('', true);
+win.on(&quot;devtools-opened&quot;, function(url) {
+    console.log(&quot;devtools-opened: &quot; + url);
+    document.getElementById('devtools').src = url;
+});
+</code></pre>">var win = nwgui.Window.get();
+win.showDevTools('', true);
+win.on("devtools-opened", function(url) {
+    console.log("devtools-opened: " + url);
+    document.getElementById('devtools').src = url;
+});
+</code></pre><h2 id="see-also"><a name="see-also" href="#see-also"></a>see also</h2><p><a href="Window.html">Window</a></p>
+
+
+</body>
+</html>

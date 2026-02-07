@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Enable Proprietary Codecs</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="enable-proprietary-codecs"><a name="enable-proprietary-codecs" href="#enable-proprietary-codecs"></a>Enable Proprietary Codecs</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#supported-codecs-in-prebuilt-nw.js-binary" html="Supported Codecs in Prebuilt NW.js Binary">Supported Codecs in Prebuilt NW.js Binary</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#enable-proprietary-codecs-in-nw.js" html="Enable Proprietary Codecs in NW.js">Enable Proprietary Codecs in NW.js</a>
+</span>
+<!--span class="number">
+1
+</span-->
+<ul>
+<li><span class="html">
+<a href="#get-ffmpeg-binaries-from-the-community" html="Get FFmpeg Binaries from the Community">Get FFmpeg Binaries from the Community</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#build-ffmpeg-dll-without-building-nw.js" html="Build FFmpeg DLL without Building NW.js">Build FFmpeg DLL without Building NW.js</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#build-entire-nw.js-with-proprietary-codecs" html="Build Entire NW.js with Proprietary Codecs">Build Entire NW.js with Proprietary Codecs</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="supported-codecs-in-prebuilt-nw.js-binary"><a name="supported-codecs-in-prebuilt-nw.js-binary" href="#supported-codecs-in-prebuilt-nw.js-binary"></a>Supported Codecs in Prebuilt NW.js Binary</h2><p>As NW.js is based on Chromium, the media components are essentially the same. In the pre-built NW.js, the following codecs are supported:</p><pre><code>- theora
+- vorbis
+- vp8 &amp; vp9
+- pcm_u8, pcm_s16le, pcm_s24le, pcm_f32le, pcm_s16be &amp; pcm_s24be
+- mp3 (v0.22.1+)
+</code></pre><p>… as well as these demuxers:</p><pre><code>- ogg
+- matroska
+- wav
+</code></pre><h2 id="enable-proprietary-codecs-in-nw.js"><a name="enable-proprietary-codecs-in-nw.js" href="#enable-proprietary-codecs-in-nw.js"></a>Enable Proprietary Codecs in NW.js</h2><p>!!! warning “License and Patent Fee”<br>    Using the H.264 codec requires you to pay attention to the patent royalties and the license of the source code. Consult a lawyer if you do not understand the licensing constraints and using patented media formats in your application. For more information about the license of the source code, check <a href="https://chromium.googlesource.com/chromium/third_party/ffmpeg.git/+/master/CREDITS.chromium">here</a>.</p><p>!!! warning “Warning”<br>    If you do <strong>NOT</strong> have the license, using this tip below or moving to other solutions does <strong>NOT</strong> make you eligible to redistribute the codecs.</p><h3 id="get-ffmpeg-binaries-from-the-community"><a name="get-ffmpeg-binaries-from-the-community" href="#get-ffmpeg-binaries-from-the-community"></a>Get FFmpeg Binaries from the Community</h3><p>In recent versions of the Chromium project, FFmpeg was changed to be built-in. So, you can’t get the FFmpeg DLL from the official Chrome distribution anymore. However, you can get <a href="https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases">precompiled binaries</a> from the community. Another alternative would be to build FFmpeg yourself by following the instructions below.</p><h3 id="build-ffmpeg-dll-without-building-nw.js"><a name="build-ffmpeg-dll-without-building-nw.js" href="#build-ffmpeg-dll-without-building-nw.js"></a>Build FFmpeg DLL without Building NW.js</h3><p>If you are using pre-built NW.js, you can just only rebuild FFmpeg DLL and replace the bundled DLL in pre-built binaries. This will save lots of time in download size (~1G) comparing to building entire NW.js (~20G).</p><p><strong>Step 1.</strong> Download zip package of customized Chromium from GitHub. You can find the corresponding version in <a href="https://github.com/nwjs/chromium.src/tags">https://github.com/nwjs/chromium.src/tags</a>. Extract the zip package into a local folder, such as <code>~/nw</code>. The unzipped package will include a sub directory. So the source folder is in <code>~/nw/&lt;sub-directory-name&gt;</code>.</p><p><strong>Step 2.</strong> Fetch dependencies</p><p>Since you are not building entire NW.js, you have to fetch following dependencies manually.</p><ul>
+<li>Git clone following folders with corresponding commits as in <code>DEPS</code> file:<ul>
+<li><code>buildtools</code></li><li><code>tools/gyp</code></li><li><code>third_party/yasm/sources/patched-yasm</code></li><li><code>third_party/ffmpeg</code></li></ul>
+</li><li>Download <code>gn</code> tools in <code>buildtools/&lt;os&gt;</code> by<pre data-origin="download_from_google_storage --no_resume \
+                           --platform=&amp;lt;platform&amp;gt; \
+                           --no_auth \
+                           --bucket chromium-gn \
+                           -s buildtools/&amp;lt;os&amp;gt;/&amp;lt;gn-exe&amp;gt;.sha1
+" class="bash hljs">download_from_google_storage --no_resume \
+                           --platform=&lt;platform&gt; \
+                           --no_auth \
+                           --bucket chromium-gn \
+                           <span class="hljs-operator">-s</span> buildtools/&lt;os&gt;/&lt;gn-exe&gt;.sha1
+</pre>
+<ul>
+<li><code>&lt;platform&gt;</code>: <code>win32</code> for Windows; <code>darwin</code> for Mac; <code>linux*</code> for Linux</li><li><code>&lt;os&gt;</code>: <code>win</code> for Windows; <code>mac</code> for Mac; <code>linux64</code> for Linux</li><li><code>&lt;gn-exe&gt;</code>: <code>gn.exe</code> for Windows; <code>gn</code> for Mac and Linux</li></ul>
+</li><li><strong>[Mac and Linux]</strong> Download <code>clang</code> tools in <code>third_party/llvm-build</code> by<pre data-origin="python tools/clang/scripts/update.py --if-needed
+" class="bash hljs">python tools/clang/scripts/update.py --if-needed
+</pre>
+</li><li><strong>[Linux]</strong> Download libraries in <code>build/linux/*-sysroot</code> by<pre data-origin="python build/linux/sysroot_scripts/install-sysroot.py --running-as-hook
+" class="bash hljs">python build/linux/sysroot_scripts/install-sysroot.py --running-as-hook
+</pre>
+</li><li><strong>[Mac]</strong> Download <strong>libc++-static</strong> library in <code>third_party/libc++-static</code> by<pre data-origin="download_from_google_storage --no_resume \
+                           --platform=darwin \
+                           --no_auth \
+                           --bucket chromium-libcpp \
+                           -s third_party/libc++-static/libc++.a.sha1
+" class="bash hljs">download_from_google_storage --no_resume \
+                           --platform=darwin \
+                           --no_auth \
+                           --bucket chromium-libcpp \
+                           <span class="hljs-operator">-s</span> third_party/libc++-static/libc++.a.sha1
+</pre>
+</li></ul><p>!!! tip “For Linux Developers”<br>    Please run <code>build/install-build-deps.sh</code> for the first time building FFmpeg DLL or NW.js before proceeding to the instructions below. You only have to run it once. This script will install the build dependencies automatically for you.</p><p><strong>Step 3.</strong> Replace BUILD.gn</p><p>Replace <code>BUILD.gn</code> in the root of the source code with following:</p><pre><code>action("dummy") {
+  deps = [
+    "//third_party/ffmpeg"
+  ]
+  script = "dummy"
+  outputs = ["$target_gen_dir/dummy.txt"]
+}
+</code></pre><p><strong>Step 4.</strong> Generate Ninja Files with GN Tools</p><pre class="bash hljs"><span class="hljs-built_in">cd</span> path/to/nw/<span class="hljs-built_in">source</span>/folder
+gn gen //out/nw \
+ --args=<span class="hljs-string">'is_debug=false is_component_ffmpeg=true target_cpu="&lt;target_cpu&gt;" is_official_build=true ffmpeg_branding="Chrome"'</span>
+</pre><p><strong>NOTE</strong>: <code>&lt;target_cpu&gt;</code> should be set to <code>x86</code> or <code>x64</code> for 32-bit or 64-bit build.</p><p><strong>Step 4.</strong> Build ffmpeg DLL</p><pre class="bash hljs">ninja -C out/nw ffmpeg
+</pre><p>You will find the DLL in <code>out/nw</code> folder. The path and file name varies between platforms:</p><ul>
+<li>Windows: <code>ffmpeg.dll</code></li><li>Mac OS X: <code>libffmpeg.dylib</code></li><li>Linux: <code>lib/libffmpeg.so</code></li></ul><p><strong>Step 5.</strong> Replace the bundled DLL in prebuild NW.js with the one you just built. The path and file name varies between platforms:</p><ul>
+<li>Windows: <code>ffmpeg.dll</code></li><li>Mac OS X: <code>nwjs.app/Contents/Versions/&lt;chromium-version&gt;/nwjs Framework.framework/libffmpeg.dylib</code></li><li>Linux <code>lib/libffmpeg.so</code></li></ul><h3 id="build-entire-nw.js-with-proprietary-codecs"><a name="build-entire-nw.js-with-proprietary-codecs" href="#build-entire-nw.js-with-proprietary-codecs"></a>Build Entire NW.js with Proprietary Codecs</h3><p>If you don’t use official pre-built NW.js, you can build entire NW.js with proprietary codecs enabled by following the instructions below. See <a href="Building NW.js.html">Building NW.js</a> for details of each steps.</p><p><strong>Step 1.</strong> Install prerequists and fetch the source code of NW.js. See <em>Prerequisits</em> and <em>Get the Code</em> sections in <a href="Building NW.js.html">Building NW.js</a>.</p><p><strong>Step 2.</strong> Set <code>ffmpeg_branding</code> to <code>Chrome</code> when you configure GN.</p><p><strong>Step 3.</strong> Regenerate the ninja files again.</p><p><strong>Step 4.</strong> Rebuild NW.js.</p>
+
+
+</body>
+</html>

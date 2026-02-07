@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Command Line Options</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="command-line-options"><a name="command-line-options" href="#command-line-options"></a>Command Line Options</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#about-command-line-arguments" html="About command line arguments">About command line arguments</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--url`" html="--url">--url</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--mixed-context`" html="--mixed-context">--mixed-context</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--nwapp`" html="--nwapp">--nwapp</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--user-data-dir`" html="--user-data-dir">--user-data-dir</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--disable-devtools`" html="--disable-devtools">--disable-devtools</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--enable-node-worker`" html="--enable-node-worker">--enable-node-worker</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--disable-raf-throttling`" html="--disable-raf-throttling">--disable-raf-throttling</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--disable-cookie-encryption`" html="--disable-cookie-encryption">--disable-cookie-encryption</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--disable-crash-handler=true`" html="--disable-crash-handler=true">--disable-crash-handler=true</a>
+</span>
+<!--span class="number">
+9
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--enable-gcm`" html="--enable-gcm">--enable-gcm</a>
+</span>
+<!--span class="number">
+10
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--enable-transparent-visuals`" html="--enable-transparent-visuals">--enable-transparent-visuals</a>
+</span>
+<!--span class="number">
+11
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--disable-transparency`" html="--disable-transparency">--disable-transparency</a>
+</span>
+<!--span class="number">
+12
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--disable-gpu`" html="--disable-gpu">--disable-gpu</a>
+</span>
+<!--span class="number">
+13
+</span-->
+</li>
+<li><span class="html">
+<a href="#`--force-cpu-draw`" html="--force-cpu-draw">--force-cpu-draw</a>
+</span>
+<!--span class="number">
+14
+</span-->
+</li>
+<li><span class="html">
+<a href="#other-chromium-options" html="Other Chromium Options">Other Chromium Options</a>
+</span>
+<!--span class="number">
+15
+</span-->
+</li>
+<li><span class="html">
+<a href="#environment-variables" html="Environment Variables">Environment Variables</a>
+</span>
+<!--span class="number">
+16
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p>You use following command line options when starting NW.js to change some default behaviors.</p><h2 id="about-command-line-arguments"><a name="about-command-line-arguments" href="#about-command-line-arguments"></a>About command line arguments</h2><p>When a user uses your app to open a file under command line, like <code>your-app file.txt file2.txt</code>, the <code>file.txt file2.txt</code> will be recorded and you can use <a href="App.html">nw.App.argv</a> to get the array of command line arguments.  If there is already one running instance of your app, the full command line of the second instance will be passed to the existing instance by sending <code>open</code> event to the <code>App</code> object.</p><p>!!! note<br>    For now there is a limitation: if the command line argument is the filename of .js file on disk, NW will just run it as upstream Node.js. This is for supporting <code>child_process.fork()</code> API.</p><h2 id="`--url`"><a name="`--url`" href="#`--url`"></a><code>--url</code></h2><p>Load URL with the default app: <code>--url=http://nwjs.io</code></p><h2 id="`--mixed-context`"><a name="`--mixed-context`" href="#`--mixed-context`"></a><code>--mixed-context</code></h2><p>Run NW.js in <a href="../For Users/Advanced/JavaScript Contexts in NW.js.html#mixed-context-mode">Mixed Context Mode</a> instead of Separate Context Mode.</p><h2 id="`--nwapp`"><a name="`--nwapp`" href="#`--nwapp`"></a><code>--nwapp</code></h2><p>An alternative way to specify the path of the app. This parameter is especially useful when <a href="../For Users/Advanced/Test with ChromeDriver.html">testing with ChromeDriver</a>.</p><h2 id="`--user-data-dir`"><a name="`--user-data-dir`" href="#`--user-data-dir`"></a><code>--user-data-dir</code></h2><p>Specify the data directory for your app, which contains the stored data, caches and crash dumps etc. By default the data directory is in following directories according to your platform:</p><ul>
+<li>Windows: <code>%LOCALAPPDATA%/&lt;name-in-manifest&gt;/</code></li><li>Mac: <code>~/Library/Application Support/&lt;name-in-manifest&gt;/</code></li><li>Linux: <code>~/.config/&lt;name-in-manifest&gt;</code></li></ul><p>Where <code>&lt;name-in-manifest&gt;</code> is the <a href="Manifest Format.html#name"><code>name</code> field in manifest</a>.</p><h2 id="`--disable-devtools`"><a name="`--disable-devtools`" href="#`--disable-devtools`"></a><code>--disable-devtools</code></h2><p>Disable user’s access to devtools feature in SDK build.</p><h2 id="`--enable-node-worker`"><a name="`--enable-node-worker`" href="#`--enable-node-worker`"></a><code>--enable-node-worker</code></h2><p>Enable the Node.js integration in Web Workers. This will help you offload CPU hogging tasks with new threads, while <a href="https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage">exchange large amount of data</a> with DOM efficiently with the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm">structured clone</a> algorithm.</p><p>Please note that binary modules of Node.js need to be thread-safe to be used in this way. We’ve made modifications to Node.js core to make sure core APIs are thread-safe, while we can not promise this with 3rd party binary modules. Pure JS modules are thread safe as long as they depends on thread-safe modules only. And there shouldn’t be any side effect when the feature is not turned on.</p><h2 id="`--disable-raf-throttling`"><a name="`--disable-raf-throttling`" href="#`--disable-raf-throttling`"></a><code>--disable-raf-throttling</code></h2><p>When it’s used, requestAnimationFrame() callback will continue to fire when window is minimized or hidden. It’s pretty useful for game developer. When the argument is not used, it behaves in the same way as Chrome browser and has no side effects.</p><h2 id="`--disable-cookie-encryption`"><a name="`--disable-cookie-encryption`" href="#`--disable-cookie-encryption`"></a><code>--disable-cookie-encryption</code></h2><p>By default, the cookie store on disk is encrypted in Chromium. Use this switch to disable the encryption for testing purpose (e.g. sharing the cookie store between different systems).</p><h2 id="`--disable-crash-handler=true`"><a name="`--disable-crash-handler=true`" href="#`--disable-crash-handler=true`"></a><code>--disable-crash-handler=true</code></h2><p>Disable the crash handler process for single process mode. NOTE: you should explicitly set it to ‘true’. When using it and <code>--single-process</code> together, there will be only one NW process for your application. The crash dumping feature will be disabled with this switch. This switch must be put in the command line (not in package.json) to be effective.</p><h2 id="`--enable-gcm`"><a name="`--enable-gcm`" href="#`--enable-gcm`"></a><code>--enable-gcm</code></h2><p>Enable the chrome.gcm API.</p><h2 id="`--enable-transparent-visuals`"><a name="`--enable-transparent-visuals`" href="#`--enable-transparent-visuals`"></a><code>--enable-transparent-visuals</code></h2><h2 id="`--disable-transparency`"><a name="`--disable-transparency`" href="#`--disable-transparency`"></a><code>--disable-transparency</code></h2><h2 id="`--disable-gpu`"><a name="`--disable-gpu`" href="#`--disable-gpu`"></a><code>--disable-gpu</code></h2><h2 id="`--force-cpu-draw`"><a name="`--force-cpu-draw`" href="#`--force-cpu-draw`"></a><code>--force-cpu-draw</code></h2><p>These options are related to the transparent window feature. See <a href="../For Users/Advanced/Transparent Window.html">Transparent Window</a> for details.</p><h2 id="other-chromium-options"><a name="other-chromium-options" href="#other-chromium-options"></a>Other Chromium Options</h2><p>You can also use Chromium options listed in <a href="https://github.com/nwjs/chromium.src/blob/nw18/chrome/common/chrome_switches.cc">https://github.com/nwjs/chromium.src/blob/nw18/chrome/common/chrome_switches.cc</a> and <a href="https://github.com/nwjs/chromium.src/blob/nw18/content/public/common/content_switches.cc">https://github.com/nwjs/chromium.src/blob/nw18/content/public/common/content_switches.cc</a> . See also <a href="http://peter.sh/experiments/chromium-command-line-switches/">http://peter.sh/experiments/chromium-command-line-switches/</a></p><p>These options can be put into <a href="Manifest Format.html#chromium-args"><code>chromium-args</code> in manifest</a> to get NW.js running with them each time.</p><h2 id="environment-variables"><a name="environment-variables" href="#environment-variables"></a>Environment Variables</h2><p><code>NW_PRE_ARGS</code>‘s value is prepended to the value of <code>chromium-args</code> in manifest.</p>
+
+
+</body>
+</html>

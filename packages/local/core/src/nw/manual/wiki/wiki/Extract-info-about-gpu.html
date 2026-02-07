@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Extract-info-about-gpu.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>Chromium has GPU related diagnostic info page at url chrome://gpu<br>In node-webkit this page is broken but information may be extracted through devtools:</p><ul>
+<li>[1] open chrome://gpu in nw</li><li>[2] open devtools</li><li>[3] enter in console</li></ul><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var browserBridge = { onGpuInfoUpdate:function(arg){console.log(JSON.stringify(arg,null,1));}};
+</code></pre>">var browserBridge = { onGpuInfoUpdate:function(arg){console.log(JSON.stringify(arg,null,1));}};
+</code></pre><ul>
+<li>[4] then</li></ul><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>chrome.send('browserBridgeInitialized');
+</code></pre>">chrome.send('browserBridgeInitialized');
+</code></pre><ul>
+<li>[5] Tada! You have JSON object describing graphic features of nw.</li></ul>
+
+
+</body>
+</html>

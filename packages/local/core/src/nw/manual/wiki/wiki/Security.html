@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Security.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p>node-webkit adds Node.js support and enhancement in DOM for trusted code and content. <strong>For untrusted code and content, it should remain in a normal <code>frame</code> or <code>iframe</code></strong>, which is the same as the one in browser. So there are 2 kinds of frames in node-webkit: <code>Node frame</code> and <code>normal frame</code>.</p><p><strong>As application developer, one should keep in mind that contents should be loaded in correct frames.</strong></p><p>Which frames are Node frames and which are not?</p><ol>
+<li>iframes that have the attribute <code>nwdisable</code> are normal frames. (NOTE: <code>nwfaketop</code> attribute should be specified with <code>nwdisable</code>. The reason is in <a href="https://github.com/rogerwang/node-webkit/issues/534">https://github.com/rogerwang/node-webkit/issues/534</a>)</li><li>Local files, <a href="App protocol">app protocol</a> frames (or remote sites when URL matches the <code>node-remote</code> field) are Node frames. (<code>nodejs</code> field should not be set to false in this case)</li><li>Frames opened with <code>window.open</code> are normal frames when these flags are set: <code>new-instance</code> = <code>true</code> and <code>nodejs</code> = <code>false</code></li></ol><p>What can Node frames do?</p><ol>
+<li>Node support: access to <code>require</code>, <code>global</code>, <code>process</code>, <code>Buffer</code> and <code>root</code> from Node.</li><li>Universal access to other frames: this can get around all cross-domain security checks defined in DOM.</li><li>Ignore <code>X-Frame-Options</code> headers for child frames.</li><li>Others listed in <a href="Changes to dom">Changes to DOM</a></li></ol><p><code>nwdisable</code> is added in 0.5.0 rc2; <code>nwfaketop</code> is added in 0.5.1</p>
+
+
+</body>
+</html>

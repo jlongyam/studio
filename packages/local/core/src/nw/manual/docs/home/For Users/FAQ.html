@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>FAQ</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="faq"><a name="faq" href="#faq"></a>FAQ</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#console.log-doesn't-output-to-linux-terminal" html="console.log doesn’t output to Linux terminal">console.log doesn’t output to Linux terminal</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#`var-crypto-=-require('crypto')`-gets-a-wrong-object" html="var crypto = require('crypto') gets a wrong object">var crypto = require('crypto') gets a wrong object</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#images-are-broken-in-angularjs-and-receive-`failed-to-load-resource-xxx-net::err_unknown_url_scheme`-in-devtools" html="Images are broken in AngularJS and receive Failed to load resource XXX net::ERR_UNKNOWN_URL_SCHEME in DevTools">Images are broken in AngularJS and receive Failed to load resource XXX net::ERR_UNKNOWN_URL_SCHEME in DevTools</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#can't-see-exception-reporting-in-angularjs-2+" html="Can’t see exception reporting in AngularJS 2+">Can’t see exception reporting in AngularJS 2+</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#how-to-leave-fullscreen-mode-with-esc-key?" html="How to leave fullscreen mode with ESC key?">How to leave fullscreen mode with ESC key?</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#how-do-i-get-" html="How do I get “intellisense” (auto-complete) in VSCode for nw?">How do I get “intellisense” (auto-complete) in VSCode for nw?</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="console.log-doesn't-output-to-linux-terminal"><a name="console.log-doesn't-output-to-linux-terminal" href="#console.log-doesn't-output-to-linux-terminal"></a>console.log doesn’t output to Linux terminal</h2><p><code>--enable-logging=stderr</code> should be used in the command line; See more here: <a href="https://www.chromium.org/for-testers/enable-logging">https://www.chromium.org/for-testers/enable-logging</a></p><h2 id="`var-crypto-=-require('crypto')`-gets-a-wrong-object"><a name="`var-crypto-=-require('crypto')`-gets-a-wrong-object" href="#`var-crypto-=-require('crypto')`-gets-a-wrong-object"></a><code>var crypto = require('crypto')</code> gets a wrong object</h2><p>Chromium has its own global <code>crypto</code> object which can’t be overwritten. So you can’t use the same variable name <code>crypto</code>. Changing your variable name to something else, like <code>nodeCrypto</code>, will work.</p><h2 id="images-are-broken-in-angularjs-and-receive-`failed-to-load-resource-xxx-net::err_unknown_url_scheme`-in-devtools"><a name="images-are-broken-in-angularjs-and-receive-`failed-to-load-resource-xxx-net::err_unknown_url_scheme`-in-devtools" href="#images-are-broken-in-angularjs-and-receive-`failed-to-load-resource-xxx-net::err_unknown_url_scheme`-in-devtools"></a>Images are broken in AngularJS and receive <code>Failed to load resource XXX net::ERR_UNKNOWN_URL_SCHEME</code> in DevTools</h2><p>AngularJS added <code>unsafe:</code> prefix for unknown scheme to prevent XSS attack. URLs in NW.js and Chrome apps are started with <code>chrome-extension:</code> scheme, which is unknown to AngularJS. The solution is to config the whitelist of known schemes with AngularJS by adding following lines:</p><pre class="javascript hljs">myApp.config([<span class="hljs-string">'$compileProvider'</span>,
+  <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">$compileProvider</span>) </span>{
+    $compileProvider.imgSrcSanitizationWhitelist(<span class="hljs-regexp">/^\s*((https?|ftp|file|blob|chrome-extension):|data:image\/)/</span>);
+    $compileProvider.aHrefSanitizationWhitelist(<span class="hljs-regexp">/^\s*(https?|ftp|mailto|tel|file|chrome-extension):/</span>);
+  }]);
+</pre><h2 id="can't-see-exception-reporting-in-angularjs-2+"><a name="can't-see-exception-reporting-in-angularjs-2+" href="#can't-see-exception-reporting-in-angularjs-2+"></a>Can’t see exception reporting in AngularJS 2+</h2><p>AngularJS 2 tries to register exception handlers in global variable <code>global</code>. However, it’s already existed in NW.js environment, which prevents exception reporting shown in DevTools. The workaround is to rename <code>global</code> to something else before loading any AngularJS libraries. For example,</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">script</span>&gt;</span><span class="javascript">
+<span class="hljs-built_in">window</span>.nw_global = <span class="hljs-built_in">window</span>.global;
+<span class="hljs-built_in">window</span>.global = <span class="hljs-literal">undefined</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-html">script</span>&gt;</span>
+<span class="hljs-comment">&lt;!-- Angular 2 Dependencies --&gt;</span>
+</pre><ul>
+<li>See also:<ul>
+<li><a href="https://dev.to/thejaredwilcurt/angular-cli-and-nwjs-for-development-49gl">Tutorial: Angular-CLI and NW.js</a></li><li><a href="https://github.com/nwutils/nw-angular-cli-example">NW.js + Angular 8 demo repo</a></li></ul>
+</li></ul><h2 id="how-to-leave-fullscreen-mode-with-esc-key?"><a name="how-to-leave-fullscreen-mode-with-esc-key?" href="#how-to-leave-fullscreen-mode-with-esc-key?"></a>How to leave fullscreen mode with ESC key?</h2><p>Usually users expect to use ESC key to quit fullscreen mode. By default, NW.js don’t bind ESC shortcut for leaving fullscreen mode, but providing APIs for entering and leaving fullscreen mode. It will give developers more control on fullscreen mode.</p><p>To enable ESC key for leaving fullscreen mode, you can use <a href="../References/Shortcut.html">Shortcut API</a>:</p><pre class="javascript hljs">nw.App.registerGlobalHotKey(<span class="hljs-keyword">new</span> nw.Shortcut({
+  key: <span class="hljs-string">"Escape"</span>,
+  active: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// decide whether to leave fullscreen mode</span>
+    <span class="hljs-comment">// then ...</span>
+    nw.Window.get().leaveFullscreen();
+  }
+}));
+</pre><h2 id="how-do-i-get-" intellisense"-(auto-complete)-in-vscode-for-`nw`?"=""><a name="how-do-i-get-" intellisense"-(auto-complete)-in-vscode-for-`nw`?"="" href="#how-do-i-get-"></a>How do I get “intellisense” (auto-complete) in VSCode for <code>nw</code>?</h2><p><img src="../../asset/Screenshot of VSCode Intellisense.png" alt="Screenshot of VSCode Intellisense for NW.js"></p><ol>
+<li>Install nwjs-types<pre data-origin="npm install --save-dev nwjs-types
+"><code>npm install --save-dev nwjs-types
+</code></pre></li><li>Force VSCode’s TypeScript engine to load.<ul>
+<li>Place <code>// @ts-check</code> at the top of your JS file.</li><li>You do not need to use TypeScript for this to work.</li><li>VSCode will load the TypeScript engine when it sees <code>// @ts-check</code>, then look for types in your <code>node_modules</code>, then find and load <code>nwjs-types</code>.</li><li>Then intellisense will know how to auto-complete for <code>nw.</code>.</li></ul>
+</li></ol>
+
+
+</body>
+</html>

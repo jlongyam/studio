@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Transparent Window</title>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="transparent-window"><a name="transparent-window" href="#transparent-window"></a>Transparent Window</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="title">
+<a href="#basic-requirements" title="Basic Requirements">Basic Requirements</a>
+</span>
+<!--span class="number">
+0
+</span-->
+<ul>
+<li><span class="title">
+<a href="#windows" title="Windows">Windows</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="title">
+<a href="#linux" title="Linux">Linux</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="title">
+<a href="#make-a-transparent-window" title="Make a Transparent Window">Make a Transparent Window</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="title">
+<a href="#click-through-(windows-and-mac)" title="Click Through (Windows and Mac)">Click Through (Windows and Mac)</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="basic-requirements"><a name="basic-requirements" href="#basic-requirements"></a>Basic Requirements</h2><p>The transparent feature is supposed to work with frameless window.</p><h3 id="windows"><a name="windows" href="#windows"></a>Windows</h3><p>The transparent feature is only supported on Vista and above with DWM (Desktop Window Manager) enabled. Transparency might not work on classic theme / basic version of the OS, or using remote desktop.</p><h3 id="linux"><a name="linux" href="#linux"></a>Linux</h3><p>You need to run NW.js with these params and your window manager needs to support <strong>compositing</strong>:</p><pre><code class="params">--enable-transparent-visuals --disable-gpu
+</code></pre><h2 id="make-a-transparent-window"><a name="make-a-transparent-window" href="#make-a-transparent-window"></a>Make a Transparent Window</h2><p>In the HTML body, specify the alpha of the background colour:</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-title">body</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">"background-color:rgba(0,0,0,0);"</span>&gt;</span>
+</pre><p>and specify <a href="../../References/Manifest Format.html#transparent"><code>transparent</code> field</a> to <code>true</code> in manifest:</p><pre class="json hljs">  "window": {
+    "frame": false,
+    "transparent": true
+  }
+</pre><h2 id="click-through-(windows-and-mac)"><a name="click-through-(windows-and-mac)" href="#click-through-(windows-and-mac)"></a>Click Through (Windows and Mac)</h2><p>You can enable transparency clickthrough on Windows and Mac. This feature enables you to click the object under the window <strong>at the point whose alpha value is <code>0</code></strong>.</p><p>To enable transparency clickthrough, you need following command line options:</p><pre><code class="params">--disable-gpu-compositing --force-cpu-draw
+</code></pre><p>!!! note<br>    The click through is only supported for <strong>frameless</strong>, <strong>non resizable</strong> frame, though it might work for other configuration depending on the OS.</p>
+
+
+</body>
+</html>

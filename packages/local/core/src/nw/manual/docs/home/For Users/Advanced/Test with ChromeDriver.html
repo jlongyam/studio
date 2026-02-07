@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Test with ChromeDriver</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="test-with-chromedriver"><a name="test-with-chromedriver" href="#test-with-chromedriver"></a>Test with ChromeDriver</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#getting-started" html="Getting started">Getting started</a>
+</span>
+<!--span class="number">
+0
+</span-->
+<ul>
+<li><span class="html">
+<a href="#installing" html="Installing">Installing</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#running" html="Running">Running</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#modifications-on-the-upstream-chromedriver" html="Modifications on the upstream chromedriver">Modifications on the upstream chromedriver</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p>From <a href="https://sites.google.com/a/chromium.org/chromedriver/">ChromeDriver project home page</a>:</p><blockquote>
+<p>WebDriver is an open source tool for automated testing of webapps across many browsers. It provides capabilities for navigating to web pages, user input, JavaScript execution, and more.  ChromeDriver is a standalone server which implements WebDriver’s wire protocol for Chromium. ChromeDriver is available for Chrome on Android and Chrome on Desktop (Mac, Linux, Windows and ChromeOS).</p>
+</blockquote><p>NW.js provide a customized ChromeDriver for automated testing NW.js based apps. You can use it with tools like <a href="http://docs.seleniumhq.org/">selenium</a>.</p><h2 id="getting-started"><a name="getting-started" href="#getting-started"></a>Getting started</h2><p>The following workflow uses <a href="http://selenium-python.readthedocs.org/">selenium-python</a> to drive the tests. You can use any language port for Selenium to work with <code>chromedriver</code>.</p><h3 id="installing"><a name="installing" href="#installing"></a>Installing</h3><ul>
+<li>Download ChromeDriver from NW.js website. It’s in the SDK build.</li><li>Extract the package and place <code>chromedriver</code> under the same dir that contains the NW.js binaries: <code>nw</code> for Linux, <code>nw.exe</code> for Windows, or <code>node-webkit.app</code> for Mac.</li><li>Install <code>selenium-python</code> in your project:<pre data-origin="pip install selenium
+" class="bash hljs">pip install selenium
+</pre>
+</li></ul><h3 id="running"><a name="running" href="#running"></a>Running</h3><p>Suppose your app shows a form for searching from remote. The page basically something like this:</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">form</span> <span class="hljs-attribute">action</span>=<span class="hljs-value">"http://mysearch.com/search"</span> <span class="hljs-attribute">method</span>=<span class="hljs-value">"GET"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-html">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"q"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-html">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"submit"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">"Submit"</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">form</span>&gt;</span>
+</pre><p>Write a Python script to automatically fill in the search box and submit the form:</p><pre class="python hljs"><span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver
+<span class="hljs-keyword">from</span> selenium.webdriver.chrome.options <span class="hljs-keyword">import</span> Options
+chrome_options = Options()
+chrome_options.add_argument(<span class="hljs-string">"nwapp=/path/to/your/app"</span>)
+
+driver = webdriver.Chrome(executable_path=<span class="hljs-string">'/path/to/nwjs/chromedriver'</span>, chrome_options=chrome_options)
+
+time.sleep(<span class="hljs-number">5</span>) <span class="hljs-comment"># Wait 5s to see the web page</span>
+search_box = driver.find_element_by_name(<span class="hljs-string">'q'</span>)
+search_box.send_keys(<span class="hljs-string">'ChromeDriver'</span>)
+search_box.submit()
+time.sleep(<span class="hljs-number">5</span>) <span class="hljs-comment"># Wait 5s to see the search result</span>
+driver.quit()
+</pre><p>See <a href="http://selenium-python.readthedocs.org/">http://selenium-python.readthedocs.org/</a> for detailed documents of <code>selenium-python</code>.</p><h2 id="modifications-on-the-upstream-chromedriver"><a name="modifications-on-the-upstream-chromedriver" href="#modifications-on-the-upstream-chromedriver"></a>Modifications on the upstream chromedriver</h2><ul>
+<li><p>chromedriver is modified to find NW executable in the same directory by default</p>
+</li><li><p>An additional option <code>nwargs</code> is added if you want to pass non-switch argument to the command line:<br>```python<br>import time<br>from selenium import webdriver<br>from selenium.webdriver.chrome.options import Options<br>chrome_options = Options()<br>chrome_options.add_argument(“nwapp=/path/to/your/app”)<br>chrome_options.add_experimental_option(“nwargs”, [“arg1”, “arg2”])</p>
+</li></ul><p>driver = webdriver.Chrome(executable_path=’/path/to/nwjs/chromedriver’, chrome_options=chrome_options)<br>```</p>
+
+
+</body>
+</html>

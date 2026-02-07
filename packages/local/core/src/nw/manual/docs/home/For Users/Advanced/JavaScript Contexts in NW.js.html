@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>JavaScript Contexts in NW.js</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="javascript-contexts-in-nw.js"><a name="javascript-contexts-in-nw.js" href="#javascript-contexts-in-nw.js"></a>JavaScript Contexts in NW.js</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#concept-of-javascript-context" html="Concept of JavaScript Context">Concept of JavaScript Context</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#contexts-in-nw.js" html="Contexts in NW.js">Contexts in NW.js</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#separate-context-mode" html="Separate Context Mode">Separate Context Mode</a>
+</span>
+<!--span class="number">
+2
+</span-->
+<ul>
+<li><span class="html">
+<a href="#browser-context" html="Browser Context">Browser Context</a>
+</span>
+<!--span class="number">
+3
+</span-->
+<ul>
+<li><span class="html">
+<a href="#load-script-in-browser-context" html="Load Script in Browser Context">Load Script in Browser Context</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#global-objects-in-browser-context" html="Global Objects in Browser Context">Global Objects in Browser Context</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#create-new-browser-context" html="Create New Browser Context">Create New Browser Context</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#access-node.js-and-nw.js-api-in-browser-context" html="Access Node.js and NW.js API in Browser Context">Access Node.js and NW.js API in Browser Context</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#relative-path-resolving-of-`require()`-in-browser-context" html="Relative Path Resolving of require() in Browser Context">Relative Path Resolving of require() in Browser Context</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#node-context" html="Node Context">Node Context</a>
+</span>
+<!--span class="number">
+9
+</span-->
+<ul>
+<li><span class="html">
+<a href="#load-script-in-node-context" html="Load Script in Node Context">Load Script in Node Context</a>
+</span>
+<!--span class="number">
+10
+</span-->
+</li>
+<li><span class="html">
+<a href="#global-objects-in-node-context" html="Global Objects in Node Context">Global Objects in Node Context</a>
+</span>
+<!--span class="number">
+11
+</span-->
+</li>
+<li><span class="html">
+<a href="#create-new-node-context" html="Create New Node Context">Create New Node Context</a>
+</span>
+<!--span class="number">
+12
+</span-->
+</li>
+<li><span class="html">
+<a href="#access-browser-and-nw.js-api-in-node-context" html="Access Browser and NW.js API in Node Context">Access Browser and NW.js API in Node Context</a>
+</span>
+<!--span class="number">
+13
+</span-->
+</li>
+<li><span class="html">
+<a href="#relative-paths-resolving-of-`require()`-in-node-context" html="Relative Paths Resolving of require() in Node Context">Relative Paths Resolving of require() in Node Context</a>
+</span>
+<!--span class="number">
+14
+</span-->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#mixed-context-mode" html="Mixed Context Mode">Mixed Context Mode</a>
+</span>
+<!--span class="number">
+15
+</span-->
+<ul>
+<li><span class="html">
+<a href="#load-script-in-mixed-context-mode" html="Load Script in Mixed Context Mode">Load Script in Mixed Context Mode</a>
+</span>
+<!--span class="number">
+16
+</span-->
+</li>
+<li><span class="html">
+<a href="#global-objects-in-mixed-context" html="Global Objects in Mixed Context">Global Objects in Mixed Context</a>
+</span>
+<!--span class="number">
+17
+</span-->
+</li>
+<li><span class="html">
+<a href="#comparing-with-separate-context" html="Comparing with Separate Context">Comparing with Separate Context</a>
+</span>
+<!--span class="number">
+18
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#working-with-multiple-contexts" html="Working with Multiple Contexts">Working with Multiple Contexts</a>
+</span>
+<!--span class="number">
+19
+</span-->
+<ul>
+<li><span class="html">
+<a href="#problem-with-`instanceof`" html="Problem with instanceOf">Problem with instanceOf</a>
+</span>
+<!--span class="number">
+20
+</span-->
+</li>
+<li><span class="html">
+<a href="#problem-with-`obj.constructor`" html="Problem with obj.constructor">Problem with obj.constructor</a>
+</span>
+<!--span class="number">
+21
+</span-->
+</li>
+<li><span class="html">
+<a href="#problem-of-`obj.__proto__`" html="Problem of obj.__proto__">Problem of obj.__proto__</a>
+</span>
+<!--span class="number">
+22
+</span-->
+</li>
+<li><span class="html">
+<a href="#problems-in-3rd-party-library" html="Problems in 3rd-Party Library">Problems in 3rd-Party Library</a>
+</span>
+<!--span class="number">
+23
+</span-->
+</li>
+<li><span class="html">
+<a href="#reliable-way-of-type-checking-across-contexts" html="Reliable Way of Type Checking Across Contexts">Reliable Way of Type Checking Across Contexts</a>
+</span>
+<!--span class="number">
+24
+</span-->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="concept-of-javascript-context"><a name="concept-of-javascript-context" href="#concept-of-javascript-context"></a>Concept of JavaScript Context</h2><p>Scripts running in different windows live in different JavaScript contexts, i.e. each window has its own global object and its own set of global constructors (such as <code>Array</code> or <code>Object</code>).</p><p>That’s common practice among web browsers and it’s a good thing because, for example:</p><ul>
+<li>when an object’s prototype is replaced or augmented by some library (such as <a href="http://prototypejs.org/">Prototype</a>) or a simpler script, the analogous objects in other windows are unaffected nevertheless;</li><li>when a programmer makes a mistake (such as <a href="http://ejohn.org/blog/simple-class-instantiation/">missing <code>new</code> before a poorly written constructor</a>) and the bug affects (pollutes) the global scope, it still cannot affect larger areas (several windows);</li><li>malicious applications cannot access confidential data structures in other windows.</li></ul><p>When a script accessing to an object / function defined in another context, JS engine will temporarily enter the target context and leave it once finished.</p><h2 id="contexts-in-nw.js"><a name="contexts-in-nw.js" href="#contexts-in-nw.js"></a>Contexts in NW.js</h2><p>NW.js is based on the architecture of Chrome Apps. Thus an invisible background page is loaded automatically at start. And when a new window is created, a JavaScript context is created as well.</p><p>In NW.js, Node.js modules can be loaded in the context running in background page, which is the default behavior. Also they can be loaded within the context of each window or frame when running as Mixed Context Mode. Continue to read following sections to see the differences between <a href="#separate-context-mode">Separate Context Mode</a> and <a href="#mixed-context-mode">Mixed Context Mode</a>.</p><h2 id="separate-context-mode"><a name="separate-context-mode" href="#separate-context-mode"></a>Separate Context Mode</h2><p>Besides the contexts created by browsers, NW.js introduced additional Node context for running Node modules in the background page by default. So NW.js has two types of JavaScript contexts: <strong>Browser Context</strong> and <strong>Node Context</strong>.</p><p>!!! note “Web Worker”<br>    <a href="https://nwjs.io/blog/v0.18.4/">You can access Node.js APIs</a> in a Web Worker by setting adding <code>"chromium-args": "--enable-node-worker"</code> to your Manifest</p><h3 id="browser-context"><a name="browser-context" href="#browser-context"></a>Browser Context</h3><h4 id="load-script-in-browser-context"><a name="load-script-in-browser-context" href="#load-script-in-browser-context"></a>Load Script in Browser Context</h4><p>Scripts loaded or embedded by traditional web ways, such as using <code>&lt;script&gt;</code> element or jQuery’s <a href="http://api.jquery.com/jQuery.getScript/"><code>$.getScript()</code></a> or <a href="http://requirejs.org/">RequireJS</a>, are running in browser context.</p><h4 id="global-objects-in-browser-context"><a name="global-objects-in-browser-context" href="#global-objects-in-browser-context"></a>Global Objects in Browser Context</h4><p>In browser context, there are some global objects including <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects">JS builtin objects</a> (such as <code>Date</code> or <code>Error</code> or <code>TypedArray</code>) and <a href="https://developer.mozilla.org/en-US/docs/Web/Reference/API">Web API</a> (such as DOM API).</p><h4 id="create-new-browser-context"><a name="create-new-browser-context" href="#create-new-browser-context"></a>Create New Browser Context</h4><p>Different windows and frames have different contexts. So when you create a new frame or window, you will get a new browser context.</p><h4 id="access-node.js-and-nw.js-api-in-browser-context"><a name="access-node.js-and-nw.js-api-in-browser-context" href="#access-node.js-and-nw.js-api-in-browser-context"></a>Access Node.js and NW.js API in Browser Context</h4><p>Some objects of Node context are copied to Browser context so that scripts running in Browser context can access Node.js objects:</p><ul>
+<li><code>nw</code> – the object of all NW.js APIs in <strong><code>References</code></strong> section</li><li><code>global</code> – the global object of Node Context; same as <code>nw.global</code></li><li><code>require</code> – the <code>require()</code> function for loading Node.js modules; similar to <code>nw.require()</code>, but it also supports <code>require('nw.gui')</code> to load NW.js API module.</li><li><code>process</code> – the <a href="https://nodejs.org/api/globals.html#globals_process">process module</a> of Node.js; same as <code>nw.process</code></li><li><code>Buffer</code> – the <a href="https://nodejs.org/api/globals.html#globals_class_buffer">Buffer class</a> of Node.js</li></ul><h4 id="relative-path-resolving-of-`require()`-in-browser-context"><a name="relative-path-resolving-of-`require()`-in-browser-context" href="#relative-path-resolving-of-`require()`-in-browser-context"></a>Relative Path Resolving of <code>require()</code> in Browser Context</h4><p>Relative paths in Browser context are resolved according to path of main HTML file (like all browsers do).</p><h3 id="node-context"><a name="node-context" href="#node-context"></a>Node Context</h3><h4 id="load-script-in-node-context"><a name="load-script-in-node-context" href="#load-script-in-node-context"></a>Load Script in Node Context</h4><p>Scripts loaded with following ways are running in Node context:</p><ul>
+<li>Scripts loaded by <code>require()</code> of Node.js API</li><li>Scripts loaded by <a href="../../References/Manifest Format.html#node-main"><code>node-main</code> in Manifest file</a></li></ul><h4 id="global-objects-in-node-context"><a name="global-objects-in-node-context" href="#global-objects-in-node-context"></a>Global Objects in Node Context</h4><p>Scripts running in the Node context can use <a href="">JS builtin objects</a> like browser context. In addition, you can also use <a href="https://nodejs.org/api/globals.html">global objects defined by Node.js</a>, such as <code>__dirname</code>, <code>process</code>, <code>Buffer</code> etc.</p><p>!!! note<br>    Web APIs are not available in Node context. See <a href="#access-browser-and-nwjs-api-in-node-context">Access Browser and NW.js API in Node Context</a> below to find out how to use them.</p><h4 id="create-new-node-context"><a name="create-new-node-context" href="#create-new-node-context"></a>Create New Node Context</h4><p><strong>All node modules shares a same Node context in separate context mode</strong>. But you have several ways to create new Node contexts:</p><ul>
+<li>Set <code>new_instance</code> option to <code>true</code> when creating window with <a href="../../References/Window.html#windowopenurl-options-callback"><code>Window.open()</code></a></li><li>Start NW.js with <code>--mixed-context</code> CLI option to turn NW.js into <a href="#mixed-context-mode">Mixed Context mode</a></li></ul><h4 id="access-browser-and-nw.js-api-in-node-context"><a name="access-browser-and-nw.js-api-in-node-context" href="#access-browser-and-nw.js-api-in-node-context"></a>Access Browser and NW.js API in Node Context</h4><p>In Node context, there are no browser side or NW.js APIs, such as <code>alert()</code> or <code>document.*</code> or <code>nw.Clipboard</code> etc. To access browser APIs, you have to pass the corresponding objects, such as <code>window</code> object, to functions in Node context.</p><p>See following example for how to achieve this.</p><p>Following script are running in Node context (myscript.js):</p><pre class="javascript hljs"><span class="hljs-comment">// `el` should be passed from browser context</span>
+exports.setText = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">el</span>) </span>{
+    el.innerHTML = <span class="hljs-string">'hello'</span>;
+};
+</pre><p>In the browser side (index.html):</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"el"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-html">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">var</span> myscript = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./myscript'</span>);
+<span class="hljs-comment">// pass the `el` element to the Node function</span>
+myscript.setText(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'el'</span>));
+<span class="hljs-comment">// you will see "hello" in the element</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-html">script</span>&gt;</span>
+</pre><p>!!! note “<code>window</code> in Node Context”<br>    There is a <code>window</code> object in Node context pointing to the DOM window object of the background page.</p><h4 id="relative-paths-resolving-of-`require()`-in-node-context"><a name="relative-paths-resolving-of-`require()`-in-node-context" href="#relative-paths-resolving-of-`require()`-in-node-context"></a>Relative Paths Resolving of <code>require()</code> in Node Context</h4><p>Relative paths in node modules are resolved according to path of that module (like Node.js always do).</p><h2 id="mixed-context-mode"><a name="mixed-context-mode" href="#mixed-context-mode"></a>Mixed Context Mode</h2><p>Mixed context is introduced in NW.js 0.13. When running NW.js with <a href="../../References/Command Line Options.html#-mixed-context"><code>--mixed-context</code> CLI option</a>, a new Node context is created at the time of each browser context creation and running in a same context as browser context, a.k.a. the Mixed context.</p><h3 id="load-script-in-mixed-context-mode"><a name="load-script-in-mixed-context-mode" href="#load-script-in-mixed-context-mode"></a>Load Script in Mixed Context Mode</h3><p>To enable Mixed context, add <code>--mixed-context</code> when starting NW.js or add it to <a href="../../References/Manifest Format.html#chromium-args"><code>chromium-args</code> in Manifest file</a>.</p><p>Any scripts loaded using web ways or <code>require()</code> in Node.js are running in a same context.</p><h3 id="global-objects-in-mixed-context"><a name="global-objects-in-mixed-context" href="#global-objects-in-mixed-context"></a>Global Objects in Mixed Context</h3><p>In Mixed context, you can use all browser and NW.js API in Node modules, and vice versa.</p><p><code>package.json</code></p><pre class="javascript hljs">{
+    <span class="hljs-string">"name"</span>: <span class="hljs-string">"test-context"</span>,
+    <span class="hljs-string">"main"</span>: <span class="hljs-string">"index.html"</span>,
+    <span class="hljs-string">"chromium-args"</span>: <span class="hljs-string">"--mixed-context"</span>
+}
+</pre><p><code>myscript.js</code></p><pre class="javascript hljs">exports.createDate = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
+};
+
+exports.showAlert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    alert(<span class="hljs-string">"I'm running in Node module!"</span>);
+};
+</pre><p>Then following comparison will success in Mixed context:<br><code>index.html</code></p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">var</span> myscript = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./myscript'</span>);
+
+<span class="hljs-built_in">console</span>.log(myscript.createDate() <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span>); <span class="hljs-comment">// true</span>
+myscript.showAlert(); <span class="hljs-comment">// I'm running in Node module!</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-html">script</span>&gt;</span>
+</pre><h3 id="comparing-with-separate-context"><a name="comparing-with-separate-context" href="#comparing-with-separate-context"></a>Comparing with Separate Context</h3><p>The advantage of Separate Context Mode is that you will not encounter many <a href="#working-with-multiple-contexts">type checking issue</a> as below.</p><p>The cons is that in Mixed Context Mode, you can’t share variable easily as before. To share variables among contexts, you should put variables in a common context that can be accessed from the contexts you want to share with. Or you can use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage"><code>window.postMessage()</code> API</a> to send and receive messages between contexts.</p><h2 id="working-with-multiple-contexts"><a name="working-with-multiple-contexts" href="#working-with-multiple-contexts"></a>Working with Multiple Contexts</h2><p>While differences of contexts are generally benefitial, sometimes they may constitute a problem in your (or some other person’s) code, and a need for a workaround arises.</p><p>For example, in different browser contexts, the global objects are not identical and some type checking tricks will fail with multiple contexts.</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">iframe</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"myframe"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"myframe.html"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-html">iframe</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">script</span>&gt;</span><span class="javascript">
+<span class="hljs-comment">// `window` is the global object of current browser context</span>
+<span class="hljs-comment">// `myframe.contentWindow` is the global object of the `&lt;iframe&gt;`'s browser context</span>
+<span class="hljs-keyword">var</span> currentContext = <span class="hljs-built_in">window</span>;
+<span class="hljs-keyword">var</span> iframeContext = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'myframe'</span>).contentWindow;
+
+<span class="hljs-comment">// `myfunc` is defined in current context</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-html">myfunc</span>(<span class="hljs-params"></span>) </span>{
+
+}
+
+<span class="hljs-built_in">console</span>.log(currentContext.Date === iframeContext.Date); <span class="hljs-comment">// false</span>
+<span class="hljs-built_in">console</span>.log(currentContext.Function === iframeContext.Function); <span class="hljs-comment">// false</span>
+<span class="hljs-built_in">console</span>.log(myfunc <span class="hljs-keyword">instanceof</span> currentContext.Function); <span class="hljs-comment">// true</span>
+<span class="hljs-built_in">console</span>.log(myfunc <span class="hljs-keyword">instanceof</span> iframeContext.Function); <span class="hljs-comment">// false</span>
+<span class="hljs-built_in">console</span>.log(myfunc.constructor === currentContext.Function); <span class="hljs-comment">// true</span>
+<span class="hljs-built_in">console</span>.log(myfunc.constructor === iframeContext.Function); <span class="hljs-comment">// false</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-html">script</span>&gt;</span>
+</pre><h3 id="problem-with-`instanceof`"><a name="problem-with-`instanceof`" href="#problem-with-`instanceof`"></a>Problem with <code>instanceOf</code></h3><p>The most common cause for such problems is the behaviour of the <code>instanceof</code> operator in JavaScript. As you may <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof">see in MDN</a>, the operation <code>someValue instanceof someConstructor</code> tests whether an object has in its prototype chain the <code>prototype</code> property of the given constructor. However, if <code>someValue</code> is passed from a different JavaScript context, then it has its own line of ancestor objects, and the <code>someValue instanceof someConstructor</code> check fails inevitably.</p><p>For example, a simple check <code>someValue instanceof Array</code> cannot determine if a variable’s value is an array’s if it’s passed from another context (see <a href="http://web.mit.edu/jwalden/www/isArray.html">Determining with absolute accuracy whether or not a JavaScript object is an array</a> for details).</p><h3 id="problem-with-`obj.constructor`"><a name="problem-with-`obj.constructor`" href="#problem-with-`obj.constructor`"></a>Problem with <code>obj.constructor</code></h3><p>The same problem arises when the <code>obj.constructor</code> property is checked directly (for example, when <code>someValue.constructor === Array</code> is used instead of <code>someValue instanceof Array</code>).</p><h3 id="problem-of-`obj.__proto__`"><a name="problem-of-`obj.__proto__`" href="#problem-of-`obj.__proto__`"></a>Problem of <code>obj.__proto__</code></h3><p>The legacy <code>obj.__proto__</code> gives you access to the prototype of that object directly. Comparing it’s constructor with global object or use <code>instanceof</code> as above will still lead to the wrong result.</p><h3 id="problems-in-3rd-party-library"><a name="problems-in-3rd-party-library" href="#problems-in-3rd-party-library"></a>Problems in 3rd-Party Library</h3><p>3rd-party libraries may use problematic ways of type checking listed above. That will cause misterious errors. Once it happens, it should be a bug of 3rd-party library. You are recommended to report a bug for the library or fix it your own.</p><h3 id="reliable-way-of-type-checking-across-contexts"><a name="reliable-way-of-type-checking-across-contexts" href="#reliable-way-of-type-checking-across-contexts"></a>Reliable Way of Type Checking Across Contexts</h3><p>A way to prevent context-related problems is to <strong>avoid using <code>instanceof</code></strong> when a value may come from another JavaScript context.</p><p>You may use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray"><code>Array.isArray</code></a> method to check whether a value is an array, and that method works reliably across contexts.</p><p>For testing if <code>someValue</code> is an object of other context dependent globals, like <code>Function</code> or <code>Date</code> etc., you may use following tricks to test the actual types:</p><pre class="javascript hljs"><span class="hljs-comment">// test a function</span>
+<span class="hljs-built_in">Object</span>.prototype.toString.apply(someValue) === <span class="hljs-string">"[object Function]"</span>
+<span class="hljs-comment">// test a Date</span>
+<span class="hljs-built_in">Object</span>.prototype.toString.apply(someValue) === <span class="hljs-string">"[object Date]"</span>
+</pre><p>However, if such a convenient alternate method is not readily available, or when you face a problem in someone other’s (not your own) code and patching that would need a hassle, then another workaround is necessary.</p><p>Also you can use <a href="https://github.com/Mithgol/nwglobal"><code>nwglobal</code></a>, which returns the global objects in Node context, to workaround the type checking in some cases.</p>
+
+
+</body>
+</html>

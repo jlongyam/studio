@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Window-menu.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>Window menu requires node-webkit &gt;= v0.3.2</em></p><p>Different platforms has different meanings of window menu, following discussions will point out the differences and provide best practice to keep window menu working decently on all platforms.</p><h2 id="create-and-set-window-menu"><a name="create-and-set-window-menu" href="#create-and-set-window-menu"></a>Create and set window menu</h2><p>To create a menubar, you just need to specify <code>type: 'menubar'</code> in the option when you create the menu:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var your_menu = new gui.Menu({ type: 'menubar' });
+</code></pre>">var your_menu = new gui.Menu({ type: 'menubar' });
+</code></pre><p>And make sure every item appended to the menubar has a submenu, a normal text-only menu item on menubar makes no sense on most platforms.</p><p>Then you can set the window menu by setting the <code>menu</code> property of the window:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>gui.Window.get().menu = your_menu;
+</code></pre>">gui.Window.get().menu = your_menu;
+</code></pre><p>See both [[Menu]] and [[Window]] for details of the API.</p><h2 id="windows-&amp;-linux"><a name="windows-&amp;-linux" href="#windows-&amp;-linux"></a>Windows &amp; Linux</h2><p>On Windows Desktop Mode and GTK environment, the menubars behave exactly the same, each window can have one menubar and they all reside bellow the titlebar.</p><p>Note on Ubuntu’s Unity environment, the menubar is remade to be global menu and is placed on the top of screen (which is similar to Mac), but still each window owns its own menubar and we can safely ignore this difference.</p><h2 id="mac"><a name="mac" href="#mac"></a>Mac</h2><p>On Mac, things are quite different. One app can only have one menu (which is called application menu) no matter how many windows the app may have. And many key shortcuts rely on the existence of application menu, such as <code>Quit</code>, <code>Close</code> and <code>Copy</code>.</p><p>By default node-webkit shows a default menubar which includes necessary menus and keeps minimal. When you use [[Menu]] API to create custom menu, it would be rather tedious to add all such menu items back, so in order to simplify the menu creation, node-webkit will merge your menu with original application menu. For example, if you set an empty menu as window menu:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var gui = require('nw.gui');
+
+gui.Window.get().menu = new gui.Menu({ type: 'menubar' });
+</code></pre>">var gui = require('nw.gui');
+
+gui.Window.get().menu = new gui.Menu({ type: 'menubar' });
+</code></pre><p>The resulted menu will have indeed three submenus: <code>your-app-name</code>, <code>Edit</code> and <code>Window</code>, which are necessary for full-functionality apps.</p><p>Another thing you may encounter is that the first item of application menu shows <code>node-webkit</code> instead of <code>your-app-name</code>, to fix it, you need to edit CFBundleName in <code>node-webkit.app/Contents/Info.plist</code>. Set your app name instead of <code>node-webkit</code> string.</p><p><em>Since v0.10.0-rc1</em></p><p>By default the standard menus (<code>your-app-name</code>, <code>Edit</code> and <code>Window</code>) are no longer enabled and so the associated hotkeys (Copy, Paste, …).<br>The window menu can be initialized with the standard menu items using the <a href="https://github.com/rogerwang/node-webkit/wiki/Menu#menucreatemacbuiltinappname">Menu.createMacBuiltin</a> method:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var gui = require('nw.gui');
+var mb = new gui.Menu({type:&quot;menubar&quot;});
+mb.createMacBuiltin(&quot;your-app-name&quot;);
+gui.Window.get().menu = mb;
+</code></pre>">var gui = require('nw.gui');
+var mb = new gui.Menu({type:"menubar"});
+mb.createMacBuiltin("your-app-name");
+gui.Window.get().menu = mb;
+</code></pre><h2 id="best-practice"><a name="best-practice" href="#best-practice"></a>Best practice</h2><p>As mentioned above, on Windows and Linux each window can have one menubar, while on Mac an app can have only one application menu. So generally you should set menu for only your main window and avoid using window menu when you may have multiple main windows.</p><p>And it may happens that you want to design different menus for different platforms, then you can use <a href="http://nodejs.org/api/process.html#process_process_platform">process.platform</a> to get which platform you’re in.</p>
+
+
+</body>
+</html>

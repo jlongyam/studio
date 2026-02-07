@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Manifest Format</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="manifest-format"><a name="manifest-format" href="#manifest-format"></a>Manifest Format</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#quick-start" html="Quick Start">Quick Start</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#required-fields" html="Required Fields">Required Fields</a>
+</span>
+<!--span class="number">
+1
+</span-->
+<ul>
+<li><span class="html">
+<a href="#main" html="main">main</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#name" html="name">name</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#features-control-fields" html="Features Control Fields">Features Control Fields</a>
+</span>
+<!--span class="number">
+4
+</span-->
+<ul>
+<li><span class="html">
+<a href="#product_string" html="product_string">product_string</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#nodejs" html="nodejs">nodejs</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#node-main" html="node-main">node-main</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#domain" html="domain">domain</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+<li><span class="html">
+<a href="#single-instance" html="single-instance">single-instance</a>
+</span>
+<!--span class="number">
+9
+</span-->
+</li>
+<li><span class="html">
+<a href="#bg-script" html="bg-script">bg-script</a>
+</span>
+<!--span class="number">
+10
+</span-->
+</li>
+<li><span class="html">
+<a href="#window" html="window">window</a>
+</span>
+<!--span class="number">
+11
+</span-->
+</li>
+<li><span class="html">
+<a href="#webkit" html="webkit">webkit</a>
+</span>
+<!--span class="number">
+12
+</span-->
+</li>
+<li><span class="html">
+<a href="#user-agent" html="user-agent">user-agent</a>
+</span>
+<!--span class="number">
+13
+</span-->
+</li>
+<li><span class="html">
+<a href="#node-remote" html="node-remote">node-remote</a>
+</span>
+<!--span class="number">
+14
+</span-->
+</li>
+<li><span class="html">
+<a href="#chromium-args" html="chromium-args">chromium-args</a>
+</span>
+<!--span class="number">
+15
+</span-->
+</li>
+<li><span class="html">
+<a href="#crash_report_url" html="crash_report_url">crash_report_url</a>
+</span>
+<!--span class="number">
+16
+</span-->
+</li>
+<li><span class="html">
+<a href="#js-flags" html="js-flags">js-flags</a>
+</span>
+<!--span class="number">
+17
+</span-->
+</li>
+<li><span class="html">
+<a href="#inject_js_start" html="inject_js_start">inject_js_start</a>
+</span>
+<!--span class="number">
+18
+</span-->
+</li>
+<li><span class="html">
+<a href="#inject_js_end" html="inject_js_end">inject_js_end</a>
+</span>
+<!--span class="number">
+19
+</span-->
+</li>
+<li><span class="html">
+<a href="#additional_trust_anchors" html="additional_trust_anchors">additional_trust_anchors</a>
+</span>
+<!--span class="number">
+20
+</span-->
+</li>
+<li><span class="html">
+<a href="#dom_storage_quota" html="dom_storage_quota">dom_storage_quota</a>
+</span>
+<!--span class="number">
+21
+</span-->
+</li>
+<li><span class="html">
+<a href="#no-edit-menu-(mac)" html="no-edit-menu (Mac)">no-edit-menu (Mac)</a>
+</span>
+<!--span class="number">
+22
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#window-subfields" html="Window Subfields">Window Subfields</a>
+</span>
+<!--span class="number">
+23
+</span-->
+<ul>
+<li><span class="html">
+<a href="#id" html="id">id</a>
+</span>
+<!--span class="number">
+24
+</span-->
+</li>
+<li><span class="html">
+<a href="#html" html="html">html</a>
+</span>
+<!--span class="number">
+25
+</span-->
+</li>
+<li><span class="html">
+<a href="#width" html="width">width</a>
+</span>
+<!--span class="number">
+26
+</span-->
+</li>
+<li><span class="html">
+<a href="#height" html="height">height</a>
+</span>
+<!--span class="number">
+27
+</span-->
+</li>
+<li><span class="html">
+<a href="#toolbar" html="toolbar">toolbar</a>
+</span>
+<!--span class="number">
+28
+</span-->
+</li>
+<li><span class="html">
+<a href="#icon" html="icon">icon</a>
+</span>
+<!--span class="number">
+29
+</span-->
+</li>
+<li><span class="html">
+<a href="#position" html="position">position</a>
+</span>
+<!--span class="number">
+30
+</span-->
+</li>
+<li><span class="html">
+<a href="#min_width" html="min_width">min_width</a>
+</span>
+<!--span class="number">
+31
+</span-->
+</li>
+<li><span class="html">
+<a href="#min_height" html="min_height">min_height</a>
+</span>
+<!--span class="number">
+32
+</span-->
+</li>
+<li><span class="html">
+<a href="#max_width" html="max_width">max_width</a>
+</span>
+<!--span class="number">
+33
+</span-->
+</li>
+<li><span class="html">
+<a href="#max_height" html="max_height">max_height</a>
+</span>
+<!--span class="number">
+34
+</span-->
+</li>
+<li><span class="html">
+<a href="#as_desktop-(linux)" html="as_desktop (Linux)">as_desktop (Linux)</a>
+</span>
+<!--span class="number">
+35
+</span-->
+</li>
+<li><span class="html">
+<a href="#resizable" html="resizable">resizable</a>
+</span>
+<!--span class="number">
+36
+</span-->
+</li>
+<li><span class="html">
+<a href="#always_on_top" html="always_on_top">always_on_top</a>
+</span>
+<!--span class="number">
+37
+</span-->
+</li>
+<li><span class="html">
+<a href="#visible_on_all_workspaces-(mac-&amp;-linux)" html="visible_on_all_workspaces (Mac &amp; Linux)">visible_on_all_workspaces (Mac &amp; Linux)</a>
+</span>
+<!--span class="number">
+38
+</span-->
+</li>
+<li><span class="html">
+<a href="#fullscreen" html="fullscreen">fullscreen</a>
+</span>
+<!--span class="number">
+39
+</span-->
+</li>
+<li><span class="html">
+<a href="#show_in_taskbar" html="show_in_taskbar">show_in_taskbar</a>
+</span>
+<!--span class="number">
+40
+</span-->
+</li>
+<li><span class="html">
+<a href="#frame" html="frame">frame</a>
+</span>
+<!--span class="number">
+41
+</span-->
+</li>
+<li><span class="html">
+<a href="#show" html="show">show</a>
+</span>
+<!--span class="number">
+42
+</span-->
+</li>
+<li><span class="html">
+<a href="#kiosk" html="kiosk">kiosk</a>
+</span>
+<!--span class="number">
+43
+</span-->
+</li>
+<li><span class="html">
+<a href="#transparent" html="transparent">transparent</a>
+</span>
+<!--span class="number">
+44
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#webkit-subfields" html="WebKit Subfields">WebKit Subfields</a>
+</span>
+<!--span class="number">
+45
+</span-->
+<ul>
+<li><span class="html">
+<a href="#double_tap_to_zoom_enabled" html="double_tap_to_zoom_enabled">double_tap_to_zoom_enabled</a>
+</span>
+<!--span class="number">
+46
+</span-->
+</li>
+<li><span class="html">
+<a href="#plugin" html="plugin">plugin</a>
+</span>
+<!--span class="number">
+47
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#other-fields" html="Other Fields">Other Fields</a>
+</span>
+<!--span class="number">
+48
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p>Every app package should contain a manifest file named <code>package.json</code> in the format of <a href="http://www.json.org/">JSON</a>. This document will help you understand the meaning of each field of the manifest.</p><h2 id="quick-start"><a name="quick-start" href="#quick-start"></a>Quick Start</h2><p>Following is a minimal manifest:</p><pre class="json hljs">{
+  "<span class="hljs-attribute">main</span>": <span class="hljs-value"><span class="hljs-string">"index.html"</span></span>,
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"nw-demo"</span>
+</span>}
+</pre><p>You only need at least these two fields to start with an NW.js app. Here is the quick explanation of them:</p><ul>
+<li><code>main</code>: tell NW.js to open <code>index.html</code> in the same folder as <code>package.json</code> at start</li><li><code>name</code>: gives the application a unique name called <code>nw-demo</code></li></ul><h2 id="required-fields"><a name="required-fields" href="#required-fields"></a>Required Fields</h2><p>Each package must provide all the following fields in its package descriptor file.</p><h3 id="main"><a name="main" href="#main"></a>main</h3><ul>
+<li><code>{String}</code> which HTML page should be opened or which JavaScript file should be executed when NW.js starts.</li></ul><p>You can specify a URL here. You can also specify just a filename (such as <code>index.html</code> or <code>script.js</code>) or a path (relative to the directory where your <code>package.json</code> resides).</p><h3 id="name"><a name="name" href="#name"></a>name</h3><ul>
+<li><code>{String}</code> the name of the package. This must be a unique, lowercase alpha-numeric name without spaces. It may include “.” or “_” or “-“ characters. It is otherwise opaque. </li></ul><p><code>name</code> should be globally unique since NW.js will store app’s data under the directory named <code>name</code>.</p><h2 id="features-control-fields"><a name="features-control-fields" href="#features-control-fields"></a>Features Control Fields</h2><p>Following fields control which features NW.js should provide and how NW.js should open the main window.</p><h3 id="product_string"><a name="product_string" href="#product_string"></a>product_string</h3><ul>
+<li><code>{String}</code> Use it to <a href="http://docs.nwjs.io/en/latest/For%20Users/Package%20and%20Distribute/#mac-os-x">rename the Helper application under macOS</a>.</li></ul><h3 id="nodejs"><a name="nodejs" href="#nodejs"></a>nodejs</h3><ul>
+<li><code>{Boolean}</code> set <code>nodejs</code> to false will disable Node support in NW.js.</li></ul><h3 id="node-main"><a name="node-main" href="#node-main"></a>node-main</h3><ul>
+<li><code>{String}</code> Specify the path to a node.js script file. And it will be executed on startup in Node context before the first DOM window load.</li></ul><h3 id="domain"><a name="domain" href="#domain"></a>domain</h3><ul>
+<li><code>{String}</code> Specify the host in the chrome-extension:// protocol URL used for the application. The web engine will share the same cookies between your application and the website under the same domain.</li></ul><h3 id="single-instance"><a name="single-instance" href="#single-instance"></a>single-instance</h3><p>!!! warning “Deprecated”<br>    This property is deprecated since 0.13.0. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>{Boolean}</code> Specify whether to start up single instance of your app. It’s set to <code>true</code> by default.</li></ul><p>By default NW.js only allows one instance of your app. If you want to allow multiple instances of your app running at the same time, set this to <code>false</code>.</p><h3 id="bg-script"><a name="bg-script" href="#bg-script"></a>bg-script</h3><ul>
+<li><code>{String}</code> background script. The script is executed in the background page at the start of application.</li></ul><h3 id="window"><a name="window" href="#window"></a>window</h3><ul>
+<li><code>{Object}</code> controls how the window looks, see <a href="#window-subfields">Window Subfields</a> below.</li></ul><h3 id="webkit"><a name="webkit" href="#webkit"></a>webkit</h3><ul>
+<li><code>{Object}</code> controls what features of WebKit should be on/off, see <a href="#webkit-subfields">WebKit Subfields</a> below.</li></ul><h3 id="user-agent"><a name="user-agent" href="#user-agent"></a>user-agent</h3><ul>
+<li><code>{String}</code> Override the <code>User-Agent</code> header in HTTP requests made from the application.</li></ul><p>The following placeholders are available to composite the user agent dynamically:</p><ul>
+<li><code>%name</code>: replaced by the <code>name</code> field in the manifest.</li><li><code>%ver</code>: replaced by the <code>version</code> field in the manifest, if available.</li><li><code>%nwver</code>: replaced by the version of NW.js.</li><li><code>%webkit_ver</code>: replaced by the version of Blink engine.</li><li><code>%chromium_ver</code>: replaced by the Chromium version</li><li><code>%osinfo</code>: replaced by the OS and CPU information you would see in browser’s user agent string.</li></ul><h3 id="node-remote"><a name="node-remote" href="#node-remote"></a>node-remote</h3><p>!!! warning “Behavior Changed”<br>    This feature is changed in 0.13.0. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>{Array}</code> or <code>{String}</code> Enable calling Node in remote pages. The value controls for which sites this feature should be turned on. Each item in the array follows the <a href="https://developer.chrome.com/extensions/match_patterns">match patterns</a> used in Chrome extension.</li></ul><p>A match pattern is essentially a URL that begins with a permitted scheme (<code>http</code>, <code>https</code>, <code>file</code>, or <code>ftp</code>, and that can contain <code>'*'</code> characters. The special pattern <code>&lt;all_urls&gt;</code> matches any URL that starts with a permitted scheme. Each match pattern has 3 parts:</p><ul>
+<li><code>scheme</code> — for example, <code>http</code> or <code>file</code> or <code>*</code></li><li><code>host</code> — for example, <code>www.google.com</code> or <code>*.google.com</code> or <code>*</code>; if the scheme is file, there is no host part</li><li><code>path</code> — for example, <code>/*</code>, <code>/foo*</code>, or <code>/foo/bar</code>. The path must be present in a host permission, but is always treated as <code>/*</code>.</li></ul><p>Here’s the basic syntax:</p><pre><code class="none">&lt;url-pattern&gt; := &lt;scheme&gt;://&lt;host&gt;&lt;path&gt;
+&lt;scheme&gt; := '*' | 'http' | 'https' | 'file' | 'ftp'
+&lt;host&gt; := '*' | '*.' &lt;any char except '/' and '*'&gt;+
+&lt;path&gt; := '/' &lt;any chars&gt;
+</code></pre><h3 id="chromium-args"><a name="chromium-args" href="#chromium-args"></a>chromium-args</h3><ul>
+<li><code>{String}</code> Specify chromium (content shell) command line arguments.</li></ul><p>It will be useful if you want to distribute the app with some custom chromium args. For example, if you want to disable the GPU accelerated video display, just add <code>"chromium-args" : "--disable-accelerated-video"</code>. If you want to add multiple arguments, separate each two arguments by space. This field can take a number of flags in one argument as well, via enclosing them in single quotation marks.</p><p>The value of <code>NW_PRE_ARGS</code> environment variable is prepended to the value of this field.</p><p>See <a href="Command Line Options.html">Command Line Options</a> for more information.</p><h3 id="crash_report_url"><a name="crash_report_url" href="#crash_report_url"></a>crash_report_url</h3><ul>
+<li><code>{String}</code> URL of the crash report server</li></ul><p>Once the app crashed, the crash dump file and information about the runtime environment will be sent to the crash server. It’s sent in the same way as in Chromium browser: a HTTP POST request with <code>multipart/form-data</code> as the content type. In theory, any breakpad/crashpad server could handle the request, since breakpad/crashpad work in the same way in NW as they do in Chromium. See <a href="https://github.com/nwjs/nw.js/blob/nw21/test/sanity/crash-dump-report/crash_server.py">a very simple server</a> used in our test case, or <a href="https://github.com/acrisci/simple-breakpad-server">simple-breakpad-server</a>.</p><p>The request contains the following field at least:</p><ul>
+<li><code>prod</code> - the <code>name</code> field in the manifest of your application</li><li><code>ver</code> - the <code>version</code> field in the manifest of your application</li><li><code>upload_file_minidump</code> - the binary contents of the minidump file</li><li><code>switch-n</code> - the command line switches of the crashing process. There are multiple fields for each switch where <code>n</code> is a number starting from 1.</li></ul><h3 id="js-flags"><a name="js-flags" href="#js-flags"></a>js-flags</h3><ul>
+<li><code>{String}</code> Specify the flags passed to JS engine (v8). e.g. turn on Harmony Proxies and Collections feature:</li></ul><pre class="json hljs">{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"nw-demo"</span></span>,
+  "<span class="hljs-attribute">main</span>": <span class="hljs-value"><span class="hljs-string">"index.html"</span></span>,
+  "<span class="hljs-attribute">js-flags</span>": <span class="hljs-value"><span class="hljs-string">"--harmony_proxies --harmony_collections"</span>
+</span>}
+</pre><p>A list of supported V8 flags can be found here: <a href="https://chromium.googlesource.com/v8/v8/+/master/src/flag-definitions.h">https://chromium.googlesource.com/v8/v8/+/master/src/flag-definitions.h</a></p><h3 id="inject_js_start"><a name="inject_js_start" href="#inject_js_start"></a>inject_js_start</h3><h3 id="inject_js_end"><a name="inject_js_end" href="#inject_js_end"></a>inject_js_end</h3><ul>
+<li><code>{String}</code> a local filename, relative to the application path, used to specify a JavaScript file to inject to the window.</li></ul><p><code>inject_js_start</code>: The injecting JavaScript code is to be executed after any files from css, but before any other DOM is constructed or any other script is run.</p><p><code>inject_js_end</code>: The injecting JavaScript code is to be executed after the document object is loaded, before <code>onload</code> event is fired. This is mainly to be used as an option of <code>Window.open()</code> to inject JS in a new window. </p><h3 id="additional_trust_anchors"><a name="additional_trust_anchors" href="#additional_trust_anchors"></a>additional_trust_anchors</h3><ul>
+<li><code>{Array}</code> Containing a list of PEM-encoded certificates (i.e. <code>"-----BEGIN CERTIFICATE-----\n...certificate data...\n-----END CERTIFICATE-----\n"</code>).</li></ul><p>These certificates are used as additional root certificates for validation, to allow connecting to services using a self-signed certificate or certificates issued by custom CAs.</p><h3 id="dom_storage_quota"><a name="dom_storage_quota" href="#dom_storage_quota"></a>dom_storage_quota</h3><ul>
+<li><code>{Integer}</code> Number of mega bytes (MB) for the quota of the DOM storage. The suggestion is to put double the value you want.</li></ul><h3 id="no-edit-menu-(mac)"><a name="no-edit-menu-(mac)" href="#no-edit-menu-(mac)"></a>no-edit-menu (Mac)</h3><p>!!! warning “Deprecated”<br>    This property is deprecated since 0.13.0. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>{Boolean}</code> whether the default <code>Edit</code> menu should be disabled on Mac OS X. The default value is <code>false</code>. Only effective on Mac OS X.</li></ul><h2 id="window-subfields"><a name="window-subfields" href="#window-subfields"></a>Window Subfields</h2><p>Most of window subfields are inherited by sub windows opened by <code>window.open()</code> or links (<code>&lt;a target="_blank"&gt;</code>) by default. The exception list of non inherited subfields are as following. They will be set to default value for opened window:</p><ul>
+<li><code>fullscreen</code> -&gt; <code>false</code></li><li><code>kiosk</code> -&gt; <code>false</code></li><li><code>position</code> -&gt; <code>null</code></li><li><code>resizable</code> -&gt; <code>true</code></li><li><code>show</code> -&gt; <code>true</code></li></ul><p>All of the window subfields can be overwritten by using <a href="Window.html#event-new-win-policy-frame-url-policy"><code>new-win-policy</code> event</a>.</p><h3 id="id"><a name="id" href="#id"></a>id</h3><ul>
+<li><code>{String}</code> the <code>id</code> used to identify the window. This will be used to remember the size and position of the window and restore that geometry when a window with the same id is later opened. <a href="https://developer.chrome.com/apps/app_window#type-CreateWindowOptions">See also the Chrome App documentation</a></li></ul><h3 id="html"><a name="html" href="#html"></a>html</h3><ul>
+<li><code>{String}</code> the default html of window created by NW.js, it’s very useful if you want to show your own html when the app is starting.</li></ul><h3 id="width"><a name="width" href="#width"></a>width</h3><h3 id="height"><a name="height" href="#height"></a>height</h3><ul>
+<li><code>{Integer}</code> the initial inner width/height of the main window.</li></ul><h3 id="toolbar"><a name="toolbar" href="#toolbar"></a>toolbar</h3><p>!!! warning “Deprecated”<br>    This property is deprecated since 0.13.0. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>{Boolean}</code> should the navigation toolbar be showed.</li></ul><h3 id="icon"><a name="icon" href="#icon"></a>icon</h3><ul>
+<li><code>{String}</code> path to window’s icon</li></ul><h3 id="position"><a name="position" href="#position"></a>position</h3><ul>
+<li><code>{String}</code> be <code>null</code> or <code>center</code> or <code>mouse</code>, controls where window will be put</li></ul><h3 id="min_width"><a name="min_width" href="#min_width"></a>min_width</h3><h3 id="min_height"><a name="min_height" href="#min_height"></a>min_height</h3><ul>
+<li><code>{Integer}</code> minimum inner width/height of window</li></ul><h3 id="max_width"><a name="max_width" href="#max_width"></a>max_width</h3><h3 id="max_height"><a name="max_height" href="#max_height"></a>max_height</h3><ul>
+<li><code>{Integer}</code> maximum inner width/height of window</li></ul><h3 id="as_desktop-(linux)"><a name="as_desktop-(linux)" href="#as_desktop-(linux)"></a>as_desktop (Linux)</h3><ul>
+<li><code>{Boolean}</code> show as desktop background window under X11 environment</li></ul><h3 id="resizable"><a name="resizable" href="#resizable"></a>resizable</h3><ul>
+<li><code>{Boolean}</code> whether window is resizable</li></ul><p>Beware, if resizable is set to false on OS X and frame is set to true, the user will still be able to make the window fullscreen. Set fullscreen to false to disable the fullscreen control.</p><h3 id="always_on_top"><a name="always_on_top" href="#always_on_top"></a>always_on_top</h3><p>!!! warning “Behavior Changed”<br>    This feature is changed in 0.13.0. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>{Boolean}</code> whether the window should always stay on top of other windows.</li></ul><h3 id="visible_on_all_workspaces-(mac-&amp;-linux)"><a name="visible_on_all_workspaces-(mac-&amp;-linux)" href="#visible_on_all_workspaces-(mac-&amp;-linux)"></a>visible_on_all_workspaces (Mac &amp; Linux)</h3><p>!!! warning “Behavior Changed”<br>    This feature is changed in 0.13.0. See <a href="../For Users/Migration/From 0.12 to 0.13.html">Migration Notes from 0.12 to 0.13</a>.</p><ul>
+<li><code>{Boolean}</code> whether the window should be visible on all workspaces simultaneously (on platforms that support multiple workspaces, currently Mac OS X and Linux).</li></ul><h3 id="fullscreen"><a name="fullscreen" href="#fullscreen"></a>fullscreen</h3><ul>
+<li><code>{Boolean}</code> whether window is fullscreen</li></ul><p>Beware, if frame is also set to false in fullscreen it will prevent the mouse from being captured on the very edges of the screen. You should avoid activate it if fullscreen is also set to true.</p><h3 id="show_in_taskbar"><a name="show_in_taskbar" href="#show_in_taskbar"></a>show_in_taskbar</h3><ul>
+<li><code>{Boolean}</code> whether the window is shown in taskbar or dock. The default is <code>true</code>. </li></ul><h3 id="frame"><a name="frame" href="#frame"></a>frame</h3><ul>
+<li><code>{Boolean}</code> specify it to <code>false</code> to make the window frameless </li></ul><p>Beware, if frame is set to false in fullscreen it will prevent the mouse from being captured on the very edges of the screen. You should avoid activating it if fullscreen is also set to true.</p><p>Frameless apps do not have a html bar for the user to click and drag the window. You can use CSS to designate DOM elements as draggable regions.</p><pre class="css hljs"><span class="hljs-class">.drag-enable</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">-webkit-app-region</span>:<span class="hljs-value"> drag</span></span>;
+}</span>
+<span class="hljs-class">.drag-disable</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">-webkit-app-region</span>:<span class="hljs-value"> no-drag</span></span>;
+}</span>
+</pre><h3 id="show"><a name="show" href="#show"></a>show</h3><ul>
+<li><code>{Boolean}</code> specify it to <code>false</code> if you want your app to be hidden on startup </li></ul><h3 id="kiosk"><a name="kiosk" href="#kiosk"></a>kiosk</h3><ul>
+<li><code>{Boolean}</code> whether to use <code>Kiosk</code> mode. In <code>Kiosk</code> mode, the app will be fullscreen and try to prevent users from leaving the app, so you should remember to provide a way in app to leave <code>Kiosk</code> mode. This mode is mainly used for presentation on public displays</li></ul><h3 id="transparent"><a name="transparent" href="#transparent"></a>transparent</h3><ul>
+<li><code>{Boolean}</code> whether to turn on transparent window mode. The default is <code>false</code>.   </li></ul><p>Control the transparency with rgba background value in CSS. Use command line option <code>--disable-transparency</code> to disable this feature completely.</p><p>There is experimental support for “click-through” on the transparent region: add <code>--disable-gpu</code> option to the command line.</p><h2 id="webkit-subfields"><a name="webkit-subfields" href="#webkit-subfields"></a>WebKit Subfields</h2><h3 id="double_tap_to_zoom_enabled"><a name="double_tap_to_zoom_enabled" href="#double_tap_to_zoom_enabled"></a>double_tap_to_zoom_enabled</h3><ul>
+<li><code>{Boolean}</code> enable zooming with double tapping on mac with 2 fingers, default is false.</li></ul><h3 id="plugin"><a name="plugin" href="#plugin"></a>plugin</h3><ul>
+<li><code>{Boolean}</code> whether to load external browser plugins like Flash, default to true.</li></ul><h2 id="other-fields"><a name="other-fields" href="#other-fields"></a>Other Fields</h2><p>The <a href="http://wiki.commonjs.org/wiki/Packages/1.0">Packages/1.0</a> standard specifies many other fields <code>package.json</code> should provide. Currently we don’t make use of them, but you provide them still.</p>
+
+
+</body>
+</html>

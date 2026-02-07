@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Clipboard.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><strong>Clipboard API requires node-webkit &gt;= v0.3.0</strong></p><p><code>Clipboard</code> is an abstraction of clipboard(Windows and GTK) and pasteboard(Mac), currently it only supports reading and writing plain text in the system clipboard.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Load native UI library
+var gui = require('nw.gui');
+
+// We can not create a clipboard, we have to receive the system clipboard
+var clipboard = gui.Clipboard.get();
+
+// Read from clipboard
+var text = clipboard.get('text');
+console.log(text);
+
+// Or write something
+clipboard.set('I love node-webkit :)', 'text');
+
+// And clear it!
+clipboard.clear();
+</code></pre>">// Load native UI library
+var gui = require('nw.gui');
+
+// We can not create a clipboard, we have to receive the system clipboard
+var clipboard = gui.Clipboard.get();
+
+// Read from clipboard
+var text = clipboard.get('text');
+console.log(text);
+
+// Or write something
+clipboard.set('I love node-webkit :)', 'text');
+
+// And clear it!
+clipboard.clear();
+</code></pre><h2 id="reference"><a name="reference" href="#reference"></a>Reference</h2><h3 id="get()"><a name="get()" href="#get()"></a>get()</h3><p>Returns the system clipboard.</p><p>It’s not possible to create a new clipboard, you can only get it from OS. And also note that the Selection Clipboard in X11 is not supported.</p><h3 id="clipboard.set(data,-[type])"><a name="clipboard.set(data,-[type])" href="#clipboard.set(data,-[type])"></a>Clipboard.set(data, [type])</h3><p>Write <code>data</code> to the clipboard. <code>type</code> specifies the mime type of the data, only <code>text</code> (plain text data) is supported now.</p><h3 id="clipboard.get([type])"><a name="clipboard.get([type])" href="#clipboard.get([type])"></a>Clipboard.get([type])</h3><p>Returns the data of <code>type</code> from clipboard. Only <code>text</code> (plain text data) is supported now.</p><h3 id="clipboard.clear()"><a name="clipboard.clear()" href="#clipboard.clear()"></a>Clipboard.clear()</h3><p>Clear the clipboard.</p>
+
+
+</body>
+</html>

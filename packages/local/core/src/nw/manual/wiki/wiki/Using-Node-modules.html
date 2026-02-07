@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Using-Node-modules.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p>There are three types of modules in Node.js:</p><ul>
+<li><p>internal modules (parts of <a href="http://nodejs.org/docs/latest/api/">Node API</a>)</p>
+</li><li><p>3rd party modules written in JavaScript</p>
+</li><li><p>3rd party modules with C/C++ addons</p>
+</li></ul><p>All of these types can be used in node-webkit.</p><p><strong>Note:</strong>   you may use the “<a href="https://github.com/joyent/node/wiki/Modules">Modules</a>” page in Node’s wiki or <a href="https://npmjs.org/">npm search</a> to discover many open source modules.</p><h2 id="internal-modules"><a name="internal-modules" href="#internal-modules"></a>Internal modules</h2><p>The internal (built-in) modules of Node.js can be used as directly as in Node, according to the documentation on <a href="http://nodejs.org/docs/latest/api/">Node API</a>.</p><p>For example, <code>var fs = require('fs')</code> is enough to start using <a href="http://nodejs.org/docs/latest/api/fs.html">the file system module.</a></p><p>For example, you may use <a href="http://nodejs.org/docs/latest/api/process.html">the <code>process</code> module</a> instantly (without any <code>require(…)</code>), as in Node.</p><p>And so on.</p><p>There are, however, some small changes between Node’s and node-webkit’s API. (See “[[Changes related to node]]” for details.)</p><h2 id="3rd-party-javascript-modules"><a name="3rd-party-javascript-modules" href="#3rd-party-javascript-modules"></a>3rd party JavaScript modules</h2><p>If a 3rd party module is written totally in JavaScript (i.e. does not contain any C/C++ <a href="http://nodejs.org/docs/latest/api/addons.html">addons</a>), it can be used in node-webkit the same way it is used in Node: <code>require('moduleName')</code>.</p><p>However, the behaviour of relative paths (if such paths are used in that <code>require()</code> method) depends on how the parent file itself is used in your application (here “the parent file” is the file in which the <code>require()</code> method is called):</p><ul>
+<li><p>If the parent file was also required by Node (using <code>require()</code>), then the child’s relative path is treated as relative to its parent.</p>
+</li><li><p>If the parent file is included by WebKit (using any web technology: classic DOM <code>window.open()</code>, node-webkit’s <a href="Window#openurl-options"><code>Window.open()</code></a>, classic DOM <a href="https://developer.mozilla.org/en/docs/DOM/XMLHttpRequest"><code>XMLHttpRequest</code></a>, jQuery’s <a href="http://api.jquery.com/jQuery.getScript/"><code>$.getScript()</code></a>, HTML <code>&lt;script src="..."&gt;</code> element, etc.), then the child’s relative path is treated as relative to the application’s root directory.</p>
+</li></ul><p>The former rule means that any module’s submodules are always being required exactly as in Node and work properly.</p><p>However, it is generally wise not to use the explicit relative paths (starting with <code>../</code> or <code>./</code>) at all. Instead of it, just calling <code>require('modulename')</code> is enough — if the module has been put in the <code>/node_modules</code> subdirectory of your application. (See the “<a href="http://nodejs.org/docs/latest/api/modules.html#modules_loading_from_node_modules_folders">Loading from <code>node_modules</code> Folders</a>” section of Node API.)</p><p>For example, you may install modules from <a href="https://npmjs.org/"><code>npm</code> packages</a> by running <code>npm install modulename</code> in your application’s directory (where your application’s <a href="Manifest-format">manifest</a> resides), because <code>npm</code> would automatically put these modules in the <code>/node_modules</code> subdirectory.</p><h3 id="example:-async"><a name="example:-async" href="#example:-async"></a>Example: async</h3><p>Here is an example of installing the <code>async</code> module:</p><pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;>$ cd /path/to/your/app
+$ npm install async
+</code></pre>">$ cd /path/to/your/app
+$ npm install async
+</code></pre><p>Here is the resulting list of files in the whole tree:</p><pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;>$ find .
+.
+./package.json
+./index.html
+./node_modules
+./node_modules/async
+./node_modules/async/.gitmodules
+./node_modules/async/package.json
+./node_modules/async/Makefile
+./node_modules/async/LICENSE
+./node_modules/async/README.md
+./node_modules/async/.npmignore
+./node_modules/async/lib
+./node_modules/async/lib/async.js
+./node_modules/async/index.js
+</code></pre>">$ find .
+.
+./package.json
+./index.html
+./node_modules
+./node_modules/async
+./node_modules/async/.gitmodules
+./node_modules/async/package.json
+./node_modules/async/Makefile
+./node_modules/async/LICENSE
+./node_modules/async/README.md
+./node_modules/async/.npmignore
+./node_modules/async/lib
+./node_modules/async/lib/async.js
+./node_modules/async/index.js
+</code></pre><p>where your application’s manifest (<code>./package.json</code>) might look like the following:</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>{
+  &quot;name&quot;: &quot;nw-demo&quot;,
+  &quot;main&quot;: &quot;index.html&quot;
+}
+</code></pre>">{
+  "name": "nw-demo",
+  "main": "index.html"
+}
+</code></pre><p>And here’s an example of <code>index.html</code>:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;title&amp;gt;test&amp;lt;/title&amp;gt;
+&amp;lt;script&amp;gt;
+var async=require('async');
+&amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+test should be here.
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;test&lt;/title&gt;
+&lt;script&gt;
+var async=require('async');
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+test should be here.
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h2 id="3rd-party-modules-with-c/c++-addons"><a name="3rd-party-modules-with-c/c++-addons" href="#3rd-party-modules-with-c/c++-addons"></a>3rd party modules with C/C++ addons</h2><p>For modules containing <a href="http://nodejs.org/docs/latest/api/addons.html">C/C++ addons</a> the situation is slightly different from the above — and more complex — because the ABI (application binary interface) of node-webkit differs from Node’s ABI.</p><p>When such a module is installed for Node (with <code>npm install</code> command), <code>npm</code> uses its internal version of the <a href="https://github.com/TooTallNate/node-gyp"><code>node-gyp</code></a> tool to build the addons (from their source code) for Node.js.</p><p>To build such a module for node-webkit, <a href="https://github.com/rogerwang/nw-gyp"><code>nw-gyp</code></a> (a special fork of node-gyp) is necessary. You also have to run <code>nw-gyp</code> manually, because <code>npm</code> (being a Node’s tool) does not know anything about building for node-webkit and using nw-gyp.</p><p>To install nw-gyp, run <code>npm install nw-gyp -g</code>.</p><p>Before actually using nw-gyp, please meet its <a href="https://github.com/rogerwang/nw-gyp#installation">requirements</a> (you’ll need a proper Python engine and C/C++ compiler). These requirements are not different from node-gyp’s.</p><p>To build a module for node-webkit, you may at first obtain it from an npm package, as if for Node.js (<code>npm install modulename</code>), but then rebuild it for node-webkit (<code>nw-gyp rebuild --target=0.5.0</code>).</p><p>Alternatively, you may get the module’s source code elsewhere (for example, from GitHub) and run <code>nw-gyp rebuild --target=0.5.0</code> on it.</p><p>In both of these alternatives,</p><ul>
+<li><p>nw-gyp must be run in the module’s directory (where the module’s <code>binding.gyp</code> resides),</p>
+</li><li><p>the necessary target version of node-webkit (such as <code>0.5.0</code> in <code>nw-gyp rebuild --target=0.5.0</code>) must be given explicitly, because nw-gyp cannot autodetect it,</p>
+</li><li><p>you must rebuild a module before you start using it in any newer version of node-webkit, because the ABI is not stable and changes constantly with the versions. For example,</p>
+<ul>
+<li>after node-webkit 0.6.0 is released, <code>nw-gyp rebuild --target=0.6.0</code> is necessary,</li><li>after node-webkit 0.6.1 is released, <code>nw-gyp rebuild --target=0.6.1</code> is necessary,</li><li>and so on.</li></ul>
+</li></ul><p>The difference of ABI also means that the built C/C++ addons (i.e. <code>.node</code> files) of Node and node-webkit are <strong>mutually incompatible:</strong> you cannot use an addon in Node if it’s built for node-webkit, and vice versa.</p><p>For example, you cannot use some <code>node test.js</code> (or <code>npm test</code>) to test an addon-containing module <strong>in Node</strong> if that addon has been built <strong>for node-webkit:</strong> the test will always fail (either with some cryptic error message or with a crash of the whole engine).</p><p><strong>Important note 1:</strong>   on Windows the engine’s executable file <strong>must</strong> have the name <code>nw.exe</code> for addons to work (i.e. you cannot rename <code>nw.exe</code> if you need any addon-containing modules). They use parts of the engine to sustain their execution.</p><p><strong>Important note 2:</strong>   on Windows it seems to be neccesary to include the full Python’s path in the system’s <code>PATH</code> variable.</p><p><strong>Important note 3:</strong>   Remember to replace the original <code>.node</code> file with your generated one, otherwise the module won’t work (because it still points to the original Node.js module instead of using the one compiled for node-webkit).</p><p>For more information on that matter (including further limitations and known issues), see “[[Build native modules with nw-gyp]]”.</p>
+
+
+</body>
+</html>

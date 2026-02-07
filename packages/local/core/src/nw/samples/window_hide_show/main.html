@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+  <div id="div">
+    <button onclick="location.reload()">reload</button>
+  </div>
+  <h1>main.html</h1>
+<script>
+main = nw.Window.get()
+main.hide()
+nw.Window.open('sub.html', {}, (win)=> {
+  win.on('close', ()=> {
+    main.show()
+    win.close(true)
+  })
+})
+main.on('close',()=> {
+  // last operation
+  // command here
+  main.close(true)
+})
+</script>
+</body>
+</html>

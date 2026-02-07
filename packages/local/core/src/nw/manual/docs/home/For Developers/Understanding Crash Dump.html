@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Understanding Crash Dump</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="understanding-crash-dump"><a name="understanding-crash-dump" href="#understanding-crash-dump"></a>Understanding Crash Dump</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#find-minidump-file" html="Find Minidump File">Find Minidump File</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#organize-symbol-files" html="Organize Symbol Files">Organize Symbol Files</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#decode-minidump-with-`minidump_stackwalk`" html="Decode Minidump with minidump_stackwalk">Decode Minidump with minidump_stackwalk</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#trigger-crash-for-testing" html="Trigger Crash for Testing">Trigger Crash for Testing</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#references" html="References">References</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p>Once NW.js crashed, a <code>minidump</code> file (<code>.dmp</code>) will be generated on disk. Users can include it in the bug report. You can decode the <code>minidump</code> file to get the stack trace when crashed. So it’s helpful to find out what’s wrong with NW.js in certain cases.</p><p>To extract the stack trace from the <code>minidump</code> file, you need three things: the minidump (<code>.dmp</code>) file generated from the crash, symbols file of NW.js binary and the <code>minidump_stackwalk</code> tool.</p><h2 id="find-minidump-file"><a name="find-minidump-file" href="#find-minidump-file"></a>Find Minidump File</h2><p>The minidump file will be generated in the following default directories when NW.js crashed:</p><ul>
+<li>Linux: <code>~/.config/&lt;name-in-manifest&gt;/Crash\ Reports/</code></li><li>Windows: <code>%LOCALAPPDATA%\&lt;name-in-manifest&gt;\User Data\CrashPad</code> <em>(In versions &lt; 0.21.5, it’s in <code>%LOCALAPPDATA%\Chromium\User Data\CrashPad</code> due to bug <a href="https://github.com/nwjs/nw.js/issues/5248">#5248</a> )</em></li><li>Mac: <code>~/Library/Application\ Support/&lt;name-in-manifest&gt;/CrashPad/</code></li></ul><p>The <code>&lt;name-in-manifest&gt;</code> is the <code>name</code> field of <a href="../References/Manifest Format.html#name">Manifest file</a>.</p><p>!!! note “Strip Headers from Linux Minidump File”<br>    Minidump file generated on Linux has additional headers in text format. They have to be stripped off before decoding. The real content of minidump file starts with <code>MDMP</code> followed by unreadable binaries. So simply delete the text before <code>MDMP</code>.</p><h2 id="organize-symbol-files"><a name="organize-symbol-files" href="#organize-symbol-files"></a>Organize Symbol Files</h2><p>Packages of symbol files for released NW.js can be download from <a href="https://dl.nwjs.io/">https://dl.nwjs.io/</a>.</p><p>For example, on Mac, with <code>0.57.1</code>:</p><p><a href="https://dl.nwjs.io/v0.57.1/nwjs-symbol-v0.57.1-osx-x64.zip">https://dl.nwjs.io/v0.57.1/nwjs-symbol-v0.57.1-osx-x64.zip</a></p><p><a href="https://dl.nwjs.io/v0.57.1/nwjs-sdk-symbol-v0.57.1-osx-x64.zip">https://dl.nwjs.io/v0.57.1/nwjs-sdk-symbol-v0.57.1-osx-x64.zip</a></p><p>Then you have to organize the symbol files in a <strong>correct path with correct file name</strong> in order be used by <code>minidump_stackwalk</code> tool. <code>minidump_stackwalk</code> uses <a href="https://code.google.com/p/chromium/codesearch#chromium/src/breakpad/src/processor/simple_symbol_supplier.cc&amp;l=142">simple symbol supplier</a> to find symbol files. Following is the way of how it finds the symbol files.</p><p>The tool will try to search the <code>.sym</code> (For Mac, change <code>.breakpad</code> to <code>.sym</code>)file as in following pattern:<br><code>{SYMBOLS_ROOT}/{DEBUG_FILE_NAME}/{DEBUG_IDENTIFIER}/{DEBUG_FILE_NAME_WITHOUT_PDB}.sym</code></p><ul>
+<li><code>{SYMBOLS_ROOT}</code> is the root folder of all symbol files. You can put all versions / platforms of NW <code>.sym</code> files in a same folder.</li><li><code>{DEBUG_FILE_NAME}</code>, <code>{DEBUG_IDENTIFIER}</code> and <code>{DEBUG_FILE_NAME_WITHOUT_PDB}</code> can be obtained from the first line of <code>.sym</code> file which typically looks like <code>MODULE Linux x86_64 265BDB6BE043D5C70D3A1E279A8F0B1A0 nw</code>(For Mac, like <code>MODULE mac x86_64 4E7C70708AFD3C889F02B149AB5007080 nwjs</code>).<ul>
+<li><code>265BDB6BE043D5C70D3A1E279A8F0B1A0</code> is <code>{DEBUG_IDENTIFIER}</code></li><li><code>nw</code> is <code>{DEBUG_FILE_NAME}</code>.</li><li><code>{DEBUG_FILE_NAME_WITHOUT_PDB}</code> can be converted from <code>{DEBUG_FILE_NAME}</code> by removing <code>.pdb</code> extension which is only necessary for Windows.</li></ul>
+</li></ul><p>For example, on Mac, with <code>0.57.1</code>:</p><pre class="bash hljs">-symbols_root/
+ -nwjs/
+    -<span class="hljs-number">4</span>E7C70708AFD3C889F02B149AB5007080/
+        -nwjs.sym
+ -nwjs Framework/
+    -<span class="hljs-number">87</span>A9EA49BC473F4C8B7817631E820BEB0/
+        -nwjs Framework.sym
+ -nwjs Helper/
+    -<span class="hljs-number">5598</span>EA295F4F36FDA21CB9A5B11B11AA0/
+        -nwjs Helper.sym
+</pre><h2 id="decode-minidump-with-`minidump_stackwalk`"><a name="decode-minidump-with-`minidump_stackwalk`" href="#decode-minidump-with-`minidump_stackwalk`"></a>Decode Minidump with <code>minidump_stackwalk</code></h2><p><code>minidump_stackwalk</code> can be built with NW.js or from breakpad source code directly on Mac and Linux. Or you can install prebuilt from Cygwin on Windows.</p><p>To get the stack trace from <code>minidump</code> file, run following command:</p><pre class="bash hljs">minidump_stackwalk minidump_file.dmp /path/to/symbols_root <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span>
+</pre><p>If the symbol files were not organized correctly, you still can get call stack from this tool. But you will not see symbols and there will be a warning in last section of output - “Loaded modules” like this:</p><pre><code class="none">0x00240000 - 0x02b29fff nw.exe ??? (main) (WARNING: No symbols, nw.exe.pdb, 669008F7B6EE44058CBD5F21BEB5B5CFe)
+</code></pre><h2 id="trigger-crash-for-testing"><a name="trigger-crash-for-testing" href="#trigger-crash-for-testing"></a>Trigger Crash for Testing</h2><p>To test the crash dump feature, you can trigger the crash on purpose with APIs provided by NW.js: <code>App.crashBrowser()</code> and <code>App.crashRenderer()</code>. They crash the browser process and the renderer process respectively.</p><h2 id="references"><a name="references" href="#references"></a>References</h2><ul>
+<li><a href="http://www.chromium.org/developers/decoding-crash-dumps">http://www.chromium.org/developers/decoding-crash-dumps</a>  </li><li><a href="http://code.google.com/p/google-breakpad/wiki/GettingStartedWithBreakpad">http://code.google.com/p/google-breakpad/wiki/GettingStartedWithBreakpad</a></li></ul>
+
+
+</body>
+</html>

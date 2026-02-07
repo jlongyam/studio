@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Window.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>Window API requires node-webkit &gt;= v0.3.0</em></p><p><code>Window</code> is a wrapper of the DOM’s <code>window</code> object. It has extended operations and can receive various window events.</p><p>Every <code>Window</code> is an instance of the <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a> class, and you’re able to use <code>Window.on(...)</code> to respond to native window’s events.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Load native UI library
+var gui = require('nw.gui'); //or global.window.nwDispatcher.requireNwGui() (see https://github.com/rogerwang/node-webkit/issues/707)
+
+// Get the current window
+var win = gui.Window.get();
+
+// Listen to the minimize event
+win.on('minimize', function() {
+  console.log('Window is minimized');
+});
+
+// Minimize the window
+win.minimize();
+
+// Unlisten the minimize event
+win.removeAllListeners('minimize');
+
+// Create a new window and get it
+var new_win = gui.Window.open('https://github.com');
+
+// And listen to new window's focus event
+new_win.on('focus', function() {
+  console.log('New window is focused');
+});
+</code></pre>">// Load native UI library
+var gui = require('nw.gui'); //or global.window.nwDispatcher.requireNwGui() (see https://github.com/rogerwang/node-webkit/issues/707)
+
+// Get the current window
+var win = gui.Window.get();
+
+// Listen to the minimize event
+win.on('minimize', function() {
+  console.log('Window is minimized');
+});
+
+// Minimize the window
+win.minimize();
+
+// Unlisten the minimize event
+win.removeAllListeners('minimize');
+
+// Create a new window and get it
+var new_win = gui.Window.open('https://github.com');
+
+// And listen to new window's focus event
+new_win.on('focus', function() {
+  console.log('New window is focused');
+});
+</code></pre><h2 id="reference"><a name="reference" href="#reference"></a>Reference</h2><h3 id="get([window_object])"><a name="get([window_object])" href="#get([window_object])"></a>get([window_object])</h3><p>If <code>window_object</code> is not specifed, then return current window’s <code>Window</code> object, otherwise return <code>window_object</code>‘s <code>Window</code> object.</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Get the current window
+var win = gui.Window.get();
+
+// Create a new window and get it
+var new_win = gui.Window.open('https://github.com');
+</code></pre>">// Get the current window
+var win = gui.Window.get();
+
+// Create a new window and get it
+var new_win = gui.Window.open('https://github.com');
+</code></pre><h3 id="open(url[,-options])"><a name="open(url[,-options])" href="#open(url[,-options])"></a>open(url[, options])</h3><p>Open a new window and load <code>url</code> in it, you can specify extra <code>options</code> with the window. All window subfields in [[Manifest format]] can be used. Since v0.4.0, a boolean field <code>new-instance</code> can be used to start a new Node instance (webkit process). Since v0.9.0 and 0.8.5, <code>inject-js-start</code> and <code>inject-js-end</code> field can be used to inject a javascript file, see [[Manifest format]] .</p><p>You must wait for the Window’s <code>loaded</code> event before interacting with any of its native components.</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var win = gui.Window.open ('https://github.com', {
+  position: 'center',
+  width: 901,
+  height: 127
+});
+win.on ('loaded', function(){
+  // the native onload event has just occurred
+  var document = win.window.document;
+});
+</code></pre>">var win = gui.Window.open ('https://github.com', {
+  position: 'center',
+  width: 901,
+  height: 127
+});
+win.on ('loaded', function(){
+  // the native onload event has just occurred
+  var document = win.window.document;
+});
+</code></pre><p>Since v0.7.3 the opened window is not focused by default. It’s a result of unifying behavior across platforms. If you want it to be focused by default, you can set <code>focus</code> to <code>true</code> in <code>options</code>.</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var win = gui.Window.open('https://github.com', {
+  focus: true
+});
+</code></pre>">var win = gui.Window.open('https://github.com', {
+  focus: true
+});
+</code></pre><h3 id="window.window"><a name="window.window" href="#window.window"></a>Window.window</h3><p><strong>Get</strong> DOM’s <code>window</code> object in the native window.</p><h3 id="window.x/window.y"><a name="window.x/window.y" href="#window.x/window.y"></a>Window.x/Window.y</h3><p><strong>Get</strong> or <strong>Set</strong> left/top offset from window to screen.</p><h3 id="window.width/window.height"><a name="window.width/window.height" href="#window.width/window.height"></a>Window.width/Window.height</h3><p><strong>Get</strong> or <strong>Set</strong> window’s size.</p><h3 id="window.title"><a name="window.title" href="#window.title"></a>Window.title</h3><p><strong>Get</strong> or <strong>Set</strong> window’s title.</p><h3 id="window.menu"><a name="window.menu" href="#window.menu"></a>Window.menu</h3><p><strong>Get</strong> or <strong>Set</strong> window’s menubar. Set with a Menu with type <code>menubar</code>. See [[Menu]].</p><h3 id="window.isfullscreen"><a name="window.isfullscreen" href="#window.isfullscreen"></a>Window.isFullscreen</h3><p><em>since v0.3.5</em></p><p><strong>Get</strong> or <strong>Set</strong> whether we’re in fullscreen mode.</p><h3 id="window.istransparent"><a name="window.istransparent" href="#window.istransparent"></a>Window.isTransparent</h3><p><em>since v0.11.2</em><br><strong>Get</strong> whether transparency is turned on</p><h3 id="window.iskioskmode"><a name="window.iskioskmode" href="#window.iskioskmode"></a>Window.isKioskMode</h3><p><em>since v0.3.5</em></p><p><strong>Get</strong> or <strong>Set</strong> whether we’re in kiosk mode.</p><h3 id="window.zoomlevel"><a name="window.zoomlevel" href="#window.zoomlevel"></a>Window.zoomLevel</h3><p><em>since v0.4.1</em></p><p><strong>Get</strong> or <strong>Set</strong> the page zoom. <code>0</code> for normal size; positive value for zooming in; negative value for zooming out.</p><h3 id="window.moveto(x,-y)"><a name="window.moveto(x,-y)" href="#window.moveto(x,-y)"></a>Window.moveTo(x, y)</h3><p>Moves a window’s left and top edge to the specified coordinates.</p><h3 id="window.moveby(x,-y)"><a name="window.moveby(x,-y)" href="#window.moveby(x,-y)"></a>Window.moveBy(x, y)</h3><p>Moves a window a specified number of pixels relative to its current coordinates.</p><h3 id="window.resizeto(width,-height)"><a name="window.resizeto(width,-height)" href="#window.resizeto(width,-height)"></a>Window.resizeTo(width, height)</h3><p>Resizes a window to the specified <code>width</code> and <code>height</code>.</p><h3 id="window.resizeby(width,-height)"><a name="window.resizeby(width,-height)" href="#window.resizeby(width,-height)"></a>Window.resizeBy(width, height)</h3><p>Resizes a window by the specified amount.</p><h3 id="window.focus()"><a name="window.focus()" href="#window.focus()"></a>Window.focus()</h3><p>Focus on the window.</p><h3 id="window.blur()"><a name="window.blur()" href="#window.blur()"></a>Window.blur()</h3><p>Move focus away. Usually it will move focus to other windows of your app, since on some platforms there is no concept of blur.</p><h3 id="window.show()"><a name="window.show()" href="#window.show()"></a>Window.show()</h3><p>Show the window if it’s not shown, <code>show</code> will not focus on the window on some platforms, so you need to call <code>focus</code> if you want to.</p><p><code>show(false)</code> has the same effect with <code>hide()</code>.</p><h3 id="window.hide()"><a name="window.hide()" href="#window.hide()"></a>Window.hide()</h3><p>Hide the window. Users will not be able to find the window if it’s hidden.</p><h3 id="window.close([force])"><a name="window.close([force])" href="#window.close([force])"></a>Window.close([force])</h3><p>Close current window, you can catch the <code>close</code> event to prevent the closing. If <code>force</code> is specified and equals to <code>true</code>, then the <code>close</code> event will be ignored.</p><p>Usually you would like to listen to the <code>close</code> event and do some shutdown work and then do a <code>close(true)</code> to really close the window.</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>win.on('close', function() {
+  this.hide(); // Pretend to be closed already
+  console.log(&quot;We're closing...&quot;);
+  this.close(true);
+});
+
+win.close();
+</code></pre>">win.on('close', function() {
+  this.hide(); // Pretend to be closed already
+  console.log("We're closing...");
+  this.close(true);
+});
+
+win.close();
+</code></pre><h3 id="window.reload()"><a name="window.reload()" href="#window.reload()"></a>Window.reload()</h3><p><em>Requires node-webkit &gt;= v0.3.5</em></p><p>Reloads the current window.</p><h3 id="window.reloaddev()"><a name="window.reloaddev()" href="#window.reloaddev()"></a>Window.reloadDev()</h3><p><em>since version 0.4.0</em><br>Reloads the current page by starting a new renderer process from scratch. This is the same as pressing the “reload” button in the right side of the toolbar.</p><h3 id="window.reloadignoringcache()"><a name="window.reloadignoringcache()" href="#window.reloadignoringcache()"></a>Window.reloadIgnoringCache()</h3><p><em>Requires node-webkit &gt;= v0.3.5</em></p><p>Like reload(), but don’t use caches (aka “shift-reload”).</p><h3 id="window.maximize()"><a name="window.maximize()" href="#window.maximize()"></a>Window.maximize()</h3><p>Maximize the window on GTK and Windows, zoom the window on Mac OS X.</p><h3 id="window.unmaximize()"><a name="window.unmaximize()" href="#window.unmaximize()"></a>Window.unmaximize()</h3><p>Unmaximize the window, e.g. the reverse of <code>maximize()</code>.</p><h3 id="window.minimize()"><a name="window.minimize()" href="#window.minimize()"></a>Window.minimize()</h3><p>Minimize the window to task bar on Windows, iconify the window on GTK, and miniaturize the window on Mac OS X.</p><h3 id="window.restore()"><a name="window.restore()" href="#window.restore()"></a>Window.restore()</h3><p>Restore window to previous state after the window is minimized, e.g. the reverse of <code>minimize()</code>. It’s not named <code>unminimize</code> since <code>restore</code> is already used commonly on Window.</p><h3 id="window.enterfullscreen()"><a name="window.enterfullscreen()" href="#window.enterfullscreen()"></a>Window.enterFullscreen()</h3><p>Make the window fullscreen. This function is different with HTML5 FullScreen API, which can make part of the page fullscreen, <code>Window.enterFullscreen()</code> will only fullscreen the whole window.</p><h3 id="window.leavefullscreen()"><a name="window.leavefullscreen()" href="#window.leavefullscreen()"></a>Window.leaveFullscreen()</h3><p>Leave the fullscreen mode.</p><h3 id="window.togglefullscreen()"><a name="window.togglefullscreen()" href="#window.togglefullscreen()"></a>Window.toggleFullscreen()</h3><p><em>Requires node-webkit &gt;= v0.3.5</em></p><p>Toggle the fullscreen mode.</p><h3 id="window.enterkioskmode()"><a name="window.enterkioskmode()" href="#window.enterkioskmode()"></a>Window.enterKioskMode()</h3><p><em>Requires node-webkit &gt;= v0.3.1</em></p><p>Enter the Kiosk mode. In Kiosk mode, the app will be fullscreen and try to prevent users from leaving the app, so you should remember to provide a way in app to leave Kiosk mode. This mode is mainly used for presentation on public displays.</p><h3 id="window.leavekioskmode()"><a name="window.leavekioskmode()" href="#window.leavekioskmode()"></a>Window.leaveKioskMode()</h3><p><em>Requires node-webkit &gt;= v0.3.1</em></p><p>Leave the Kiosk mode.</p><h3 id="window.togglekioskmode()"><a name="window.togglekioskmode()" href="#window.togglekioskmode()"></a>Window.toggleKioskMode()</h3><p><em>Requires node-webkit &gt;= v0.3.5</em></p><p>Toggle the kiosk mode.</p><h3 id="window.settransparent(transparent)"><a name="window.settransparent(transparent)" href="#window.settransparent(transparent)"></a>Window.setTransparent(transparent)</h3><p><em>since v0.11.2</em><br>turn on/off the transparency support, more info <a href="https://github.com/rogerwang/node-webkit/wiki/Transparency">https://github.com/rogerwang/node-webkit/wiki/Transparency</a></p><h3 id="window.showdevtools([id-|-iframe,-headless])"><a name="window.showdevtools([id-|-iframe,-headless])" href="#window.showdevtools([id-|-iframe,-headless])"></a>Window.showDevTools([id | iframe, headless])</h3><p>Open the devtools to inspect the window.</p><p>The optional <code>id</code> argument is supported since v0.6.0. It should be the value of <code>id</code> attribute of any <code>iframe</code> element in the window. It can be used to limit the devtools window to inspect only the iframe. If <code>id</code> is empty string, this feature is not effective.</p><p>The optional <code>headless</code> argument is supported since v0.6.0. When it is <code>true</code>, the Devtools window will not be opened. Instead, a <code>devtools-opened</code> will be sent to the <code>Window</code> object after Devtools is ready.</p><p>The optional <code>iframe</code> argument is supported since v0.7.2. It should be the iframe object. And it serves the same purpose with the <code>id</code> argument.</p><p>For more information, please read [[Devtools Jail Feature]].</p><p>Since v0.8.1, this function returns a <code>Window</code> object when <code>headless</code> is <code>false</code>, so the devtools Window can be manipulated. Note that the events on this object is not working yet.</p><h3 id="window.closedevtools()"><a name="window.closedevtools()" href="#window.closedevtools()"></a>Window.closeDevTools()</h3><p><em>since v0.7.3</em></p><p>Close the devtools window.</p><h3 id="window.isdevtoolsopen()"><a name="window.isdevtoolsopen()" href="#window.isdevtoolsopen()"></a>Window.isDevToolsOpen()</h3><p><em>since v0.8.0</em></p><p>Query the status of devtools window. <em>Note: This will always return false if the <code>headless</code> option was  <code>true</code> when calling <code>showDevTools()</code></em></p><h3 id="window.setmaximumsize(width,-height)"><a name="window.setmaximumsize(width,-height)" href="#window.setmaximumsize(width,-height)"></a>Window.setMaximumSize(width, height)</h3><p>Set window’s maximum size.</p><h3 id="window.setminimumsize(width,-height)"><a name="window.setminimumsize(width,-height)" href="#window.setminimumsize(width,-height)"></a>Window.setMinimumSize(width, height)</h3><p>Set window’s minimum size.</p><h3 id="window.setresizable(boolean-resizable)"><a name="window.setresizable(boolean-resizable)" href="#window.setresizable(boolean-resizable)"></a>Window.setResizable(Boolean resizable)</h3><p>Set whether window is resizable.</p><h3 id="window.setalwaysontop(boolean-top)"><a name="window.setalwaysontop(boolean-top)" href="#window.setalwaysontop(boolean-top)"></a>Window.setAlwaysOnTop(Boolean top)</h3><p><em>Requires node-webkit &gt;= v0.3.4</em></p><p>Sets the widget to be on top of all other windows in the windowing system.</p><h3 id="window.setvisibleonallworkspaces(boolean)"><a name="window.setvisibleonallworkspaces(boolean)" href="#window.setvisibleonallworkspaces(boolean)"></a>Window.setVisibleOnAllWorkspaces(Boolean)</h3><p><em>since v0.11.3</em></p><p>For platforms that support multiple workspaces (currently Mac OS X and Linux), this allows node-webkit windows to be visible on all workspaces simultaneously.</p><p>For example usage see <a href="https://github.com/rogerwang/node-webkit/tree/0d9a0319b49c665c88d69ee6b1093bb1ff8f4915/tests/manual_tests/visible_on_all_workspaces">visible_on_all_workspaces manual test</a>.</p><p>For further information see <a href="https://github.com/rogerwang/node-webkit/issues/2523">https://github.com/rogerwang/node-webkit/issues/2523</a>.</p><h3 id="window.cansetvisibleonallworkspaces()"><a name="window.cansetvisibleonallworkspaces()" href="#window.cansetvisibleonallworkspaces()"></a>Window.canSetVisibleOnAllWorkspaces()</h3><p><em>since v0.11.3</em></p><p>Returns a a boolean indicating if the platform (currently Mac OS X and Linux) support Window API object method <code>setVisibleOnAllWorkspace(Boolean)</code>.</p><h3 id="window.setposition(string-position)"><a name="window.setposition(string-position)" href="#window.setposition(string-position)"></a>Window.setPosition(String position)</h3><p>Shortcut to move window to specified <code>position</code>. Currently only <code>center</code> is supported on all platforms, which will put window in the middle of the screen.</p><h3 id="window.setshowintaskbar(boolean-show)"><a name="window.setshowintaskbar(boolean-show)" href="#window.setshowintaskbar(boolean-show)"></a>Window.setShowInTaskbar(Boolean show)</h3><p><em>since v0.9.2</em><br>Control whether to show window in taskbar or dock. See also <code>show_in_taskbar</code> in [[Manifest-format]].</p><h3 id="window.requestattention(boolean-attention)"><a name="window.requestattention(boolean-attention)" href="#window.requestattention(boolean-attention)"></a>Window.requestAttention(Boolean attention)</h3><p>Pass <code>true</code> to indicate that the window needs user’s action, pass <code>false</code> to cancel it. The final behaviour depends on the platform.</p><h3 id="window.requestattention(integer-count)"><a name="window.requestattention(integer-count)" href="#window.requestattention(integer-count)"></a>Window.requestAttention(Integer count)</h3><p><em>since v0.10.2</em><br>Similar with the boolean version, on Windows platform you can specify number of times the frame flash(es)<br><br>on OSX value &lt; 0 will trigger <code>NSInformationalRequest</code> while value &gt; 0 will trigger <code>NSCriticalRequest</code><br><br>on Linux the Integer value will be casted to Boolean</p><h3 id="window.capturepage(callback-[,-image_format-|-config_object-])"><a name="window.capturepage(callback-[,-image_format-|-config_object-])" href="#window.capturepage(callback-[,-image_format-|-config_object-])"></a>Window.capturePage(callback [, image_format | config_object ])</h3><p><em>since v0.4.2</em></p><p>Captures the visible area of the window. Note: a simple demo usage can be found here: <a href="https://gist.github.com/zhchbin/4749217">https://gist.github.com/zhchbin/4749217</a> </p><p><code>callback</code> should be a function that will be called when the the image data is ready. It looks like this:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>function(dataUrl) {...};
+</code></pre>">function(dataUrl) {...};
+</code></pre><p>A <code>dataURL(string)</code> which encodes an image of the visible area of the captured<br>window. May be assigned to the ‘src’ property of an HTML Image element for display.</p><p><code>image_format</code> is enumerated string [“jpeg”, “png”]. Default is ‘jpeg’.</p><p><em>since v0.9.3</em></p><p>It is now possible to define the <code>datatype</code> of the returned image by using an <code>config_object</code> as the second parameter.</p><p>This object should be like: </p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>{ 
+ format : &quot;[jpeg|png]&quot;, 
+ datatype : &quot;[raw|buffer|datauri]&quot; 
+}
+</code></pre>">{ 
+ format : "[jpeg|png]", 
+ datatype : "[raw|buffer|datauri]" 
+}
+</code></pre><p>Where:<br><code>format</code> defaults to <code>jpeg</code><br><code>datatype</code> defaults to <code>datauri</code>  </p><p>Example usage:</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>// png as base64string
+win.capturePage(function(base64string){
+ // do something with the base64string
+}, { format : 'png', datatype : 'raw'} );
+
+// png as node buffer
+win.capturePage(function(buffer){
+ // do something with the buffer
+}, { format : 'png', datatype : 'buffer'} );
+</code></pre>">// png as base64string
+win.capturePage(function(base64string){
+ // do something with the base64string
+}, { format : 'png', datatype : 'raw'} );
+
+// png as node buffer
+win.capturePage(function(buffer){
+ // do something with the buffer
+}, { format : 'png', datatype : 'buffer'} );
+</code></pre><h3 id="setprogressbar(progress)"><a name="setprogressbar(progress)" href="#setprogressbar(progress)"></a>setProgressBar(progress)</h3><p><em>since v0.10.2</em><br>valid values are 0 to 1 <br><br>val &lt; 0 means remove the progress bar <br><br>val &gt; 1 means indeterminate <br><br>on linux, only Ubuntu is supported, you’ll need to specify the application <code>.desktop</code> file through <code>NW_DESKTOP</code> env. if <code>NW_DESKTOP</code> env variable is not found, it will assume <code>nw.desktop</code></p><h3 id="setbadgelabel(label)"><a name="setbadgelabel(label)" href="#setbadgelabel(label)"></a>setBadgeLabel(label)</h3><p><em>since v0.10.0-rc1</em><br>Windows and OSX only. Set the badge label on the window icon in taskbar or dock.<br><br><em>since v0.10.2</em> the linux Ubuntu is supported, however the label is restricted to a string number only. You’ll also need to specify the <code>.desktop</code> file for your application (see the note on <code>setProgressBar</code>)</p><h3 id="window.cookies.*"><a name="window.cookies.*" href="#window.cookies.*"></a>Window.cookies.*</h3><p><em>since v0.8.1</em></p><p>This includes multiple functions to manipulate the cookies. The API is defined in the same way as <a href="http://developer.chrome.com/extensions/cookies.html">Chrome Extensions’</a>. node-webkit supports the <code>get</code>, <code>getAll</code>, <code>remove</code> and <code>set</code> methods; <code>onChanged</code> event (supporting both <code>addListener</code> and <code>removeListener</code> function on this event).</p><p>And anything related to <code>CookieStore</code> in the Chrome extension API is not supported, because there is only one global cookie store in node-webkit apps.</p><h3 id="window.eval(frame,-script)"><a name="window.eval(frame,-script)" href="#window.eval(frame,-script)"></a>Window.eval(frame, script)</h3><p><em>Since v0.9.0 and v0.8.5</em><br>Execute a piece of JavaScript in the window, if <code>frame</code> argument is null, or in the context of an iframe, if <code>frame</code> is an iframe object. The <code>script</code> argument is the content of the JavaScript source code.</p><h3 id="window.evalnwbin(frame,-path)"><a name="window.evalnwbin(frame,-path)" href="#window.evalnwbin(frame,-path)"></a>Window.evalNWBin(frame, path)</h3><p><em>Since v0.12.0-rc1</em><br>Load compiled JavaScript binary in the window, if <code>frame</code> argument is null; or in the context of an iframe, if <code>frame</code> is an iframe object. The <code>path</code> argument is the path of the JS binary compiled with <code>nwjc</code>, see <a href="https://github.com/nwjs/nw.js/wiki/Protect-JavaScript-source-code-with-v8-snapshot">https://github.com/nwjs/nw.js/wiki/Protect-JavaScript-source-code-with-v8-snapshot</a>. <strong>NOTE: this method has no effect and will not load the binary when devtools window is opening.</strong> See <a href="https://github.com/nwjs/nw.js/issues/3388">https://github.com/nwjs/nw.js/issues/3388</a></p><h2 id="events"><a name="events" href="#events"></a>Events</h2><p>Following events can be listened by using <code>Window.on()</code> function, for more information on how to receive events, you can visit <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>.</p><h3 id="close"><a name="close" href="#close"></a>close</h3><p>The <code>close</code> event is a special event that will affect the result of the <code>Window.close()</code> function. If developer is listening to the <code>close</code> event of a window, the <code>Window.close()</code> call to that window will not close the window but send the <code>close</code> event.</p><p>Usually you would do some shutdown work in the callback of <code>close</code> event, and then call <code>this.close(true)</code> to really close the window, which will not be caught again. Forgetting to add <code>true</code> when calling <code>this.close()</code> in the callback will result in infinite loop.</p><p>And if the shutdown work takes some time, users may feel that the app is exiting slowly, which is bad experience, so you could just hide the window in the <code>close</code> event before really closing it to make a smooth user experience.</p><p>For use case you can see demo code of <code>Window.close()</code> above.</p><p>Since v0.8.4 on OSX, there is a parameter on the callback of this event. Its value will be set to ‘quit’ if the window is being closed by pressing ‘Cmd-Q’ (intent to quit application). Otherwise the value is undefined. See <a href="https://github.com/rogerwang/node-webkit/issues/430">https://github.com/rogerwang/node-webkit/issues/430</a></p><h3 id="closed"><a name="closed" href="#closed"></a>closed</h3><p>The <code>closed</code> event is emitted <strong>after</strong> corresponding window is closed. Normally you’ll not be able to get this event since after the window is closed all js objects will be released. But it’s useful if you’re listening this window’s events in another window, whose objects will not be released.</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;script&amp;gt;
+  var gui = require('nw.gui');
+
+  // Open a new window.
+  var win = gui.Window.open('popup.html');
+
+  // Release the 'win' object here after the new window is closed.
+  win.on('closed', function() {
+    win = null;
+  });
+
+  // Listen to main window's close event
+  gui.Window.get().on('close', function() {
+    // Hide the window to give user the feeling of closing immediately
+    this.hide();
+
+    // If the new window is still open then close it.
+    if (win != null)
+      win.close(true);
+
+    // After closing the new window, close the main window.
+    this.close(true);
+  });
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;script&gt;
+  var gui = require('nw.gui');
+
+  // Open a new window.
+  var win = gui.Window.open('popup.html');
+
+  // Release the 'win' object here after the new window is closed.
+  win.on('closed', function() {
+    win = null;
+  });
+
+  // Listen to main window's close event
+  gui.Window.get().on('close', function() {
+    // Hide the window to give user the feeling of closing immediately
+    this.hide();
+
+    // If the new window is still open then close it.
+    if (win != null)
+      win.close(true);
+
+    // After closing the new window, close the main window.
+    this.close(true);
+  });
+&lt;/script&gt;
+</code></pre><h3 id="loading"><a name="loading" href="#loading"></a>loading</h3><p><em>Requires node-webkit &gt;= v0.3.5</em></p><p>Emitted when the window starts to reload, normally you cannot catch this event because usually it’s emitted before you actually setup the callback.</p><p>The only situation that you can catch this event is when you refresh the window and listen to this event in another window.</p><h3 id="loaded"><a name="loaded" href="#loaded"></a>loaded</h3><p><em>Requires node-webkit &gt;= v0.3.5</em></p><p>Emitted when the window is fully loaded, this event behaves the same with <code>window.onload</code>, but doesn’t rely on the DOM.</p><h3 id="document-start"><a name="document-start" href="#document-start"></a>document-start</h3><p><em>since v0.9.0 and v0.8.5</em> </p><p><code>function (frame) {}</code><br>Emitted when the document object in this window or a child iframe is available, after any files from css, but before any other DOM is constructed or any other script is run; </p><ul>
+<li><strong>frame</strong> is the iframe object, or <code>null</code> if the event is for the window.  </li></ul><p>See also: <code>inject-js-start</code> in [[Manifest-format]]</p><h3 id="document-end"><a name="document-end" href="#document-end"></a>document-end</h3><p><em>since v0.9.0 and v0.8.5</em></p><p><code>function (frame) {}</code><br>Emitted when the document object in this window or a child iframe is loaded, before the <code>onload</code> event is emitted. </p><ul>
+<li><strong>frame</strong> is the iframe object, or <code>null</code> if the event is for the window.  </li></ul><p>See also: <code>inject-js-end</code> in [[Manifest-format]]</p><h3 id="focus"><a name="focus" href="#focus"></a>focus</h3><p>Emitted when window gets focus.</p><h3 id="blur"><a name="blur" href="#blur"></a>blur</h3><p>Emitted when window loses focus.</p><h3 id="minimize"><a name="minimize" href="#minimize"></a>minimize</h3><p>Emitted when window is minimized.</p><h3 id="restore"><a name="restore" href="#restore"></a>restore</h3><p>Emitted when window is restored from minimize state.</p><h3 id="maximize"><a name="maximize" href="#maximize"></a>maximize</h3><p>Emitted when window is maximized.</p><h3 id="unmaximize"><a name="unmaximize" href="#unmaximize"></a>unmaximize</h3><p>Emitted when window is restored from maximize state. Note that on some platforms window can be resized even when maximized, so the <code>unmaximize</code> may not be emitted when a maximized window is resized instead of being unmaximized</p><h3 id="move"><a name="move" href="#move"></a>move</h3><p><em>since v0.8.2</em><br>Emitted after window is moved. The callback is called with 2 arguments: <code>(x, y)</code> for the new location of the upper-left corner of the window.</p><h3 id="resize"><a name="resize" href="#resize"></a>resize</h3><p><em>since v0.8.2</em><br>Emitted after window is resized. The callback is called with 2 arguments: <code>(width, height)</code> for the new size of the window.</p><h3 id="enter-fullscreen"><a name="enter-fullscreen" href="#enter-fullscreen"></a>enter-fullscreen</h3><p>Emitted when window enters fullscreen state.</p><h3 id="leave-fullscreen"><a name="leave-fullscreen" href="#leave-fullscreen"></a>leave-fullscreen</h3><p>Emitted when window leaves fullscreen state.</p><h3 id="zoom"><a name="zoom" href="#zoom"></a>zoom</h3><p>Emitted when window zooming changed. It has a parameter indicating the new zoom level. See <code>Window.zoom</code> for the parameter’s value definition.</p><h3 id="capturepagedone"><a name="capturepagedone" href="#capturepagedone"></a>capturepagedone</h3><p>Emitted after the capturePage method is called and image data is ready. See <code>Window.capturePage's</code> callback function for the parameter’s value definition. </p><h3 id="devtools-opened"><a name="devtools-opened" href="#devtools-opened"></a>devtools-opened</h3><p>Emitted after Devtools is opened by any means (since v0.8.0), or ready after calling <code>Window.showDevTools(id, headless)</code> with <code>headless</code> = <code>true</code>. The event callback has an <code>url</code> argument, which is the URL to load Devtools UI. See [[Devtools jail feature]] and [[Window]] for more information.</p><h3 id="devtools-closed"><a name="devtools-closed" href="#devtools-closed"></a>devtools-closed</h3><p><em>since v0.8.0</em></p><p>Emitted after Devtools is closed.</p><h3 id="new-win-policy"><a name="new-win-policy" href="#new-win-policy"></a>new-win-policy</h3><p><em>since v0.9.0 and v0.8.5</em></p><p><code>function (frame, url, policy) {}</code><br>Emitted when a new window is requested from this window or a child iframe, e.g. user clicks a link with <code>_blank</code> target.</p><ul>
+<li><strong>frame</strong> is the object of the child iframe where the request is from, or <code>null</code> if it’s from the top window.</li><li><strong>url</strong> is the address of the requested link</li><li><strong>policy</strong> is an object with the following methods:<ul>
+<li><code>ignore()</code> : ignore the request, navigation won’t happen.</li><li><code>forceCurrent()</code> : force the link to be opened in the same frame</li><li><code>forceDownload()</code> : force the link to be a downloadable, or open by external program</li><li><code>forceNewWindow()</code> : force the link to be opened in a new window</li><li><code>forceNewPopup()</code> : force the link to be opened in a new popup window</li><li><code>setNewWindowManifest(m)</code> : control the options for the new popup window. The object <code>m</code> is in the same format as the <code>window</code> subfield in [[Manifest format]] (e.g. <code>{"frame" : false}</code>). <em>since v0.11.3</em></li></ul>
+</li></ul><h2 id="issues"><a name="issues" href="#issues"></a>Issues</h2><p>Now on linux, the function <code>setMaximumSize()/setMinimumSize()</code> and <code>setResizable()</code> can not be set at the same time. If do so, they all do not work. Please take this into consideration.</p><h2 id="see-also"><a name="see-also" href="#see-also"></a>See also</h2><ul>
+<li><a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a></li></ul>
+
+
+</body>
+</html>

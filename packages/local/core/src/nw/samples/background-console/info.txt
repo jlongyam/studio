@@ -1,0 +1,4 @@
+added to package.json
+"chromium-args": "--enable-logging=stderr",
+
+see wiki > full console loging

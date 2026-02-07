@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>use-express-and-similar-web-frameworks.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>Before you start developing an express-based NW.js(node-webkit) application, you should see <a href="https://github.com/nwjs/nw.js/wiki/About-Node.js-server-side-script-in-nw.js">About Node.js server side script in nw.js</a>, as it provides some good ways to replace those frameworks.</p><p>But if you already have an express-based webapp, and you want NW.js to use it as desktop app, you might encounter problems.</p><p>First, express provide a web server and doesn’t have an <code>index.html</code> file, so what should you do with the <code>package.json</code> <code>main</code> property?</p><p>The solution is that you can create a <code>index.html</code> file, and use the following code to run the system:</p><p><code>&lt;script type="text/javascript" src="app.js"&gt;&lt;/script&gt;</code></p><p>In NW.js you can use node modules in html files, for more details on this, see: <a href="https://github.com/nwjs/nw.js/wiki/Using-Node-modules">Using Node modules</a></p><p>Second, express 3.x/4.x use the <code>./bin/www</code> folder to start a web server, so if you run the <code>app.js</code> it will fail to start. If you want run a node app directly, not through a html file, you can use the following way.</p><p>We can setup <code>node-main</code> in <code>package.json</code>. The <code>node-main</code> property is a command which will be call when NW.js app start, for more details see: <a href="https://github.com/nwjs/nw.js/wiki/Node-main">Node main</a>.<br>And for express, we should also setup the <code>main</code> property to <code>http://localhost:3000</code>. If we setup a filename to that, NW.js will open it with the file protocol, so you will see the source code. If you setup a url with http protocol, NW.js will open it just like a browser.</p><pre><code data-origin="<pre><code>&quot;node-main&quot;: &quot;./bin/www&quot;,
+&quot;main&quot;: &quot;http://localhost:3000&quot;
+</code></pre>">"node-main": "./bin/www",
+"main": "http://localhost:3000"
+</code></pre><p>Put the above code in your package.json and run it. It seems OK but there is a problem (maybe a bug), in that NW.js shows a blank page. You must refresh the page, and then the content will show.<br>There is a way to solve this problem: you can create a html file and write JavaScript code <code>location.href="http://localhost:3000/"</code> in it, then setup the <code>main</code> as <code>your-dir-html.html</code>.</p><p>If the application that you’re working with doesn’t contain a www binary, try something like this:</p><pre><code data-origin="<pre><code>&quot;node-main&quot;: &quot;./app.js&quot;,
+&quot;main&quot;: &quot;http://localhost:3000&quot;
+</code></pre>">"node-main": "./app.js",
+"main": "http://localhost:3000"
+</code></pre><p>This worked with the mean-stack-relational application (<a href="https://github.com/jpotts18/mean-stack-relational">https://github.com/jpotts18/mean-stack-relational</a>) which doesn’t have a www binary.</p>
+
+
+</body>
+</html>

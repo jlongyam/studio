@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>How-to-run-apps.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>Since our package system is similar to <a href="https://love2d.org">LÖVE</a>, following guides are modified from its <a href="https://love2d.org/wiki/Getting_Started">Wiki</a>.</em></p><p><code>node-webkit</code> can load an app in two ways:</p><ul>
+<li>From a folder. The startup path specifies this folder.</li><li>From a <code>.nw</code> file (a renamed .zip-file). The startup path specifies the file.</li></ul><p>In both cases, there has to be a file called <code>package.json</code> in the startup path or <code>.nw</code> zipfile. This file will be parsed when <code>node-webkit</code> starts. If this file is missing, <code>node-webkit</code> will not recognize the folder or <code>.nw</code> file as app, and it will complain about a wrongly packaged app. A frequently made mistake is zipping the folder rather than its contents. This stems from very old practice (because when you unzip a folder you don’t want it to splash out all over your current directory), but for <code>node-webkit</code> doing that doesn’t make sense: you need to zip the app folder’s contents only, to get a correct <code>.nw</code>.</p><h3 id="all-platforms"><a name="all-platforms" href="#all-platforms"></a>All platforms</h3><p>You can put files of node-webkit in the same directory with your app’s files including <code>package.json</code>, and then just run the <code>nw</code> executable.</p><h3 id="windows"><a name="windows" href="#windows"></a>Windows</h3><p>On Windows, the easiest way to run the app is to drag the folder onto <code>nw.exe</code>, or a shortcut to <code>nw.exe</code>. Remember to drag the folder containing <code>package.json</code>, and not <code>package.json</code> itself.</p><p>You can also call it from the command line:</p><p>For instance:</p><pre><code data-origin="<pre><code>C:\nw\nw.exe C:\apps\myapp
+C:\nw\nw.exe C:\apps\packagedapp.nw
+</code></pre>">C:\nw\nw.exe C:\apps\myapp
+C:\nw\nw.exe C:\apps\packagedapp.nw
+</code></pre><p>You can also:</p><ol>
+<li>Copy the command (<code>C:\nw\nw.exe "C:\apps\myapp"</code>)</li><li>Right-click in a folder or on the desktop</li><li>New &gt; Shortcut</li><li>Paste &gt; Next</li><li>Type the App name &gt; Finish</li></ol><p>Now you are always just a double-click away from running your app.</p><h3 id="linux"><a name="linux" href="#linux"></a>Linux</h3><p>On Linux, you can use one of these command lines:</p><pre><code data-origin="<pre><code>nw /home/path/to/appdir/
+nw /home/path/to/packagedapp.nw
+</code></pre>">nw /home/path/to/appdir/
+nw /home/path/to/packagedapp.nw
+</code></pre><p>If you have installed the <code>.deb</code>, you can double click on <code>.nw</code> files in your file manager as well.</p><p>If you see this error:</p><pre><code data-origin="<pre><code>nw: error while loading shared libraries: libudev.so.0: cannot open shared object file: No such file or directory
+</code></pre>">nw: error while loading shared libraries: libudev.so.0: cannot open shared object file: No such file or directory
+</code></pre><p>Please read <a href="https://github.com/nwjs/nw.js/wiki/The-solution-of-lacking-libudev.so.0">The solution of lacking libudev.so.0</a></p><h3 id="mac-os-x"><a name="mac-os-x" href="#mac-os-x"></a>Mac OS X</h3><p>On Mac OSX, a folder or <code>.nw</code> file can be dropped onto the nw.app application bundle. On the Mac OSX Terminal (commandline), you can use nw like this (assuming it’s installed to the Applications directory):</p><pre><code data-origin="<pre><code>open -n -a nwjs --args &quot;/home/path/to/app&quot;
+</code></pre>">open -n -a nwjs --args "/home/path/to/app"
+</code></pre><p>In some cases it may be faster to invoke the nw binary inside the application bundle directly via the following:</p><pre><code data-origin="<pre><code>/Applications/nwjs.app/Contents/MacOS/nwjs myapp
+</code></pre>">/Applications/nwjs.app/Contents/MacOS/nwjs myapp
+</code></pre><p>You can setup an alias in your Terminal session to call the binary when you use nw by adding an alias to your ~/.bash_profile (open -a TextEdit ~/.bash_profile):</p><pre><code data-origin="<pre><code># alias to nw
+alias nw=&quot;/Applications/nwjs.app/Contents/MacOS/nwjs&quot;
+</code></pre>"># alias to nw
+alias nw="/Applications/nwjs.app/Contents/MacOS/nwjs"
+</code></pre><p>You have to refresh the bash shell environment:</p><pre><code data-origin="<pre><code>source ~/.bash_profile
+</code></pre>">source ~/.bash_profile
+</code></pre><p>Now you can call nw from the commandline like Linux and Windows:</p><pre><code data-origin="<pre><code>nw &quot;/home/path/to/game&quot;
+</code></pre>">nw "/home/path/to/game"
+</code></pre><h3 id="using-npm-`nw`-installer"><a name="using-npm-`nw`-installer" href="#using-npm-`nw`-installer"></a>Using npm <code>nw</code> installer</h3><p><a href="https://www.npmjs.com/package/nw">nw on npmjs.com</a> and <a href="https://github.com/nwjs/npm-installer">nw on github</a></p><p>Install globally:</p><pre><code data-origin="<pre><code>sudo npm install -g nw
+nw ./my_nwjs_app
+</code></pre>">sudo npm install -g nw
+nw ./my_nwjs_app
+</code></pre><p>Install locally:</p><pre><code data-origin="<pre><code>npm install nw
+node_modules/.bin/nw ./my_nwjs_app
+</code></pre>">npm install nw
+node_modules/.bin/nw ./my_nwjs_app
+</code></pre>
+
+
+</body>
+</html>

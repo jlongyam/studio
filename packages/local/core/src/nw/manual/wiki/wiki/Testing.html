@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Testing.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>Now node-webkit’s testing works have two parts: automatic tests and manual test. Node-webkit uses <a href="http://www.mochajs.org/">Mocha</a> to run automatic tests.</p><h2 id="node-webkit-tests"><a name="node-webkit-tests" href="#node-webkit-tests"></a>node-webkit tests</h2><p>[[How to run node-webkit’s test cases]]</p><h2 id="how-do-we-test-with-mocha"><a name="how-do-we-test-with-mocha" href="#how-do-we-test-with-mocha"></a>How do we test with Mocha</h2><p>In folder <code>automatic_tests</code>, every subdirectory has a file called <code>mocha_test.js</code>. In <code>mocha_test.js</code>, there are test cases written using mocha. Finally we load these test cases and run them in <code>index.html</code>. The structure is:</p><pre><code data-origin="<pre><code>node-webkit/
+|-- src/
+`-- tests/
+    |-- index.html
+    |-- ...
+    `-- automatic_tests/
+        |-- ...
+        `-- node/
+            |-- mocha_test.js
+</code></pre>">node-webkit/
+|-- src/
+`-- tests/
+    |-- index.html
+    |-- ...
+    `-- automatic_tests/
+        |-- ...
+        `-- node/
+            |-- mocha_test.js
+</code></pre><h2 id="how-to-write-test-case-for-node-webkit"><a name="how-to-write-test-case-for-node-webkit" href="#how-to-write-test-case-for-node-webkit"></a>How to write test case for node-webkit</h2><p>Mocha is easy to use, we can directly write mocha code in <code>mocha_test.js</code>. But if we have a simple app and want to use it, there are some traps.</p><p>We need to spawn a new process for the app, but there would be a problem with using the communication method of node.js’ <code>child_process</code> module. So we need to use other method for the data transporting like using socket.</p><p>In node-webkit testing system, we have implemented a simple module <code>nw_test_app</code> for the job. How to use it:</p><p><code>mocha_test.js</code>:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var child = app_test.createChildProcess({
+  execPath: process.execPath,
+  appPath: 'path_to_app',
+  end: function(data, app) {
+    if (data.ok) {
+      done();
+    } else {
+      done('error');
+    }
+  }
+});
+</code></pre>">var child = app_test.createChildProcess({
+  execPath: process.execPath,
+  appPath: 'path_to_app',
+  end: function(data, app) {
+    if (data.ok) {
+      done();
+    } else {
+      done('error');
+    }
+  }
+});
+</code></pre><p><code>app</code>:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var client = require('nw_test_app').createClient({
+  argv: gui.App.argv,
+  data: {ok : true},
+});
+</code></pre>">var client = require('nw_test_app').createClient({
+  argv: gui.App.argv,
+  data: {ok : true},
+});
+</code></pre>
+
+
+</body>
+</html>

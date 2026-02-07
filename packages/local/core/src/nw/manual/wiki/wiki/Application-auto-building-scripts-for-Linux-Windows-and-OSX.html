@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Application-auto-building-scripts-for-Linux-Windows-and-OSX.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<h2 id="web2executable"><a name="web2executable" href="#web2executable"></a>Web2Executable</h2><p><a href="https://github.com/orugatil/obs-studio/releases/download/obs/AppSetup.zip">Web2Exectable</a> is a friendly commandline and GUI application that helps you build your NW.js app cross-platform.</p><h2 id="node-webkit-builder"><a name="node-webkit-builder" href="#node-webkit-builder"></a>node-webkit-builder</h2><p><strong>You can use <a href="https://github.com/mllrsohn/node-webkit-builder">node-webkit-builder</a> to automate this process.</strong></p><p>Structure of files for autobuild cross-platform app:</p><pre><code data-origin="<pre><code>my-app/
+├── Resources/
+│   ├── package.json
+│   ├── index.html
+│   ├── build.sh
+│   ├── build.bat
+│   └── build.command
+├── build/
+│   ├── linux
+│   ├── win32
+│   └── osx
+</code></pre>">my-app/
+├── Resources/
+│   ├── package.json
+│   ├── index.html
+│   ├── build.sh
+│   ├── build.bat
+│   └── build.command
+├── build/
+│   ├── linux
+│   ├── win32
+│   └── osx
+</code></pre><p>In Linux we can “install” node-webkit in: /opt/node-webkit</p><h2 id="build.sh-for-linux:"><a name="build.sh-for-linux:" href="#build.sh-for-linux:"></a>build.sh for Linux:</h2><pre><code data-origin="<pre><code>#zip all files to nw archive
+zip -r my-app.nw ./*
+#copy nw.pak from current build node-webkit
+cp /opt/node-webkit/nw.pak ./nw.pak
+#compilation to executable form
+cat /opt/node-webkit/nw ./my-app.nw &amp;gt; ../build/linux/my-app &amp;amp;&amp;amp; chmod +x ../build/linux/my-app
+#move nw.pak to build folder
+mv ./nw.pak ../build/linux/nw.pak
+#remove my-app.nw
+rm ./my-app.nw
+#run application
+../build/linux/my-app
+</code></pre>">#zip all files to nw archive
+zip -r my-app.nw ./*
+#copy nw.pak from current build node-webkit
+cp /opt/node-webkit/nw.pak ./nw.pak
+#compilation to executable form
+cat /opt/node-webkit/nw ./my-app.nw &gt; ../build/linux/my-app &amp;&amp; chmod +x ../build/linux/my-app
+#move nw.pak to build folder
+mv ./nw.pak ../build/linux/nw.pak
+#remove my-app.nw
+rm ./my-app.nw
+#run application
+../build/linux/my-app
+</code></pre><p>In Windows we can “install” node-webkit in: c:\node-webkit</p><p>In Windows we must use for example 7-zip [<a href="http://www.7-zip.org/">http://www.7-zip.org/</a>] batch file - in this system we cannot make zip archive from native console…</p><h2 id="build.bat-for-windows:"><a name="build.bat-for-windows:" href="#build.bat-for-windows:"></a>build.bat for Windows:</h2><pre><code class="lang-bat" data-origin="<pre><code class=&quot;lang-bat&quot;>rem zip all files without git to zip archive -2 compression methods - fast (-mx0) or strong (-mx9)
+7z.exe a -tzip my-app.nw * -xr!?git\* -mx0
+rem copy nw.pak from current build node-webkit to current (%~dp0) folder
+copy c:\node-webkit\nw.pak nw.pak
+rem copy icudt.dll from current build node-webkit
+copy c:\node-webkit\icudt.dll icudt.dll
+rem compilation to executable form
+copy /b c:\node-webkit\nw.exe+%~dp0my-app.nw ..\build\win32\my-app.exe
+rem move nw.pak to build folder
+copy nw.pak ..\build\win32\nw.pak
+del nw.pak
+rem move icudt.dll to build folder
+copy icudt.dll ..\build\win32\icudt.dll
+del icudt.dll
+rem remove my-app.nw
+del my-app.nw
+rem run application
+..\build\win32\my-app.exe
+</code></pre>">rem zip all files without git to zip archive -2 compression methods - fast (-mx0) or strong (-mx9)
+7z.exe a -tzip my-app.nw * -xr!?git\* -mx0
+rem copy nw.pak from current build node-webkit to current (%~dp0) folder
+copy c:\node-webkit\nw.pak nw.pak
+rem copy icudt.dll from current build node-webkit
+copy c:\node-webkit\icudt.dll icudt.dll
+rem compilation to executable form
+copy /b c:\node-webkit\nw.exe+%~dp0my-app.nw ..\build\win32\my-app.exe
+rem move nw.pak to build folder
+copy nw.pak ..\build\win32\nw.pak
+del nw.pak
+rem move icudt.dll to build folder
+copy icudt.dll ..\build\win32\icudt.dll
+del icudt.dll
+rem remove my-app.nw
+del my-app.nw
+rem run application
+..\build\win32\my-app.exe
+</code></pre><h3 id="powershell-script"><a name="powershell-script" href="#powershell-script"></a>PowerShell Script</h3><p><a href="https://gist.github.com/romanov/abc494ee7b08f232f539">PowerShell Script</a></p><h3 id="building-a-.dmg-for-mac-when-you-don't-own-a-mac"><a name="building-a-.dmg-for-mac-when-you-don't-own-a-mac" href="#building-a-.dmg-for-mac-when-you-don't-own-a-mac"></a>Building a .dmg for mac when you don’t own a mac</h3><p>If you want to create a proper .dmg file for OSX, you will need a an OSX environment to create the package. These <em>cannot</em> be built on Windows or Linux!</p><p>You can either hijack a friend’s Mac, or run virtualize OSX on VirtualBox or VMWare</p><p>Example OSX compatible shell script that SCP’s node-webkit-builder’s output to an OSX machine and builds a .dmg using <a href="https://github.com/andreyvit/create-dmg">create-dmg</a>.<br>Copies output script back to the remote host where you ran node-webkit-builder.</p><p>build-osx.sh</p><pre><code data-origin="<pre><code># cleanup old input and output dir and rebuild them.
+rm -rf ./input
+mkdir input
+rm -rf ./output
+mkdir output
+
+#copy over files from remote host to build on this machine
+scp -r myuser@nodewebkitbuilderhost:/var/www/my-app/build/osx ./input
+
+#make sure all relevant execute permissions are set properly, or the app will not start.
+chmod +x ./input/myapp/myapp.app
+chmod +x ./input/myapp/myapp.app/Contents/MacOS/nwjs 
+chmod +x ./input/myapp/myapp.app/Contents/Frameworks/nwjs\ Helper.app/Contents/MacOS/nwjs\ Helper 
+chmod +x ./input/myapp/myapp.app/Contents/Frameworks/nwjs\ Helper\ NP.app/Contents/MacOS/nwjs\ Helper\ NP 
+chmod +x ./input/myapp/myapp.app/Contents/Frameworks/nwjs\ Helper\ EH.app/Contents/MacOS/nwjs\ Helper\ EH 
+chmod +x ./input/myapp/myapp.app/Contents/Frameworks/nwjs\ Framework.framework/nwjs\ Framework 
+
+#run create-dmg from parent directory. Adjust this location when needed.
+../create-dmg/create-dmg \
+--volname &quot;My App Installer&quot; \
+--window-pos 200 120 \
+--window-size 800 400 \
+--icon-size 100 \
+--icon myapp.app 200 190 \
+--hide-extension myapp.app \
+--app-drop-link 600 185 \
+output/myapp.dmg \
+input/myapp/
+
+#copy back results to node-webkit-builder host
+scp ./output/myapp.dmg myuser@nodewebkitbuilderhost:/var/www/my-app/build/
+</code></pre>"># cleanup old input and output dir and rebuild them.
+rm -rf ./input
+mkdir input
+rm -rf ./output
+mkdir output
+
+#copy over files from remote host to build on this machine
+scp -r myuser@nodewebkitbuilderhost:/var/www/my-app/build/osx ./input
+
+#make sure all relevant execute permissions are set properly, or the app will not start.
+chmod +x ./input/myapp/myapp.app
+chmod +x ./input/myapp/myapp.app/Contents/MacOS/nwjs 
+chmod +x ./input/myapp/myapp.app/Contents/Frameworks/nwjs\ Helper.app/Contents/MacOS/nwjs\ Helper 
+chmod +x ./input/myapp/myapp.app/Contents/Frameworks/nwjs\ Helper\ NP.app/Contents/MacOS/nwjs\ Helper\ NP 
+chmod +x ./input/myapp/myapp.app/Contents/Frameworks/nwjs\ Helper\ EH.app/Contents/MacOS/nwjs\ Helper\ EH 
+chmod +x ./input/myapp/myapp.app/Contents/Frameworks/nwjs\ Framework.framework/nwjs\ Framework 
+
+#run create-dmg from parent directory. Adjust this location when needed.
+../create-dmg/create-dmg \
+--volname "My App Installer" \
+--window-pos 200 120 \
+--window-size 800 400 \
+--icon-size 100 \
+--icon myapp.app 200 190 \
+--hide-extension myapp.app \
+--app-drop-link 600 185 \
+output/myapp.dmg \
+input/myapp/
+
+#copy back results to node-webkit-builder host
+scp ./output/myapp.dmg myuser@nodewebkitbuilderhost:/var/www/my-app/build/
+</code></pre>
+
+
+</body>
+</html>

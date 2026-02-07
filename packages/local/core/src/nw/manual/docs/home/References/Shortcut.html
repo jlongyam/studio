@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Shortcut</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="shortcut"><a name="shortcut" href="#shortcut"></a>Shortcut</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#synopsis" html="Synopsis">Synopsis</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#new-shortcut(option)" html="new Shortcut(option)">new Shortcut(option)</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#shortcut.key" html="shortcut.key">shortcut.key</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#shortcut.active" html="shortcut.active">shortcut.active</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#shortcut.failed" html="shortcut.failed">shortcut.failed</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:active" html="Event:active">Event:active</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:failed" html="Event:failed">Event:failed</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p><code>Shortcut</code> represents a global keyboard shortcut, also known as system-wide hotkey. If registered successfully, it works even if your app does <em>not</em> have focus.</p><p><code>Shortcut</code> inherited from <a href="https://nodejs.org/api/events.html#events_class_events_eventemitter"><code>EventEmitter</code></a>. Every time the user presses the registered shortcut, your app will receive an <code>active</code> event of the shortcut object.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre class="javascript hljs"><span class="hljs-keyword">var</span> option = {
+  key : <span class="hljs-string">"Ctrl+Shift+A"</span>,
+  active : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Global desktop keyboard shortcut: "</span> + <span class="hljs-keyword">this</span>.key + <span class="hljs-string">" active."</span>); 
+  },
+  failed : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+    <span class="hljs-comment">// :(, fail to register the |key| or couldn't parse the |key|.</span>
+    <span class="hljs-built_in">console</span>.log(msg);
+  }
+};
+
+<span class="hljs-comment">// Create a shortcut with |option|.</span>
+<span class="hljs-keyword">var</span> shortcut = <span class="hljs-keyword">new</span> nw.Shortcut(option);
+
+<span class="hljs-comment">// Register global desktop shortcut, which can work without focus.</span>
+nw.App.registerGlobalHotKey(shortcut);
+
+<span class="hljs-comment">// If register |shortcut| successfully and user struck "Ctrl+Shift+A", |shortcut|</span>
+<span class="hljs-comment">// will get an "active" event.</span>
+
+<span class="hljs-comment">// You can also add listener to shortcut's active and failed event.</span>
+shortcut.on(<span class="hljs-string">'active'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Global desktop keyboard shortcut: "</span> + <span class="hljs-keyword">this</span>.key + <span class="hljs-string">" active."</span>); 
+});
+
+shortcut.on(<span class="hljs-string">'failed'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+  <span class="hljs-built_in">console</span>.log(msg);
+});
+
+<span class="hljs-comment">// Unregister the global desktop shortcut.</span>
+nw.App.unregisterGlobalHotKey(shortcut);
+</pre><h2 id="new-shortcut(option)"><a name="new-shortcut(option)" href="#new-shortcut(option)"></a>new Shortcut(option)</h2><ul>
+<li><code>option</code> <code>{Object}</code><ul>
+<li><code>key</code> <code>{String}</code> key combinations of the shortcut, such as <code>"ctrl+shift+a"</code>. See <a href="#shortcutkey">shortcut.key</a> property for details.</li><li><code>active</code> <code>{Function}</code> <em>Optional</em> a callback when the hotkey is triggered. See <a href="#shortcutactive">shortcut.active</a> property for details.</li><li><code>failed</code> <code>{Function}</code> <em>Optional</em> a callback when failed to register the hotkey. See <a href="#shortcutfailed">shortcut.failed</a> property for details.</li></ul>
+</li></ul><p>Create new <code>Shortcut</code>, <code>option</code> is an object contains initial settings for the <code>Shortcut</code>.</p><h2 id="shortcut.key"><a name="shortcut.key" href="#shortcut.key"></a>shortcut.key</h2><p>Get the <code>key</code> of a <code>Shortcut</code>. It is a string to specify the shortcut key, like <code>"Ctrl+Alt+A"</code>. The key is consisted of zero or more <em>modifiers</em> and a <em>key</em> on your keyboard. Only one key code is supported. Key code is case insensitive.</p><p>List of supported modifiers:</p><ul>
+<li><code>Ctrl</code></li><li><code>Alt</code></li><li><code>Shift</code></li><li><code>Command</code>: <code>Command</code> modifier maps to Apple key (<kbd>⌘</kbd>) on Mac, and maps to the Windows key on Windows and Linux.</li></ul><p>List of supported keys:</p><ul>
+<li>Alphabet: <code>A</code>-<code>Z</code></li><li>Digits: <code>0</code>-<code>9</code></li><li>Function Keys: <code>F1</code>-<code>F24</code></li><li><code>Comma</code></li><li><code>Period</code></li><li><code>Tab</code></li><li><code>Home</code> / <code>End</code> / <code>PageUp</code> / <code>PageDown</code> / <code>Insert</code> / <code>Delete</code></li><li><code>Up</code> / <code>Down</code> / <code>Left</code> / <code>Right</code></li><li><code>MediaNextTrack</code> / <code>MediaPlayPause</code> / <code>MediaPrevTrack</code> / <code>MediaStop</code></li><li><code>Comma</code> or <code>,</code></li><li><code>Period</code> or <code>.</code></li><li><code>Tab</code> or <code>\t</code></li><li><code>Backquote</code> or <code>` </code></li><li><code>Enter</code> or <code>\n</code></li><li><code>Minus</code> or <code>-</code></li><li><code>Equal</code> or <code>=</code></li><li><code>Backslash</code> or <code>\</code></li><li><code>Semicolon</code> or <code>;</code></li><li><code>Quote</code> or <code>'</code></li><li><code>BracketLeft</code> or <code>[</code></li><li><code>BracketRight</code> or <code>]</code></li><li><code>Escape</code></li><li><a href="http://www.w3.org/TR/DOM-Level-3-Events-code/">DOM Level 3 W3C KeyboardEvent Code Values</a></li></ul><p>!!! warning “Single Key without Modifiers”<br>    The API <code>App.registerGlobalHotKey()</code> can support applications intercepting a single key (like <code>{ key: "A"}</code>). But users will not be able to use “A” normally any more until the app unregisters it. However, the API doesn’t limit this usage, and it would be useful if the applications wants to listen Media Keys.<br>    <strong>Only use zero modifier when you are knowing what your are doing.</strong></p><h2 id="shortcut.active"><a name="shortcut.active" href="#shortcut.active"></a>shortcut.active</h2><p>Get or set the <code>active</code> callback of a <code>Shortcut</code>. It will be called when user presses the shortcut.</p><h2 id="shortcut.failed"><a name="shortcut.failed" href="#shortcut.failed"></a>shortcut.failed</h2><p>*Get or set the <code>failed</code> callback of a <code>Shortcut</code>. It will be called when application passes an invalid key , or failed to register the key.</p><h2 id="event:active"><a name="event:active" href="#event:active"></a>Event:active</h2><p>Same as <a href="#shortcutactive"><code>shortcut.active</code></a></p><h2 id="event:failed"><a name="event:failed" href="#event:failed"></a>Event:failed</h2><p>Same as <a href="#shortcutfailed"><code>shortcut.failed</code></a></p>
+
+
+</body>
+</html>

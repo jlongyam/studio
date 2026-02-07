@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Chromedriver.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p>Since v0.6.0 <code>chromedriver</code> is distributed with node-webkit binaries.</p><p>From <a href="http://code.google.com/p/chromedriver/">chromedriver project home page</a>:</p><blockquote>
+<p>WebDriver is an open source tool for automated testing of webapps across many browsers. It provides capabilities for navigating to web pages, user input, JavaScript execution, and more. ChromeDriver is a standalone server which implements WebDriver’s wire protocol for Chromium. It is being developed by members of the Chromium and WebDriver teams. </p>
+</blockquote><p>You can use it with tools like <a href="http://docs.seleniumhq.org/">selenium</a>.</p><p>The only difference of the binary files from the official one is: <code>chromedriver2_server</code> will search for node-webkit binaries (nw, nw.exe) in the same directory (on OSX it’s the same directory with <code>node-webkit.app</code>).</p><h2 id="getting-started"><a name="getting-started" href="#getting-started"></a>Getting started</h2><p>The following workflow uses <a href="https://github.com/admc/wd">wd</a> to drive the tests:</p><h3 id="installing"><a name="installing" href="#installing"></a>Installing</h3><ul>
+<li>Download <code>chromedriver2</code> (see links below) and place it under the same dir that contains the node-webkit binaries (<code>nw</code>, <code>nw.exe</code>, or <code>node-webkit.app</code> on OSX)</li><li>Download the <a href="http://docs.seleniumhq.org/download/">Selenium Server Standalone</a> jar and place it in the same dir as <code>chromedriver2</code></li><li>Install <code>wd</code> in your project’s <code>node_modules/</code>:<pre><code data-origin="<pre><code>$ npm install wd
+</code></pre>">$ npm install wd
+</code></pre></li></ul><h3 id="running"><a name="running" href="#running"></a>Running</h3><ul>
+<li>Start Selenium:<pre><code data-origin="<pre><code>$ java -jar selenium-server-standalone-VERSION.jar -Dwebdriver.chrome.driver=./chromedriver2_server
+</code></pre>">$ java -jar selenium-server-standalone-VERSION.jar -Dwebdriver.chrome.driver=./chromedriver2_server
+</code></pre></li><li>Drive Selenium as per <a href="https://github.com/admc/wd">wd</a>‘s instructions, for example:<pre><code data-origin="<pre><code>$ (your_project_path)/node_modules/.bin/wd shell
+(wd): x = wd.remote()
+(wd): x.init({ browserName: &quot;chrome&quot; })
+(wd): x.get(&quot;http://google.com&quot;)
+</code></pre>">$ (your_project_path)/node_modules/.bin/wd shell
+(wd): x = wd.remote()
+(wd): x.init({ browserName: "chrome" })
+(wd): x.get("http://google.com")
+</code></pre></li><li>At this point you should have a node-webkit window open showing Google’s homepage</li><li>Another sample with python:</li></ul><pre><code class="lang-python" data-origin="<pre><code class=&quot;lang-python&quot;>
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome('/home/roger/Download/node-webkit-v0.10.2-linux-x64/chromedriver')  # Optional argument, if not specified will search path.
+driver.get('http://www.google.com/xhtml');
+time.sleep(5) # Let the user actually see something!
+search_box = driver.find_element_by_name('q')
+search_box.send_keys('ChromeDriver')
+search_box.submit()
+time.sleep(5) # Let the user actually see something!
+driver.quit()
+</code></pre>">
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome('/home/roger/Download/node-webkit-v0.10.2-linux-x64/chromedriver')  # Optional argument, if not specified will search path.
+driver.get('http://www.google.com/xhtml');
+time.sleep(5) # Let the user actually see something!
+search_box = driver.find_element_by_name('q')
+search_box.send_keys('ChromeDriver')
+search_box.submit()
+time.sleep(5) # Let the user actually see something!
+driver.quit()
+</code></pre><h3 id="important-note-for-ubuntu-13.x-users"><a name="important-note-for-ubuntu-13.x-users" href="#important-note-for-ubuntu-13.x-users"></a>Important Note For Ubuntu 13.x Users</h3><p>As you may have found from trying to run node-webkit in later versions of Ubuntu, you will probably find this won’t work due to lacking libudev.so.0.  You can work around this reasonably easily.</p><ol>
+<li>Rename <code>nw</code> to something else (I chose <code>myapp-bin</code>) - this is because ChromeDriver has hard-coded the executable to nw.</li><li>Create a new executable file called <code>nw</code> with the instructions found in the Wiki for the <a href="https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0">libudev.so.0</a> hack.  <strong>REMEMBER TO CREATE A SIMLINK IN THIS DIRECTORY!!!</strong></li></ol><p>You should find this now works in Ubuntu 13.x</p><h2 id="downloads"><a name="downloads" href="#downloads"></a>Downloads</h2><h3 id="0.10.x"><a name="0.10.x" href="#0.10.x"></a>0.10.x</h3><p>Please look for it in the release notes or the same directory with the node-webkit binary on <a href="http://dl.node-webkit.org/">http://dl.node-webkit.org/</a>  </p><h3 id="0.9.x"><a name="0.9.x" href="#0.9.x"></a>0.9.x</h3><p><a href="https://s3.amazonaws.com/node-webkit/v0.9.0/chromedriver2-nw-v0.9.0-linux-ia32.tar.gz">https://s3.amazonaws.com/node-webkit/v0.9.0/chromedriver2-nw-v0.9.0-linux-ia32.tar.gz</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.9.0/chromedriver2-nw-v0.9.0-linux-x64.tar.gz">https://s3.amazonaws.com/node-webkit/v0.9.0/chromedriver2-nw-v0.9.0-linux-x64.tar.gz</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.9.0/chromedriver2-nw-v0.9.0-osx-ia32.zip">https://s3.amazonaws.com/node-webkit/v0.9.0/chromedriver2-nw-v0.9.0-osx-ia32.zip</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.9.0/chromedriver2-nw-v0.9.0-win-ia32.zip">https://s3.amazonaws.com/node-webkit/v0.9.0/chromedriver2-nw-v0.9.0-win-ia32.zip</a>  </p><h3 id="0.8.x"><a name="0.8.x" href="#0.8.x"></a>0.8.x</h3><p><a href="https://s3.amazonaws.com/node-webkit/v0.8.0/chromedriver2-nw-v0.8.0-linux-ia32.tar.gz">https://s3.amazonaws.com/node-webkit/v0.8.0/chromedriver2-nw-v0.8.0-linux-ia32.tar.gz</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.8.0/chromedriver2-nw-v0.8.0-linux-x64.tar.gz">https://s3.amazonaws.com/node-webkit/v0.8.0/chromedriver2-nw-v0.8.0-linux-x64.tar.gz</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.8.0/chromedriver2-nw-v0.8.0-osx-ia32.zip">https://s3.amazonaws.com/node-webkit/v0.8.0/chromedriver2-nw-v0.8.0-osx-ia32.zip</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.8.0/chromedriver2-nw-v0.8.0-win-ia32.zip">https://s3.amazonaws.com/node-webkit/v0.8.0/chromedriver2-nw-v0.8.0-win-ia32.zip</a>  </p><h3 id="0.7.x"><a name="0.7.x" href="#0.7.x"></a>0.7.x</h3><p><a href="https://s3.amazonaws.com/node-webkit/v0.7.0/chromedriver2-nw-v0.7-win-ia32.zip">https://s3.amazonaws.com/node-webkit/v0.7.0/chromedriver2-nw-v0.7-win-ia32.zip</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.7.0/chromedriver2-nw-v0.7-osx-ia32.zip">https://s3.amazonaws.com/node-webkit/v0.7.0/chromedriver2-nw-v0.7-osx-ia32.zip</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.7.0/chromedriver2-nw-v0.7-linux-ia32.tar.gz">https://s3.amazonaws.com/node-webkit/v0.7.0/chromedriver2-nw-v0.7-linux-ia32.tar.gz</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.7.0/chromedriver2-nw-v0.7-linux-x64.tar.gz">https://s3.amazonaws.com/node-webkit/v0.7.0/chromedriver2-nw-v0.7-linux-x64.tar.gz</a>  </p><h3 id="0.6.x"><a name="0.6.x" href="#0.6.x"></a>0.6.x</h3><p><a href="https://s3.amazonaws.com/node-webkit/v0.6.0/chromedriver2-nw-v0.6.0-win-ia32.zip">https://s3.amazonaws.com/node-webkit/v0.6.0/chromedriver2-nw-v0.6.0-win-ia32.zip</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.6.0/chromedriver2-nw-v0.6.0-linux-ia32.tar.gz">https://s3.amazonaws.com/node-webkit/v0.6.0/chromedriver2-nw-v0.6.0-linux-ia32.tar.gz</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.6.0/chromedriver2-nw-v0.6.0-linux-x64.tar.gz">https://s3.amazonaws.com/node-webkit/v0.6.0/chromedriver2-nw-v0.6.0-linux-x64.tar.gz</a><br><a href="https://s3.amazonaws.com/node-webkit/v0.6.0/chromedriver2-nw-v0.6.0-osx-ia32.zip">https://s3.amazonaws.com/node-webkit/v0.6.0/chromedriver2-nw-v0.6.0-osx-ia32.zip</a>  </p>
+
+
+</body>
+</html>

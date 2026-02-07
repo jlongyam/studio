@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Content Verification</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="content-verification"><a name="content-verification" href="#content-verification"></a>Content Verification</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#sign-an-application" html="Sign an application">Sign an application</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#rebuild-to-use-your-own-keypair" html="Rebuild to use your own keypair">Rebuild to use your own keypair</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p>The “content verification” feature, or “app signing”, prevents loading unsigned files with your official binary. Given a keypair, ‘verified_contents.json’ is the signature for the application files. It’s created with the tool ‘sign.py’ and the private key (private_key.pem file). The public key is built into NW.js binary. To run the signed application, use <code>nw --verify-content=enforce_strict .</code> in the application directory. It will show the simple page. In the next, try to modify index.html a little bit and run it again. NW will report the file is corrupted and quit immediately.</p><p>!!! note<br>    This feature doesn’t prevent someone from hacking your app and loading it with other NW binaries. Consider writing some of your features with C++ and load it with Node.js module, NaCl or <a href="Protect JavaScript Source Code.html">compile your JS to binary with nwjc</a></p><h2 id="sign-an-application"><a name="sign-an-application" href="#sign-an-application"></a>Sign an application</h2><p>To sign an application with the demo keypair, do the following:</p><ol>
+<li>change to application directory</li><li>make sure <code>verified_contents.json</code> or <code>computed_hashes.json</code> is not there (you can just remove them)</li><li>run <code>payload.exe</code>; it will generate <code>payload.json</code>, which serves as input for <code>sign.py</code></li><li>run <code>python sign.py &gt; /tmp/verified_contents.json</code> (it’s important that the tmp destination directory is not application directory)</li><li>move the generated <code>verified_contents.json</code> file to application dir and it’s done.</li></ol><h2 id="rebuild-to-use-your-own-keypair"><a name="rebuild-to-use-your-own-keypair" href="#rebuild-to-use-your-own-keypair"></a>Rebuild to use your own keypair</h2><p>To use your own keypair you’ll need to rebuild the NW binary. And the argument for <code>--verify-content=</code> in the command line need to be set to <code>enforce_strict</code> by default in your build.</p><ol>
+<li>generate your keypair: <code>openssl genrsa -out private_key.pem 2048</code><br>(the output file contains both the private and public key)</li><li>run python convertkey.py; it will convert the public key to C source code.</li><li>put the generated source code in<br><code>content/nw/src/nw_content_verifier_delegate.cc</code>; replace the default key.</li><li>change the default value for the command line argument: change line no.73 in that file to:<br><code>Mode experiment_value =  ContentVerifierDelegate::ENFORCE_STRICT;</code></li><li>build the NW binary.</li></ol><p>Tools, sample application and the demo private key is under <code>tools/sign</code> directory. The demo private key is paired with the public key built into the official NW binaries.</p>
+
+
+</body>
+</html>

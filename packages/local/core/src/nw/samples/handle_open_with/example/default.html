@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+  <div id="div">
+    <h1>Default</h1>
+  </div>
+  <pre id="pre">TODO</pre>
+<script>
+let pre = document.querySelector('#pre')
+pre.textContent = JSON.stringify(nw.App.argv,0,2)
+</script>
+</body>
+</html>

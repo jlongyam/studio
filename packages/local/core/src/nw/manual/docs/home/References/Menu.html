@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Menu</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="menu"><a name="menu" href="#menu"></a>Menu</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#synopsis" html="Synopsis">Synopsis</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#new-menu([option])" html="new Menu([option])">new Menu([option])</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#menu.items" html="menu.items">menu.items</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#menu.append(item)" html="menu.append(item)">menu.append(item)</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#menu.insert(item,-i)" html="menu.insert(item, i)">menu.insert(item, i)</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#menu.remove(item)" html="menu.remove(item)">menu.remove(item)</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#menu.removeat(i)" html="menu.removeAt(i)">menu.removeAt(i)</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#menu.popup(x,-y)" html="menu.popup(x, y)">menu.popup(x, y)</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#menu.createmacbuiltin(appname,-[options])-(mac)" html="menu.createMacBuiltin(appname, [options]) (Mac)">menu.createMacBuiltin(appname, [options]) (Mac)</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p><code>Menu</code> represents a menubar or a context menu. And <code>MenuItem</code> is item inside a menu. Please read the document of <a href="MenuItem.html"><code>MenuItem</code></a> for more details.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><p>An example to create a context menu:</p><pre class="javascript hljs"><span class="hljs-comment">// Create an empty context menu</span>
+<span class="hljs-keyword">var</span> menu = <span class="hljs-keyword">new</span> nw.Menu();
+
+<span class="hljs-comment">// Add some items</span>
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item A'</span> }));
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item B'</span> }));
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ type: <span class="hljs-string">'separator'</span> }));
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item C'</span> }));
+
+<span class="hljs-comment">// Remove one item</span>
+menu.removeAt(<span class="hljs-number">1</span>);
+
+<span class="hljs-comment">// Popup as context menu</span>
+menu.popup(<span class="hljs-number">10</span>, <span class="hljs-number">10</span>);
+
+<span class="hljs-comment">// Iterate menu's items</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; menu.items.length; ++i) {
+  <span class="hljs-built_in">console</span>.log(menu.items[i]);
+}
+</pre><p>To create a menubar, usually you have to create a 2-level menu and assign it to <code>win.menu</code>. Here is the example of creating a menubar:</p><pre class="javascript hljs"><span class="hljs-comment">// Create an empty menubar</span>
+<span class="hljs-keyword">var</span> menu = <span class="hljs-keyword">new</span> nw.Menu({type: <span class="hljs-string">'menubar'</span>});
+
+<span class="hljs-comment">// Create a submenu as the 2nd level menu</span>
+<span class="hljs-keyword">var</span> submenu = <span class="hljs-keyword">new</span> nw.Menu();
+submenu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item A'</span> }));
+submenu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item B'</span> }));
+
+<span class="hljs-comment">// Create and append the 1st level menu to the menubar</span>
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({
+  label: <span class="hljs-string">'First Menu'</span>,
+  submenu: submenu
+}));
+
+<span class="hljs-comment">// Assign it to `window.menu` to get the menu displayed</span>
+nw.Window.get().menu = menu;
+</pre><p>See <a href="../For Users/Advanced/Customize Menubar.html">Customize Menubar</a> for detailed usages.</p><p>!!! warning “Using Menu With Page Navigation”<br>    Menus created in the page that can be navigated will not be functional after a reload or navigation. The reason is that the menus and even the web page will be garbage collected by JS engine after navigation to prevent memory leak. So it’s recommended to use menus in <strong>background page</strong>, which is existed for the life cycle of your app. See <a href="Manifest Format.html#bg-script"><code>bg-script</code></a> and <a href="Manifest Format.html#main"><code>main</code></a> for how to execute scripts in the background page.</p><h2 id="new-menu([option])"><a name="new-menu([option])" href="#new-menu([option])"></a>new Menu([option])</h2><ul>
+<li><code>option</code> <code>{Object}</code> <em>Optional</em><ul>
+<li><code>type</code> <code>{String}</code> <em>Optional</em> two types are accepted by this method: “menubar” or “contextmenu”. The value is set to “contextmenu” by default.</li></ul>
+</li></ul><p>Create a <code>Menu</code> object.</p><h2 id="menu.items"><a name="menu.items" href="#menu.items"></a>menu.items</h2><p>Get an array that contains all items of a menu. Each item is an instance of <code>MenuItem</code>. See <a href="MenuItem.html">MenuItem</a> for detailed information.</p><h2 id="menu.append(item)"><a name="menu.append(item)" href="#menu.append(item)"></a>menu.append(item)</h2><ul>
+<li><code>item</code> <code>{MenuItem}</code> the item to be appended to the tail of the menu</li></ul><p>Append <code>item</code> to the tail of the menu.</p><h2 id="menu.insert(item,-i)"><a name="menu.insert(item,-i)" href="#menu.insert(item,-i)"></a>menu.insert(item, i)</h2><ul>
+<li><code>item</code> <code>{MenuItem}</code> the item to be inserted into the menu</li><li><code>i</code> <code>{Integer}</code> the index in the menu list to insert the the item</li></ul><p>Insert the <code>item</code> at <code>i</code>th position of the menu. The index is started from 0.</p><h2 id="menu.remove(item)"><a name="menu.remove(item)" href="#menu.remove(item)"></a>menu.remove(item)</h2><ul>
+<li><code>item</code> <code>{MenuItem}</code> the item to be removed</li></ul><p>Remove <code>item</code> from the menu. This method requires you to keep the <code>MenuItem</code> outside the <code>Menu</code>.</p><h2 id="menu.removeat(i)"><a name="menu.removeat(i)" href="#menu.removeat(i)"></a>menu.removeAt(i)</h2><ul>
+<li><code>i</code> <code>{Integer}</code> the index of the item to be removed from the menu</li></ul><p>Remove the <code>i</code>th item form the menu.</p><h2 id="menu.popup(x,-y)"><a name="menu.popup(x,-y)" href="#menu.popup(x,-y)"></a>menu.popup(x, y)</h2><ul>
+<li><code>x</code> <code>{Integer}</code> the x position of the anchor</li><li><code>y</code> <code>{Integer}</code> the y position of the anchor</li></ul><p>Popup the context menu at the anchor in (<code>x</code>, <code>y</code>) in current window. This method is only valid for <code>contextmenu</code> type.</p><p>Usually you would listen to <code>contextmenu</code> event of DOM elements and manually popup the menu:</p><pre class="javascript hljs"><span class="hljs-built_in">document</span>.body.addEventListener(<span class="hljs-string">'contextmenu'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ev</span>) </span>{ 
+  ev.preventDefault();
+  menu.popup(ev.x, ev.y);
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+});
+</pre><p>In this way, you can precisely choose which menu to show for different elements, and you can update menu elements just before popuping it.</p><h2 id="menu.createmacbuiltin(appname,-[options])-(mac)"><a name="menu.createmacbuiltin(appname,-[options])-(mac)" href="#menu.createmacbuiltin(appname,-[options])-(mac)"></a>menu.createMacBuiltin(appname, [options]) (Mac)</h2><ul>
+<li><code>appname</code> <code>{String}</code> The application name</li><li><code>options</code> <code>{Object}</code> <em>Optional</em><ul>
+<li><code>hideEdit</code> <code>{Boolean}</code> <em>Optional</em> do not populate the Edit menu</li><li><code>hideWindow</code> <code>{Boolean}</code> <em>Optional</em> do not populate the Window menu</li></ul>
+</li></ul><p>Creates the builtin menus (<em>App</em>, <em>Edit</em> and <em>Window</em>) within the menubar on Mac. The items can be manipulated with the <code>items</code> property. The argument <code>appname</code> is used for the html of <em>App</em> menu.</p><p>You can still use builtin menus with other menu items. i.e. append or insert items to the menu is still valid.</p><p>See also <a href="../For Users/Advanced/Customize Menubar.html#mac-os-x">Customize Menubar</a> for detailed usage.</p>
+
+
+</body>
+</html>

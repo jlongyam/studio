@@ -1,0 +1,16 @@
+{
+	"name": "nw-test",
+	"main": "app://path/to/file.html",
+	"window": {
+	  "position": "center",
+	  "toolbar": true
+	},
+	"webview": {
+    "partitions": [{
+       "name": "trusted",
+       "accessible_resources": [
+          "<all_urls>"
+       ]
+    }]
+  }
+}

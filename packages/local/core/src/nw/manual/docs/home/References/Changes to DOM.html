@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Changes to DOM</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="changes-to-dom"><a name="changes-to-dom" href="#changes-to-dom"></a>Changes to DOM</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#input-type=file" html="input type=file">input type=file</a>
+</span>
+<!--span class="number">
+0
+</span-->
+<ul>
+<li><span class="html">
+<a href="#fileinput.value" html="fileinput.value">fileinput.value</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#fileitem.path" html="fileitem.path">fileitem.path</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#attribute:-`nwdirectory`" html="Attribute: nwdirectory">Attribute: nwdirectory</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#attribute:-`nwdirectorydesc`" html="Attribute: nwdirectorydesc">Attribute: nwdirectorydesc</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#attribute:-`nwsaveas`" html="Attribute: nwsaveas">Attribute: nwsaveas</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#attribute:-`nwworkingdir`" html="Attribute: nwworkingdir">Attribute: nwworkingdir</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#`oncancel`-event" html="oncancel event">oncancel event</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#iframe" html="iframe">iframe</a>
+</span>
+<!--span class="number">
+8
+</span-->
+<ul>
+<li><span class="html">
+<a href="#attribute:-nwdisable" html="Attribute: nwdisable">Attribute: nwdisable</a>
+</span>
+<!--span class="number">
+9
+</span-->
+</li>
+<li><span class="html">
+<a href="#attribute:-nwfaketop" html="Attribute: nwfaketop">Attribute: nwfaketop</a>
+</span>
+<!--span class="number">
+10
+</span-->
+</li>
+<li><span class="html">
+<a href="#attribute:-nwuseragent" html="Attribute: nwUserAgent">Attribute: nwUserAgent</a>
+</span>
+<!--span class="number">
+11
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#webview-tag" html="webview tag">webview tag</a>
+</span>
+<!--span class="number">
+12
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="input-type=file"><a name="input-type=file" href="#input-type=file"></a>input type=file</h2><p>HTML5 does provided limited support for file dialogs with <code>&lt;input type="file" /&gt;</code> element, such as <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple"><code>multiple</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-accept"><code>accept</code></a> and <code>webkitdirectory</code>. NW.js extended the file input to better support native apps.</p><p>!!! note<br>    NW.js extended features are only enabled in Node frames for security reasons. See <a href="../For Users/Advanced/Security in NW.js.html">Security in NW.js</a> for the differences of Node and normal frame.</p><h3 id="fileinput.value"><a name="fileinput.value" href="#fileinput.value"></a>fileinput.value</h3><p>The property contains native path of the local file.</p><p>For example, you can read the file selected by user with Node.js API:</p><pre class="javascript hljs"><span class="hljs-comment">// Get the native path of the file selected by user</span>
+<span class="hljs-keyword">var</span> fileinput = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'input[type=file]'</span>);
+<span class="hljs-keyword">var</span> path = fileinput.value;
+
+<span class="hljs-comment">// Read file with Node.js API</span>
+<span class="hljs-keyword">var</span> fs = nw.require(<span class="hljs-string">'fs'</span>);
+fs.readFile(path, <span class="hljs-string">'utf8'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, txt</span>) </span>{
+  <span class="hljs-keyword">if</span> (err) {
+    <span class="hljs-built_in">console</span>.error(err);
+    <span class="hljs-keyword">return</span>;
+  }
+
+  <span class="hljs-built_in">console</span>.log(txt);
+});
+</pre><h3 id="fileitem.path"><a name="fileitem.path" href="#fileitem.path"></a>fileitem.path</h3><p>HTML5 provides a <code>files</code> attribute to return all files selected in a <code>&lt;input&gt;</code> tag. NW.js provided an extra property <code>fileitem.path</code> to each file item in <code>files</code>, which is the native path of the selected file.</p><pre class="javascript hljs"><span class="hljs-keyword">var</span> fileinput = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'input[type=file]'</span>);
+<span class="hljs-keyword">var</span> files = fileinput.files;
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; files.length; ++i) {
+  <span class="hljs-built_in">console</span>.log(files[i].path);
+}
+</pre><h3 id="attribute:-`nwdirectory`"><a name="attribute:-`nwdirectory`" href="#attribute:-`nwdirectory`"></a>Attribute: <code>nwdirectory</code></h3><p><code>nwdirectory</code> is a bit similar to <code>webkitdirectory</code>, but it returns the path of directory instead of returning files in it.</p><p>For example:</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"file"</span> <span class="hljs-attribute">nwdirectory</span>&gt;</span>
+</pre><h3 id="attribute:-`nwdirectorydesc`"><a name="attribute:-`nwdirectorydesc`" href="#attribute:-`nwdirectorydesc`"></a>Attribute: <code>nwdirectorydesc</code></h3><p>Set the description of the html in the file dialog for <code>nwdirectory</code>. Default is <code>Select Folder</code>.</p><h3 id="attribute:-`nwsaveas`"><a name="attribute:-`nwsaveas`" href="#attribute:-`nwsaveas`"></a>Attribute: <code>nwsaveas</code></h3><p><code>nwsaveas</code> will open a ‘Save as’ dialog, which lets user enter the path of a file. It’s possible to select a non-existing file, which is different from the default file input tag.</p><p>For example:</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"file"</span> <span class="hljs-attribute">nwsaveas</span>&gt;</span>
+</pre><p>And you can specify a value for the default file name to save:</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"file"</span> <span class="hljs-attribute">nwsaveas</span>=<span class="hljs-value">"filename.txt"</span>&gt;</span>
+</pre><h3 id="attribute:-`nwworkingdir`"><a name="attribute:-`nwworkingdir`" href="#attribute:-`nwworkingdir`"></a>Attribute: <code>nwworkingdir</code></h3><p>With <code>nwworkingdir</code>, the file dialog starts in the given directory when the element is activated.</p><p>For example, following code enables the file dialog opening in <code>/home/path/</code> by default:</p><pre class="xml hljs"><span class="hljs-tag">&lt;<span class="hljs-html">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"file"</span> <span class="hljs-attribute">nwworkingdir</span>=<span class="hljs-value">"/home/path/"</span>&gt;</span>
+</pre><h3 id="`oncancel`-event"><a name="`oncancel`-event" href="#`oncancel`-event"></a><code>oncancel</code> event</h3><p>This event is fired after user cancels the file dialog.</p><h2 id="iframe"><a name="iframe" href="#iframe"></a>iframe</h2><p>NW.js extended <code>&lt;iframe&gt;</code> tag for easier developing native apps. Thoses features enables apps to bypass the restrictions of Sandbox and Same Origin Policy etc.</p><p>See also <a href="webview Tag.html">webview Tag</a> for the new <code>&lt;webview&gt;</code> tag.</p><h3 id="attribute:-nwdisable"><a name="attribute:-nwdisable" href="#attribute:-nwdisable"></a>Attribute: nwdisable</h3><p>Make the frame and subframes normal frames.</p><p>!!! note<br>    This attribute doesn’t prevent the page in normal frames accessing its parent and top frames. Then they can still get access to Node.js APIs. So usually you may want to use this attribute with <code>nwfaketop</code> togather.</p><h3 id="attribute:-nwfaketop"><a name="attribute:-nwfaketop" href="#attribute:-nwfaketop"></a>Attribute: nwfaketop</h3><p>Prevent web page in the frame accessing the real <code>window.parent</code> or <code>window.top</code>. They will get the faked parent and top, which is its own <code>window</code> object of the frame. Subframes will also be affected.</p><p>This attribute is usually used with <code>nwdisable</code>.</p><h3 id="attribute:-nwuseragent"><a name="attribute:-nwuseragent" href="#attribute:-nwuseragent"></a>Attribute: nwUserAgent</h3><p>Override the default user-agent when loading the web page in the frame and sub frames. See <a href="Manifest Format.html#user-agent"><code>user-agent</code> in manifest</a> for details.</p><h2 id="webview-tag"><a name="webview-tag" href="#webview-tag"></a>webview tag</h2><p>added some methods to <a href="webview Tag.html">webview tag</a></p>
+
+
+</body>
+</html>

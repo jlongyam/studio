@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>node-webkit-process.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<pre><code data-origin="<pre><code>try{
+    var gui = require('nw.gui');
+    var win = gui.Window.get();
+}catch(e){
+    console.log(e);
+}
+var isShowWindow = true,tray
+win.on('document-start',function(){
+    console.log('document-start .. ');
+});
+win.on('document-end',function(){
+    console.log('document-end .. ');
+    try{
+        var process = require('process');
+        console.log('process load success .. ');
+    }catch(e){
+        console.log('process load failure .. ');
+    }
+});
+win.on('loaded',function(){
+    console.log(&quot;loaded  .. !&quot;);
+    try{
+        var process = require('process');
+        console.log('process load success .. ');
+    }catch(e){
+        console.log('process load failure .. ');
+    }
+});
+win.window.onload =function(){
+    try{
+        var process = require('process');
+        console.log('win.onload process load success .. ');
+    }catch(e){
+        console.log('process load failure .. ');
+    }
+};
+$(document).ready(function(){
+    try{
+        var process = require('process');
+        console.log('$.onload process load success .. ');
+    }catch(e){
+        console.log('process load failure .. ');
+    }
+});
+</code></pre>">try{
+    var gui = require('nw.gui');
+    var win = gui.Window.get();
+}catch(e){
+    console.log(e);
+}
+var isShowWindow = true,tray
+win.on('document-start',function(){
+    console.log('document-start .. ');
+});
+win.on('document-end',function(){
+    console.log('document-end .. ');
+    try{
+        var process = require('process');
+        console.log('process load success .. ');
+    }catch(e){
+        console.log('process load failure .. ');
+    }
+});
+win.on('loaded',function(){
+    console.log("loaded  .. !");
+    try{
+        var process = require('process');
+        console.log('process load success .. ');
+    }catch(e){
+        console.log('process load failure .. ');
+    }
+});
+win.window.onload =function(){
+    try{
+        var process = require('process');
+        console.log('win.onload process load success .. ');
+    }catch(e){
+        console.log('process load failure .. ');
+    }
+};
+$(document).ready(function(){
+    try{
+        var process = require('process');
+        console.log('$.onload process load success .. ');
+    }catch(e){
+        console.log('process load failure .. ');
+    }
+});
+</code></pre><h3 id="测试结果:"><a name="测试结果:" href="#测试结果:"></a>测试结果:</h3><p>process load failure ..<br>document-end ..<br>process load failure ..<br>process load failure ..<br>loaded  .. !<br>process load failure ..  </p><h3 id="分析"><a name="分析" href="#分析"></a>分析</h3><p>jquery的ready &gt; nw.gui.window 的 document-end事件 &gt; window.onload &gt;  nw.gui.window 的 loaded事件</p><h3 id="疑问"><a name="疑问" href="#疑问"></a>疑问</h3><p>只有在加载nodejs的process模块才加载失败,加载util 或者其他模块不会报失败! 真心不知道这是怎么的…node官方API写着process对象是一个全局对象，可以在任何地方访问到它。</p><h3 id="解答"><a name="解答" href="#解答"></a>解答</h3><p>经过测试 终于明白啥叫全局对象 , 不需要require..怪不得加载不出来..唉 自坑啊</p>
+
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+	<link href="log.css" rel="stylesheet">
+	<script src="log.js"></script>
+</head>
+<body>
+  <div id="div">
+    <button onclick="location.reload()">reload</button>
+  </div>
+	<div>
+		<button onclick="shell_exec()">shell_exec</button>
+		<button onclick="shell_execFile()">shell_execFile</button>
+		<button onclick="shell_spawn()">shell_spawn</button>
+	</div>
+<script>
+const { exec, spawn } = require('child_process')
+if( typeof $_ === 'undefined' ) $_ = {}
+$_.shell = {}
+
+$_.shell.exec = ( input, executable = false )=> {
+	
+	exec( input, (error,stdout)=> {
+    if(!executable) {
+			let str = ''
+      if(error) {
+				str = error.trim()
+				console.error(str)
+				log.string(str)
+			}
+      else {
+				str = stdout.trim()
+				console.log(str)
+				log.string(str)
+			}
+    }
+  })
+	
+}
+$_.shell.spawn = ( input, type = 'bat', cb )=> {
+	let batch
+	if( type === ( 'bat' || 'cmd' ) ) {
+		batch = spawn('cmd.exe', ['/c', input ], { shell: false })
+	}
+	batch.stdout.on('data', (data) => {
+    console.log(data.toString())
+  })
+  batch.stderr.on('data', (data) => {
+    console.error(data.toString())
+  })
+  if(cb) {
+    batch.on('exit', (code) => {
+      cb(code)
+    })
+  }
+}
+function shell_exec() {
+	//$_.shell.exec('echo Hello')
+	//$_.shell.exec('cmd /c hello.bat')
+	//$_.shell.exec('hello.bat')
+	//$_.shell.exec('php -v')
+	$_.shell.exec('php file.php')
+}
+function shell_execFile() {
+  $_.shell.exec('notepad.exe', true)
+}
+function shell_spawn() {
+  $_.shell.spawn('hello.bat')
+}
+</script>
+</body>
+</html>

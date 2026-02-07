@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IE8-Compatible Tabs with Span</title>
+<style>
+/* Reset & base */
+* { margin: 0; padding: 0; }
+body { font: 14px Arial, sans-serif; padding: 20px; }
+
+/* Tab container */
+.tabs { margin-bottom: 20px;  }
+.tabs:after { content: ""; display: table; clear: both; }
+
+/* Tab headers list */
+.tab-headers {
+  list-style: none;
+  
+}
+.tab-headers:after { content: ""; display: table; clear: both; }
+.tab-headers li {
+  float: left; /* default: horizontal (top/right/left) */
+  margin-right: 2px;
+}
+.tab-headers span {
+  display: inline-block; /* IE8 needs inline-block for click area */
+  padding: 6px 12px;
+  background: #ddd;
+  color: #333;
+  text-decoration: none;
+  border: 1px solid #aaa;
+  border-bottom: none; /* for top/bottom layouts */
+  cursor: pointer;
+    /* IE7 inline-block fix */
+}
+.tab-headers span:hover { background: #ccc; }
+.tab-headers .active span {
+  background: #fff;
+  font-weight: bold;
+  border-color: #aaa;
+}
+
+/* Make spans keyboard focusable*/
+.tab-headers span:focus {
+  outline: 2px dotted #333;
+  outline: 2px solid silver;
+  /*outline-offset: 2px;*/
+  /*outline-offset: -4px;*/
+} 
+
+/* Tab content panes */
+.tab-content { border: 1px solid #aaa; padding: 10px; background: #fff; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* LAYOUT VARIANTS */
+
+/* 1. TOP TABS (default) */
+.tabs.top .tab-headers { border-bottom: 1px solid #aaa; margin-bottom: -1px; }
+.tabs.top .tab-headers li { float: left; }
+/*.tabs.top .tab-headers span { border-radius: 4px 4px 0 0; }*/
+
+/* 2. BOTTOM TABS */
+.tabs.bottom .tab-headers { border-top: 1px solid #aaa; margin-top: -1px; }
+.tabs.bottom .tab-headers li { float: left; }
+.tabs.bottom .tab-headers span {
+  /*border-radius: 0 0 4px 4px;*/
+  border-top: none;
+  border-bottom: 1px solid #aaa;
+}
+/* .tabs.bottom .tab-content {  } */
+
+/* 3. LEFT TABS */
+.tabs.left .tab-headers {
+  width: 120px; float: left; border-right: 1px solid #aaa; margin-right: -2px;
+  /*min-height: 120px;*/
+}
+.tabs.left .tab-headers li { display: block; float: none; margin-bottom: 2px; }
+.tabs.left .tab-headers span {
+  /*border-radius: 4px 0 0 4px;*/
+ /* border-right: 1px solid #aaa;*/
+  border-bottom: 1px solid #aaa;
+  border-right: none;
+  margin-right: -2px;
+  display: block; /* Make full width in side tabs */
+
+}
+.tabs.left .tab-content { margin-left: 120px; /*border-left: none;*/
+/*min-height: 98px;*/ }
+
+/* 4. RIGHT TABS */
+
+.tabs.right .tab-headers {
+  width: 120px; float: right; border-left: 1px solid #aaa;
+  margin-left: 2px;
+   /*min-height: 120px;*/
+}
+.tabs.right .tab-headers li { display: block; float: none; margin-bottom: 2px; }
+.tabs.right .tab-headers span {
+  /*border-radius: 0 4px 4px 0;*/
+  border-left: none;
+  border-bottom: 1px solid #aaa;
+  display: block; /* Make full width in side tabs */
+}
+.tabs.right .tab-content {
+  margin-right: 120px; /*border-right: none;*/
+/* min-height: 98px;*/
+}
+</style>
+</head>
+<body>
+
+<h2>Top Tabs</h2>
+<div class="tabs top" id="tabsTop">
+  <ul class="tab-headers">
+    <li><span tabindex="0" data-target="top-1" class="active">Tab 1</span></li>
+    <li><span tabindex="0" data-target="top-2">Tab 2</span></li>
+    <li><span tabindex="0" data-target="top-3">Tab 3</span></li>
+  </ul>
+  <div class="tab-content">
+    <div id="top-1" class="tab-pane active">Content for top tab 1.</div>
+    <div id="top-2" class="tab-pane">Content for top tab 2.</div>
+    <div id="top-3" class="tab-pane">Content for top tab 3.</div>
+  </div>
+</div>
+
+<h2>Bottom Tabs</h2>
+<div class="tabs bottom" id="tabsBottom">
+  <div class="tab-content">
+    <div id="bottom-1" class="tab-pane active">Content for bottom tab 1.</div>
+    <div id="bottom-2" class="tab-pane">Content for bottom tab 2.</div>
+    <div id="bottom-3" class="tab-pane">Content for bottom tab 3.</div>
+  </div>
+  <ul class="tab-headers">
+    <li><span tabindex="0" data-target="bottom-1" class="active">Tab 1</span></li>
+    <li><span tabindex="0" data-target="bottom-2">Tab 2</span></li>
+    <li><span tabindex="0" data-target="bottom-3">Tab 3</span></li>
+  </ul>
+</div>
+
+<h2>Left Tabs</h2>
+<div class="tabs left" id="tabsLeft">
+  <ul class="tab-headers">
+    <li><span tabindex="0" data-target="left-1" class="active">Tab 1</span></li>
+    <li><span tabindex="0" data-target="left-2">Tab 2</span></li>
+    <li><span tabindex="0" data-target="left-3">Tab 3</span></li>
+  </ul>
+  <div class="tab-content">
+    <div id="left-1" class="tab-pane active">Content for left tab 1.</div>
+    <div id="left-2" class="tab-pane">Content for left tab 2.</div>
+    <div id="left-3" class="tab-pane">
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+    </div>
+  </div>
+</div>
+
+<h2>Right Tabs</h2>
+<div class="tabs right" id="tabsRight">
+  <ul class="tab-headers">
+    <li><span tabindex="0" data-target="right-1" class="active">Tab 1</span></li>
+    <li><span tabindex="0" data-target="right-2">Tab 2</span></li>
+    <li><span tabindex="0" data-target="right-3">Tab 3</span></li>
+  </ul>
+  <div class="tab-content">
+    <div id="right-1" class="tab-pane active">Content for right tab 1.</div>
+    <div id="right-2" class="tab-pane">Content for right tab 2.</div>
+    <div id="right-3" class="tab-pane">
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+      Content for right tab 3.<br>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Helper functions for class manipulation (IE8-safe)
+  function hasClass(el, className) {
+    return (" " + el.className + " ").indexOf(" " + className + " ") !== -1;
+  }
+
+  function addClass(el, className) {
+    if (!hasClass(el, className)) {
+      el.className = (el.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+    }
+  }
+
+  function removeClass(el, className) {
+    var classNames = (" " + el.className + " ").replace(/\s+/g, " ");
+    el.className = classNames.replace(" " + className + " ", " ").replace(/^\s+|\s+$/g, "");
+  }
+
+  // Initialize tabs
+  function initTabs(container) {
+    // Find tab headers (ul.tab-headers)
+    var uls = container.getElementsByTagName("ul");
+    var headers = null;
+    for (var i = 0; i < uls.length; i++) {
+      if (hasClass(uls[i], "tab-headers")) {
+        headers = uls[i];
+        break;
+      }
+    }
+    if (!headers) return;
+
+    // Get all span elements inside headers (our tab buttons)
+    var spans = headers.getElementsByTagName("span");
+
+    // Find tab panes (div.tab-pane)
+    var divs = container.getElementsByTagName("div");
+    var panes = [];
+    for (var i = 0; i < divs.length; i++) {
+      if (hasClass(divs[i], "tab-pane")) {
+        panes.push(divs[i]);
+      }
+    }
+
+    for (var i = 0; i < spans.length; i++) {
+      (function(span) {
+        var handler = function(e) {
+          e = e || window.event;
+          
+          // Get target pane ID from data-target attribute
+          var targetId = span.getAttribute('data-target');
+          if (!targetId) return;
+          
+          var targetPane = document.getElementById(targetId);
+          if (!targetPane) return;
+
+          // Prevent default action (for keyboard Enter/Space)
+          if (e.preventDefault) e.preventDefault(); 
+          else if (e.returnValue !== undefined) e.returnValue = false;
+
+          // Remove 'active' from all headers & panes in this container
+          for (var j = 0; j < spans.length; j++) {
+            removeClass(spans[j], "active");
+          }
+          for (var k = 0; k < panes.length; k++) {
+            removeClass(panes[k], "active");
+          }
+
+          // Add 'active' to clicked tab and its pane
+          addClass(span, "active");
+          addClass(targetPane, "active");
+
+          // IE8 layout reflow hack (forces redraw)
+          container.style.display = "none";
+          container.style.display = "block";
+        };
+
+        var keyHandler = function(e) {
+          e = e || window.event;
+          if (e.keyCode === 13 || e.keyCode === 32) { // Enter or Space
+            handler(e);
+          }
+        };
+
+        if (span.addEventListener) {
+          span.addEventListener("click", handler, false);
+          span.addEventListener("keydown", keyHandler, false);
+        } else if (span.attachEvent) {
+          span.attachEvent("onclick", handler);
+          span.attachEvent("onkeydown", keyHandler);
+        }
+      })(spans[i]);
+    }
+  }
+
+  // DOM ready handler (IE8-safe)
+  function ready(fn) {
+    if (document.readyState !== "loading") {
+      fn();
+    } else if (document.addEventListener) {
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      document.attachEvent("onreadystatechange", function() {
+        if (document.readyState === "complete") fn();
+      });
+    }
+  }
+
+  ready(function() {
+    // Find all tab containers (div.tabs)
+    var allDivs = document.getElementsByTagName("div");
+    var tabContainers = [];
+    for (var i = 0; i < allDivs.length; i++) {
+      if (hasClass(allDivs[i], "tabs")) {
+        tabContainers.push(allDivs[i]);
+      }
+    }
+
+    for (var i = 0; i < tabContainers.length; i++) {
+      initTabs(tabContainers[i]);
+    }
+  });
+})();
+</script>
+</body>
+</html>

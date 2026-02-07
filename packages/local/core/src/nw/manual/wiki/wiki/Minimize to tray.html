@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Minimize to tray.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><em>This example needs node-webkit &gt;= v0.3.0</em></p><p>On Windows, a common window design pattern is to minimize the window to the notification area. e.g. Hide and window when you click the minimize button and add a tray icon to bring the window back.</p><p>To implement it in node-webkit, you can try to use the code bellow.</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;html&amp;gt;
+&amp;lt;body&amp;gt;
+  &amp;lt;div&amp;gt;Minimize to tray&amp;lt;/div&amp;gt;
+  &amp;lt;script&amp;gt;
+    // Load library
+    var gui = require('nw.gui');
+
+    // Reference to window and tray
+    var win = gui.Window.get();
+    var tray;
+
+    // Get the minimize event
+    win.on('minimize', function() {
+      // Hide window
+      this.hide();
+
+      // Show tray
+      tray = new gui.Tray({ icon: 'icon.png' });
+
+      // Show window and remove tray when clicked
+      tray.on('click', function() {
+        win.show();
+        this.remove();
+        tray = null;
+      });
+    });
+  &amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;html&gt;
+&lt;body&gt;
+  &lt;div&gt;Minimize to tray&lt;/div&gt;
+  &lt;script&gt;
+    // Load library
+    var gui = require('nw.gui');
+
+    // Reference to window and tray
+    var win = gui.Window.get();
+    var tray;
+
+    // Get the minimize event
+    win.on('minimize', function() {
+      // Hide window
+      this.hide();
+
+      // Show tray
+      tray = new gui.Tray({ icon: 'icon.png' });
+
+      // Show window and remove tray when clicked
+      tray.on('click', function() {
+        win.show();
+        this.remove();
+        tray = null;
+      });
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h2 id="see-also"><a name="see-also" href="#see-also"></a>See also</h2><ul>
+<li><a href="Tray.html">Tray</a></li></ul>
+
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>MenuItem</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="menuitem"><a name="menuitem" href="#menuitem"></a>MenuItem</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#synopsis" html="Synopsis">Synopsis</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#new-menuitem(option)" html="new MenuItem(option)">new MenuItem(option)</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.type" html="item.type">item.type</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.label" html="item.label">item.label</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.icon" html="item.icon">item.icon</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.iconistemplate-(mac)" html="item.iconIsTemplate (Mac)">item.iconIsTemplate (Mac)</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.tooltip-(mac)" html="item.tooltip (Mac)">item.tooltip (Mac)</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.checked" html="item.checked">item.checked</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.enabled" html="item.enabled">item.enabled</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.submenu" html="item.submenu">item.submenu</a>
+</span>
+<!--span class="number">
+9
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.click" html="item.click">item.click</a>
+</span>
+<!--span class="number">
+10
+</span-->
+</li>
+<li><span class="html">
+<a href="#item.key" html="item.key">item.key</a>
+</span>
+<!--span class="number">
+11
+</span-->
+<ul>
+<li><span class="html">
+<a href="#valid-keys-for-all-platforms" html="Valid Keys for All Platforms">Valid Keys for All Platforms</a>
+</span>
+<!--span class="number">
+12
+</span-->
+</li>
+<li><span class="html">
+<a href="#special-keys-for-mac-only" html="Special Keys for Mac Only">Special Keys for Mac Only</a>
+</span>
+<!--span class="number">
+13
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#item.modifiers" html="item.modifiers">item.modifiers</a>
+</span>
+<!--span class="number">
+14
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-click" html="Event: click">Event: click</a>
+</span>
+<!--span class="number">
+15
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p><code>MenuItem</code> represents an item in a menu. A <code>MenuItem</code> can be a separator or a normal item which has label and icon or a checkbox. It can response to mouse click or keyboard shortcut.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre class="javascript hljs"><span class="hljs-keyword">var</span> item;
+
+<span class="hljs-comment">// Create a separator</span>
+item = <span class="hljs-keyword">new</span> nw.MenuItem({ type: <span class="hljs-string">'separator'</span> });
+
+<span class="hljs-comment">// Create a normal item with label and icon</span>
+item = <span class="hljs-keyword">new</span> nw.MenuItem({
+  type: <span class="hljs-string">"normal"</span>, 
+  label: <span class="hljs-string">"I'm a menu item"</span>,
+  icon: <span class="hljs-string">"img/icon.png"</span>
+});
+
+<span class="hljs-comment">// Or you can omit the 'type' field for normal items</span>
+item = <span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Simple item'</span> });
+
+<span class="hljs-comment">// Bind a callback to item</span>
+item = <span class="hljs-keyword">new</span> nw.MenuItem({
+  label: <span class="hljs-string">"Click me"</span>,
+  click: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"I'm clicked"</span>);
+  },
+  key: <span class="hljs-string">"s"</span>,
+  modifiers: <span class="hljs-string">"ctrl+alt"</span>,
+});
+
+<span class="hljs-comment">// You can have submenu!</span>
+<span class="hljs-keyword">var</span> submenu = <span class="hljs-keyword">new</span> nw.Menu();
+submenu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item 1'</span> }));
+submenu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item 2'</span> }));
+submenu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item 3'</span> }));
+item.submenu = submenu;
+
+<span class="hljs-comment">// And everything can be changed at runtime</span>
+item.label = <span class="hljs-string">'New label'</span>;
+item.click = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'New click callback'</span>); };
+</pre><h2 id="new-menuitem(option)"><a name="new-menuitem(option)" href="#new-menuitem(option)"></a>new MenuItem(option)</h2><ul>
+<li><code>option</code> <code>{Object}</code> an object contains initial settings for the <code>MenuItem</code><ul>
+<li><code>label</code> <code>{String}</code> <em>Optional</em> label for normal item or checkbox</li><li><code>icon</code> <code>{String}</code> <em>Optional</em> icon for normal item or checkbox</li><li><code>tooltip</code> <code>{String}</code> <em>Optional</em> tooltip for normal item or checkbox</li><li><code>type</code> <code>{String}</code> <em>Optional</em> the type of the item. Three types are accepted: <code>normal</code>, <code>checkbox</code>, <code>separator</code></li><li><code>click</code> <code>{Function}</code> <em>Optional</em> the callback function when item is triggered by mouse click or keyboard shortcut</li><li><code>enabled</code> <code>{Boolean}</code> <em>Optional</em> whether the item is enabled or disabled. It’s set to <code>true</code> by default.</li><li><code>checked</code> <code>{Boolean}</code> <em>Optional</em> whether the checkbox is checked or not. It’s set to <code>false</code> by default.</li><li><code>submenu</code> <code>{Menu}</code> <em>Optional</em> a submenu</li><li><code>key</code> <code>{String}</code> <em>Optional</em> the key of the shortcut</li><li><code>modifiers</code> <code>{String}</code> <em>Optional</em> the modifiers of the shortcut</li></ul>
+</li></ul><p>Every field has its own property in the <code>MenuItem</code>, see documentation of each property for details.</p><p><code>MenuItem</code> is inherited from <code>EventEmitter</code>. You can use <code>on</code> to listen to the events.</p><h2 id="item.type"><a name="item.type" href="#item.type"></a>item.type</h2><p>Get the <code>type</code> of a <code>MenuItem</code>, it can be <code>separator</code>, <code>checkbox</code> and <code>normal</code>.</p><p>!!! note<br>    The type can be set only when you create it. It cannot be changed at runtime.</p><h2 id="item.label"><a name="item.label" href="#item.label"></a>item.label</h2><p>Get or set the <code>label</code> of a <code>MenuItem</code>, it can only be plain text for now.</p><h2 id="item.icon"><a name="item.icon" href="#item.icon"></a>item.icon</h2><p>Get or set the <code>icon</code> of a <code>MenuItem</code>, it must a path to your icon file. It can be a relative path which points to an icon in your app, or an absolute path pointing to a file in user’s system.</p><p>It has no effect on setting <code>icon</code> of a <code>separator</code> item.</p><h2 id="item.iconistemplate-(mac)"><a name="item.iconistemplate-(mac)" href="#item.iconistemplate-(mac)"></a>item.iconIsTemplate (Mac)</h2><p>Get or set whether <code>icon</code> image is treated as “template” (<code>true</code> by default). When the property is set to <code>true</code> the image is treated as “template” and the system automatically ensures proper styling according to the various states of the status item (e.g. dark menu, light menu, etc.). Template images should consist only of black and clear colours and can use the alpha channel in the image to adjust the opacity of black content. It has no effects on Linux and Windows.</p><h2 id="item.tooltip-(mac)"><a name="item.tooltip-(mac)" href="#item.tooltip-(mac)"></a>item.tooltip (Mac)</h2><p>Get or set the <code>tooltip</code> of a <code>MenuItem</code>, it can only be plain text. A <code>tooltip</code> is short string that describes the menu item, it will show when you hover your mouse on the item.</p><h2 id="item.checked"><a name="item.checked" href="#item.checked"></a>item.checked</h2><p>Get or set whether the <code>MenuItem</code> is <code>checked</code>. Usually if a <code>MenuItem</code> is checked. There will be a mark on the left side of it. It’s used mostly to indicate whether an option is on.</p><h2 id="item.enabled"><a name="item.enabled" href="#item.enabled"></a>item.enabled</h2><p>Get or set whether the <code>MenuItem</code> is <code>enabled</code>. An disabled <code>MenuItem</code> will be greyed out and you will not be able to click on it.</p><h2 id="item.submenu"><a name="item.submenu" href="#item.submenu"></a>item.submenu</h2><p>Get or set the <code>submenu</code> of a <code>MenuItem</code>, the <code>submenu</code> must be a <code>Menu</code> object. You should set <code>submenu</code> in the <code>option</code> when creating the <code>MenuItem</code>. Changing it at runtime is slow on some platforms.</p><h2 id="item.click"><a name="item.click" href="#item.click"></a>item.click</h2><p>Get or set the <code>click</code> callback of a <code>MenuItem</code>, the <code>click</code> must be a valid function. It will be called when users activate the item.</p><h2 id="item.key"><a name="item.key" href="#item.key"></a>item.key</h2><p>A single character string to specify the shortcut key for the menu item.</p><h3 id="valid-keys-for-all-platforms"><a name="valid-keys-for-all-platforms" href="#valid-keys-for-all-platforms"></a>Valid Keys for All Platforms</h3><ul>
+<li>Alphabet: <code>a</code>-<code>z</code></li><li>Digits: <code>0</code>-<code>9</code></li><li>Other keys on main area: <code>[</code> , <code>]</code> , <code>'</code> , <code>,</code> , <code>.</code> , <code>/</code> , <code>` </code> , <code>-</code> , <code>=</code> , <code>\</code> , <code>'</code> , <code>;</code> , <code>Tab</code></li><li><code>Esc</code></li><li><code>Down</code> , <code>Up</code> , <code>Left</code> , <code>Right</code></li><li><a href="http://www.w3.org/TR/DOM-Level-3-Events-key/">W3C DOM Level 3 KeyboardEvent Key Values</a>: <code>KeyA</code> (same as <code>A</code>), <code>Escape</code> (same as <code>Esc</code>), <code>F1</code>, <code>ArrowDown</code> (same as <code>Down</code>) etc.</li></ul><h3 id="special-keys-for-mac-only"><a name="special-keys-for-mac-only" href="#special-keys-for-mac-only"></a>Special Keys for Mac Only</h3><p>On Mac, you can also use special keys as shortcut key with <code>String.fromCharCode(specialKey)</code>. Here are some useful keys:</p><ul>
+<li><strong>28</strong>: Left (<kbd>←</kbd>)</li><li><strong>29</strong>: Right (<kbd>→</kbd>)</li><li><strong>30</strong>: Up (<kbd>↑</kbd>)</li><li><strong>31</strong>: Down (<kbd>↓</kbd>)</li><li><strong>27</strong>: Escape (<kbd>⎋</kbd>)</li><li><strong>11</strong>: PageUp (<kbd>⇞</kbd>)</li><li><strong>12</strong>: PageDown (<kbd>⇟</kbd>)</li></ul><p>For full list of special keys supported on Mac, see <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSMenuItem_Class/#//apple_ref/occ/instp/NSMenuItem/keyEquivalent">NSMenuItem.keyEquivalent</a> and <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSEvent_Class/index.html#//apple_ref/doc/constant_group/Function_Key_Unicodes">NSEvent: Function-Key Unicodes</a>.</p><h2 id="item.modifiers"><a name="item.modifiers" href="#item.modifiers"></a>item.modifiers</h2><p>A string to specify the modifier keys for the shortcut of the menu item. It should be the concatenation of the following strings: <code>cmd</code> / <code>command</code> / <code>super</code>, <code>shift</code>, <code>ctrl</code>, <code>alt</code>. e.g. <code>"cmd+shift+alt"</code>.</p><p><code>cmd</code> represents different keys on all platforms: Windows key (<kbd>Windows</kbd>) on Windows and Linux, Apple key (<kbd>⌘</kbd>) on Mac. <code>super</code> and <code>command</code> are aliases of <code>cmd</code>.</p><h2 id="event:-click"><a name="event:-click" href="#event:-click"></a>Event: click</h2><p>Emitted when user activates the menu item.</p>
+
+
+</body>
+</html>

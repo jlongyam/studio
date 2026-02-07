@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Differences-of-JavaScript-contexts.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p>Different windows of a node-webkit-based application have different JavaScript contexts, i.e. each window has its own global object and its own set of global constructors (such as <code>Array</code> or <code>Object</code>).</p><p>That’s common practice among web browsers. It’s a good thing because, for example:</p><ul>
+<li><p>when an object’s prototype is replaced or augmented by some library (such as <a href="http://prototypejs.org/">Prototype</a>) or a simpler script, the analogous objects in other windows are unaffected nevertheless;</p>
+</li><li><p>when a programmer makes a mistake (such as <a href="http://ejohn.org/blog/simple-class-instantiation/">missing <code>new</code> before a poorly written constructor</a>) and the bug affects (pollutes) the global scope, it still cannot affect larger areas (several windows);</p>
+</li><li><p>malicious applications cannot access confidential data structures in other windows.</p>
+</li></ul><p>Node modules in node-webkit run in their own shared Node context. (Shared by default; however, you may explicitly add <code>'new-instance': true</code> to the options of <a href="https://github.com/rogerwang/node-webkit/wiki/Window#openurl-options"><code>Window.open</code></a> if you need your new window to have a separate Node.js context.)</p><h2 id="determining-the-context-of-a-script"><a name="determining-the-context-of-a-script" href="#determining-the-context-of-a-script"></a>Determining the context of a script</h2><p>If the <code>require()</code> method (of Node.js <a href="http://nodejs.org/docs/latest/api/modules.html">modules API</a>) is used, then the required module runs in the Node’s context. (When you call the <code>require()</code> function or a function from some required module, the JS engine enters the Node’s context and leaves it after the function returns.)</p><p>If HTML <code>&lt;script&gt;</code> element (or jQuery’s <a href="http://api.jquery.com/jQuery.getScript/"><code>$.getScript()</code></a>, or any other similar method) is used in some window, then the script runs in the context of that window.</p><p>If the module is given as the value of the <a href="https://github.com/rogerwang/node-webkit/wiki/node-main"><code>"node-main"</code></a> property of the application’s <a href="https://github.com/rogerwang/node-webkit/wiki/Manifest-format">manifest file</a>, then the module runs in the Node’s context but later has access to the <code>window</code> object. (See the “<a href="https://github.com/rogerwang/node-webkit/wiki/node-main">node-main</a>” article for details.)</p><h2 id="features-and-limitations-of-the-node's-context"><a name="features-and-limitations-of-the-node's-context" href="#features-and-limitations-of-the-node's-context"></a>Features and limitations of the Node’s context</h2><p>Scripts running in the Node’s context may use <code>__dirname</code> variable to read the path of their file’s directory.</p><p>The Node.js <code>global</code> object is the global object in the Node’s context. Any WebKit window’s <code>window</code> object is not the global object and even is not implicitly available in the Node’s context (the special case of <a href="https://github.com/rogerwang/node-webkit/wiki/node-main">node-main</a> is the only exception), i.e. you have to (explicitly) pass the <code>window</code> object to your module’s function if you need to access it.</p><p>That also means you cannot rely on <code>alert()</code> (which is actually <code>window.alert()</code>) for debugging. You may, however, use <code>console.log()</code>; its output (and the output of other similar methods such as <code>console.warn()</code> and <code>console.error()</code>) is redirected to WebKit’s console. You may see it in your “<a href="Debugging-with-devtools">Developer Tools</a>” window (on its “Console” tab).</p><p>You cannot use <code>require('nw.gui')</code> (to access the node-webkit’s <a href="https://github.com/rogerwang/node-webkit/wiki/API-Overview-and-Notices">GUI API</a>) from the Node’s context, because there’s no GUI outside of a window.</p><p>Some other browser features (such as <code>Worker</code> and <code>WebSocket</code> interfaces) are also unavailable in the Node’s context.</p><h2 id="resolving-relative-paths-to-other-scripts"><a name="resolving-relative-paths-to-other-scripts" href="#resolving-relative-paths-to-other-scripts"></a>Resolving relative paths to other scripts</h2><p>Relative paths in webkit context are resolved according to path of main HTML file (like all browsers do). Relative paths in node modules are resolved according to path of that module (like node.js always do). Just remember in which context you are.</p><p>For example if we have file <code>/myApp/main.html</code>:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;!-- will be resolved according to this html file path --&amp;gt;
+    &amp;lt;script src=&quot;components/myComponent.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;script&amp;gt;
+      // will be resolved according to this html file path
+      var hello = require('./libs/myLib');
+      // __dirname is not defined in webkit context, this is only node.js thing
+      console.log(__dirname); // undefined
+    &amp;lt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;html&gt;
+  &lt;head&gt;
+    &lt;!-- will be resolved according to this html file path --&gt;
+    &lt;script src="components/myComponent.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;script&gt;
+      // will be resolved according to this html file path
+      var hello = require('./libs/myLib');
+      // __dirname is not defined in webkit context, this is only node.js thing
+      console.log(__dirname); // undefined
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>In file <code>/myApp/components/myComponent.js</code> we can do this:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// we are still in webkit context, so paths are still resolved according to main.html
+
+var something = require('./util.js'); // will look for file /myApp/util.js NOT for /myApp/components/util.js
+
+// __dirname still not defined
+console.log(__dirname); // undefined
+</code></pre>">// we are still in webkit context, so paths are still resolved according to main.html
+
+var something = require('./util.js'); // will look for file /myApp/util.js NOT for /myApp/components/util.js
+
+// __dirname still not defined
+console.log(__dirname); // undefined
+</code></pre><p>In file <code>/myApp/libs/myLib.js</code> we can do this:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// here we are in node.js context, so paths are resolved according to this file
+
+var something = require('./otherUtil.js'); // will look for file /myApp/libs/otherUtil.js
+
+// __dirname is defined
+console.log(__dirname); // '/myApp/libs'
+</code></pre>">// here we are in node.js context, so paths are resolved according to this file
+
+var something = require('./otherUtil.js'); // will look for file /myApp/libs/otherUtil.js
+
+// __dirname is defined
+console.log(__dirname); // '/myApp/libs'
+</code></pre><h2 id="working-around-differences-of-contexts"><a name="working-around-differences-of-contexts" href="#working-around-differences-of-contexts"></a>Working around differences of contexts</h2><p>While differences of contexts are generally beneficial, sometimes they may constitute a problem in your (or some other person’s) code, and a need for a workaround arises.</p><p>The most common cause for such problems is the behaviour of the <code>instanceof</code> operator in JavaScript. As you may <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof">see in MDN</a>, the operation <code>someValue instanceof someConstructor</code> tests whether an object has in its prototype chain the <code>prototype</code> property of the given constructor. However, if <code>someValue</code> is passed from a different JavaScript context, then it has its own line of ancestor objects, and the <code>someValue instanceof someConstructor</code> check fails inevitably.</p><p>For example, a simple check <code>someValue instanceof Array</code> cannot determine if a variable’s value is an array’s if it’s passed from another context (see “<a href="http://web.mit.edu/jwalden/www/isArray.html">Determining with absolute accuracy whether or not a JavaScript object is an array</a>” for details).</p><p>The same problem arises when the <code>.constructor</code> property is checked directly (for example, when <code>someValue.constructor === Array</code> is used instead of <code>someValue instanceof Array</code>).</p><p>The following constructors are children of the context-dependent global object, and thus their instances are affected:</p><ul>
+<li><p><strong>Standard object types:</strong> <code>Array</code>, <code>Boolean</code>, <code>Date</code>, <code>Function</code>, <code>Number</code>, <code>Object</code>, <code>RegExp</code>, <code>String</code>.</p>
+</li><li><p><strong>Typed array types:</strong> <code>ArrayBuffer</code>, <code>DataView</code>, <code>Float32Array</code>, <code>Float64Array</code>, <code>Int16Array</code>, <code>Int32Array</code>, <code>Int8Array</code>, <code>Uint16Array</code>, <code>Uint32Array</code>, <code>Uint8Array</code>.</p>
+</li><li><p><strong>Error types:</strong> <code>Error</code>, <code>EvalError</code>, <code>RangeError</code>, <code>ReferenceError</code>, <code>SyntaxError</code>, <code>TypeError</code>, <code>URIError</code>.</p>
+</li></ul><p>There are several ways to work around this problem.</p><h3 id="avoiding-instanceof"><a name="avoiding-instanceof" href="#avoiding-instanceof"></a>Avoiding instanceof</h3><p>The easiest way to prevent context-related problems is to avoid using <code>instanceof</code> when a value may come from another JavaScript context. For example, you may use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray"><code>Array.isArray</code></a> method to check whether a value is an array, and that method works reliably across contexts.</p><p>However, if such a convenient alternate method is not readily available, or when you face a problem in someone other’s (not your own) code and patching that would need a hassle, then another workaround is necessary.</p><h3 id="using-a-constructor-from-the-other-context"><a name="using-a-constructor-from-the-other-context" href="#using-a-constructor-from-the-other-context"></a>Using a constructor from the other context</h3><p>When you foresee passing a value to some other context, you may providently use a constructor from that context in order to construct your value. The value then would easily pass any <code>instanceof</code> checks in that context.</p><p>For example, the well-known <a href="https://github.com/caolan/async"><code>async</code></a> module used (in <a href="https://github.com/caolan/async/blob/d8601a17ab0bc6a1572227998b6e9182637f37b6/lib/async.js">its code</a> dated 2013-05-20; it was fixed later) numerous <code>.constructor</code> checks (in lines <a href="https://github.com/caolan/async/blob/d8601a17ab0bc6a1572227998b6e9182637f37b6/lib/async.js#L472">472</a>, <a href="https://github.com/caolan/async/blob/d8601a17ab0bc6a1572227998b6e9182637f37b6/lib/async.js#L505">505</a>, <a href="https://github.com/caolan/async/blob/d8601a17ab0bc6a1572227998b6e9182637f37b6/lib/async.js#L545">545</a>, <a href="https://github.com/caolan/async/blob/d8601a17ab0bc6a1572227998b6e9182637f37b6/lib/async.js#L675">675</a>, <a href="https://github.com/caolan/async/blob/d8601a17ab0bc6a1572227998b6e9182637f37b6/lib/async.js#L752">752</a>) and thus failed whenever it encountered an array from another context. For example, if you run the following code from a node-webkit’s window context,</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>require('async').waterfall([
+   function(callback){
+      console.log('1.');
+      callback(null, 'one', 'two');
+   },
+   function(arg1, arg2, callback){
+      console.log('2.');
+      callback(null, 'three');
+   },
+   function(arg1, callback){
+      console.log('3.');
+      callback(null, 'done');
+   }
+], function (err, result) {
+   console.log('Fin.');
+   if( err ) throw err;
+   console.log(result);
+});
+</code></pre>">require('async').waterfall([
+   function(callback){
+      console.log('1.');
+      callback(null, 'one', 'two');
+   },
+   function(arg1, arg2, callback){
+      console.log('2.');
+      callback(null, 'three');
+   },
+   function(arg1, callback){
+      console.log('3.');
+      callback(null, 'done');
+   }
+], function (err, result) {
+   console.log('Fin.');
+   if( err ) throw err;
+   console.log(result);
+});
+</code></pre><p>it throws the <code>Error: First argument to waterfall must be an array of functions</code> (erroneously thinking it’s not an array).</p><p>Using the <a href="https://github.com/Mithgol/nwglobal"><code>nwglobal</code></a> module, you may access the Node’s context’s <code>Array</code> constructor and rewrite the above code:</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>require('async').waterfall( require('nwglobal').Array(
+   function(callback){
+      console.log('1.');
+      callback(null, 'one', 'two');
+   },
+   function(arg1, arg2, callback){
+      console.log('2.');
+      callback(null, 'three');
+   },
+   function(arg1, callback){
+      console.log('3.');
+      callback(null, 'done');
+   }
+), function (err, result) {
+   console.log('Fin.');
+   if( err ) throw err;
+   console.log(result);
+});
+</code></pre>">require('async').waterfall( require('nwglobal').Array(
+   function(callback){
+      console.log('1.');
+      callback(null, 'one', 'two');
+   },
+   function(arg1, arg2, callback){
+      console.log('2.');
+      callback(null, 'three');
+   },
+   function(arg1, callback){
+      console.log('3.');
+      callback(null, 'done');
+   }
+), function (err, result) {
+   console.log('Fin.');
+   if( err ) throw err;
+   console.log(result);
+});
+</code></pre><p>It makes the <code>async</code> module happy.</p><p>However, in some cases you cannot (or won’t) use the constructor directly to create your value. (For example, as you may <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">see in MDN</a>, using the <code>Function</code> constructor is less efficient than declaring a function, and it also does not create a closure.) In such cases another workaround is necessary.</p><h3 id="replacing-`__proto__`"><a name="replacing-`__proto__`" href="#replacing-`__proto__`"></a>Replacing <code>__proto__</code></h3><p>The non-standard (but widely implemented) <code>__proto__</code> property of an object can be used (as you may <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto">see in MDN</a>) to change the object’s internal “[[Prototype]]” property (initially containing the prototype of its constructor).</p><p>When you foresee passing a value to some other context, you may providently replace the value’s <code>__proto__</code> property with a constructor from that context. The value then would easily pass any <code>instanceof</code> checks in that context.</p><p>For example, the well-known <a href="https://github.com/caolan/async"><code>async</code></a> module used (in <a href="https://github.com/caolan/async/blob/d8601a17ab0bc6a1572227998b6e9182637f37b6/lib/async.js">its code</a> dated 2013-05-20; it was fixed later) an <code>instanceof Function</code> check (<a href="https://github.com/caolan/async/blob/d8601a17ab0bc6a1572227998b6e9182637f37b6/lib/async.js#L428">on line 428</a>) and thus it failed whenever it encountered a function from another context. For example, if you run the following code from a node-webkit’s window context,</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>var getData = function (callback) {
+   setTimeout(function(){
+       console.log('1.1: got data');
+       callback();
+   }, 300);
+}
+var makeFolder = function (callback) {
+   setTimeout(function(){
+       console.log('1.1: made folder');
+       callback();
+   }, 200);
+}
+var writeFile = function(callback) {
+   setTimeout(function(){
+       console.log('1.1: wrote file');
+       callback(null, 'myfile');
+   }, 300);
+}
+var emailFiles = function(callback, results) {
+   console.log('1.1: emailed file: '+results.writeFile);
+   callback(null, results.writeFile);
+}
+require('async').auto({
+   getData:getData ,
+   makeFolder:makeFolder,
+   writeFile: ['getData', 'makeFolder',writeFile],
+   emailFiles: ['writeFile',emailFiles]
+}, function(err, results) {
+   console.log('1.1: err: '+ err);
+   console.log('1.1: results: '+ results);
+});
+</code></pre>">var getData = function (callback) {
+   setTimeout(function(){
+       console.log('1.1: got data');
+       callback();
+   }, 300);
+}
+var makeFolder = function (callback) {
+   setTimeout(function(){
+       console.log('1.1: made folder');
+       callback();
+   }, 200);
+}
+var writeFile = function(callback) {
+   setTimeout(function(){
+       console.log('1.1: wrote file');
+       callback(null, 'myfile');
+   }, 300);
+}
+var emailFiles = function(callback, results) {
+   console.log('1.1: emailed file: '+results.writeFile);
+   callback(null, results.writeFile);
+}
+require('async').auto({
+   getData:getData ,
+   makeFolder:makeFolder,
+   writeFile: ['getData', 'makeFolder',writeFile],
+   emailFiles: ['writeFile',emailFiles]
+}, function(err, results) {
+   console.log('1.1: err: '+ err);
+   console.log('1.1: results: '+ results);
+});
+</code></pre><p>it throws the <code>has no method slice</code> error (erroneously thinking that the given value is not a function and thus it has to be an array, and then attempting to slice that “array”).</p><p>Using the <a href="https://github.com/Mithgol/nwglobal"><code>nwglobal</code></a> module, you may access the Node’s context’s <code>Function</code> constructor and rewrite the above code:</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>var getData = function (callback) {
+   setTimeout(function(){
+       console.log('1.1: got data');
+       callback();
+   }, 300);
+}
+getData.__proto__ = require('nwglobal').Function;
+var makeFolder=  function (callback) {
+   setTimeout(function(){
+       console.log('1.1: made folder');
+       callback();
+   }, 200);
+}
+makeFolder.__proto__ = require('nwglobal').Function;
+var writeFile= function(callback) {
+   setTimeout(function(){
+       console.log('1.1: wrote file');
+       callback(null, 'myfile');
+   }, 300);
+}
+writeFile.__proto__ = require('nwglobal').Function;
+var emailFiles= function(callback, results) {
+   console.log('1.1: emailed file: '+results.writeFile);
+   callback(null, results.writeFile);
+}
+emailFiles.__proto__ = require('nwglobal').Function;
+require('async').auto({
+   getData:getData ,
+   makeFolder:makeFolder,
+   writeFile: ['getData', 'makeFolder',writeFile],
+   emailFiles: ['writeFile',emailFiles]
+}, function(err, results) {
+   console.log('1.1: err: '+ err);
+   console.log('1.1: results: '+ results);
+});
+</code></pre>">var getData = function (callback) {
+   setTimeout(function(){
+       console.log('1.1: got data');
+       callback();
+   }, 300);
+}
+getData.__proto__ = require('nwglobal').Function;
+var makeFolder=  function (callback) {
+   setTimeout(function(){
+       console.log('1.1: made folder');
+       callback();
+   }, 200);
+}
+makeFolder.__proto__ = require('nwglobal').Function;
+var writeFile= function(callback) {
+   setTimeout(function(){
+       console.log('1.1: wrote file');
+       callback(null, 'myfile');
+   }, 300);
+}
+writeFile.__proto__ = require('nwglobal').Function;
+var emailFiles= function(callback, results) {
+   console.log('1.1: emailed file: '+results.writeFile);
+   callback(null, results.writeFile);
+}
+emailFiles.__proto__ = require('nwglobal').Function;
+require('async').auto({
+   getData:getData ,
+   makeFolder:makeFolder,
+   writeFile: ['getData', 'makeFolder',writeFile],
+   emailFiles: ['writeFile',emailFiles]
+}, function(err, results) {
+   console.log('1.1: err: '+ err);
+   console.log('1.1: results: '+ results);
+});
+</code></pre><p>It makes the <code>async</code> module happy.</p><h2 id="avoiding-node's-setimmediate"><a name="avoiding-node's-setimmediate" href="#avoiding-node's-setimmediate"></a>Avoiding Node’s setImmediate</h2><p>Switching between WebKit’s and Node’s contexts takes some time.</p><p>In most cases this delay does not constitute a serious problem, but if you are in a WebKit’s context and you are simply deferring some function’s execution (in some <em><a href="http://www.catb.org/jargon/html/H/hot-spot.html">hot spot</a></em> where the same function is likely to be deferred hundreds of times; for example, when you draw some 500 objects giving the WebKit its chance to redraw the window after each object’s appearance rather than forcing the user to stare on a blank screen mindlessly), then using Node’s <a href="http://nodejs.org/docs/latest/api/timers.html#timers_setimmediate_callback_arg"><code>setImmediate</code></a> (exported from some Node.js module) can actually become less “immediate” than you would be happy to experience.</p><p>To work around this problem it’s usually enough to define (in WebKit’s context) and use David Baron’s <a href="http://dbaron.org/log/20100309-faster-timeouts"><code>setZeroTimeout</code></a> function instead of Node’s <code>setImmediate</code>.</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>// Only add setZeroTimeout to the window object, and hide
+// everything else in a closure.
+(function() {
+   var timeouts = [];
+   var messageName = &quot;zero-timeout-message&quot;;
+
+   // Like setTimeout, but only takes a function argument.
+   // There's no time argument (always 0) and no function's arguments
+   // (you have to use a closure if such arguments are necessary).
+   function setZeroTimeout(fn) {
+      timeouts.push(fn);
+      window.postMessage(messageName, &quot;*&quot;);
+   }
+
+   function handleMessage(event) {
+      if (event.source == window &amp;amp;&amp;amp; event.data == messageName) {
+         event.stopPropagation();
+         if (timeouts.length &amp;gt; 0) {
+            var fn = timeouts.shift();
+            fn();
+         }
+      }
+   }
+
+   window.addEventListener(&quot;message&quot;, handleMessage, true);
+
+   // Add the one thing we want added to the window object.
+   window.setZeroTimeout = setZeroTimeout;
+})();
+</code></pre>">// Only add setZeroTimeout to the window object, and hide
+// everything else in a closure.
+(function() {
+   var timeouts = [];
+   var messageName = "zero-timeout-message";
+
+   // Like setTimeout, but only takes a function argument.
+   // There's no time argument (always 0) and no function's arguments
+   // (you have to use a closure if such arguments are necessary).
+   function setZeroTimeout(fn) {
+      timeouts.push(fn);
+      window.postMessage(messageName, "*");
+   }
+
+   function handleMessage(event) {
+      if (event.source == window &amp;&amp; event.data == messageName) {
+         event.stopPropagation();
+         if (timeouts.length &gt; 0) {
+            var fn = timeouts.shift();
+            fn();
+         }
+      }
+   }
+
+   window.addEventListener("message", handleMessage, true);
+
+   // Add the one thing we want added to the window object.
+   window.setZeroTimeout = setZeroTimeout;
+})();
+</code></pre><p>Using standard <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window.setTimeout"><code>window.setTimeout(yourFunction, 0)</code></a> is less efficient because <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#timers">HTML5 standard</a> defines its minimal timeout as <strong>4 milliseconds</strong> even if <code>0</code> is given (i.e. even if you use <code>setTimeout</code> only 250 times, you already get a whole second of extra delay in your application).</p>
+
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Transfer-objects-between-window-and-node.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>When you found you can use the <code>require</code> function in the <code>&lt;script&gt;</code> tag, one thing you would be tempted to do is moving every javascript libraries into node modules and use <code>require</code> to use them. Most times you’re right to do this, but there’re some cases that are terribly wrong on this.</p><h2 id="contexts"><a name="contexts" href="#contexts"></a>Contexts</h2><p>First I should introduce the concept of <code>context</code>, every javascript variable lives in a javascript context, and every javascript context has a root global variable.</p><p>In the browser world, every window you open has a <code>window</code> object in it, and global variables will only live in the window where they’re created, so different windows’ global variables will not conflict. That’s because every browser window (or tab) has its own javascript context, and the <code>window</code> object is the root global variable of the window’s javascript context.</p><p>In the node.js world, things are similar. Every module in node.js has it’s own context (including the main script you passed in command line), so modules’ global variables won’t fight each other, and if you want to pass variables between contexts, you have to use <code>require</code> and <code>export</code>, this is the fundamental idea of node.js’s module system.</p><p>But in contrast to browsers, node.js also has a global context which has a <code>global</code> root variable, every global variables lives the global context is accessible from modules’ context. So members of <code>global</code>, such as <code>process</code> and <code>console</code>, can be used in modules.</p><h2 id="bridge-between-window-and-node"><a name="bridge-between-window-and-node" href="#bridge-between-window-and-node"></a>Bridge between window and node</h2><p>The magic node-webkit does, is simply assigning members of <code>global</code> object to the <code>window</code> object when window’s javascript context is created, so you can use <code>require</code> and others in the <code>&lt;script&gt;</code> tag.</p><p>So the <code>require</code> function is indeed living in node.js’s context, when you execute a module by <code>require(module)</code>, node-webkit will execute module’s code in node.js’s context and then transfer results to the browser window’s context.</p><p>Another interesting point is the <code>global</code> object, since node-webkit have transferred the <code>global</code> object to <code>window</code> object, you can assign <code>window</code>‘s DOM elements to the node.js’s modules, like this:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>// In index.html
+&amp;lt;script&amp;gt;
+global.$ = $;
+require('./test.js');
+&amp;lt;/script&amp;gt;
+</code></pre>">// In index.html
+&lt;script&gt;
+global.$ = $;
+require('./test.js');
+&lt;/script&gt;
+</code></pre><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// In test.js
+$('#content').text('Modifying DOM elements');
+</code></pre>">// In test.js
+$('#content').text('Modifying DOM elements');
+</code></pre><h2 id="one-node-to-multiple-windows"><a name="one-node-to-multiple-windows" href="#one-node-to-multiple-windows"></a>One node to multiple windows</h2><p>In node-webkit, every renderer process has only one node.js context. So even you have created many windows, they will share the same <code>global</code> variable, in this way you can store shared information between multiple windows.</p><p>But one problem caused by this scheme is, variables you stored in <code>global</code> object may be overlapped by other windows. As an example, if we execute <code>global.$ = $</code> used above in multiple windows, the <code>global.$</code> will store only the last window’s <code>$</code> object.</p><p>So if you are developing a multiple-window app that may share a module between multiple windows, you should never store DOM elements in the <code>global</code> variable or manipulate DOM elements in node.js modules, instead you need to switch to the traditional web javascript library way:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>// In index.html
+&amp;lt;script src=&quot;test.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+</code></pre>">// In index.html
+&lt;script src="test.js"&gt;&lt;/script&gt;
+</code></pre><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// In test.js
+var test = {}
+(function(){
+var local = ...;
+test.operation = ...;
+})();
+</code></pre>">// In test.js
+var test = {}
+(function(){
+var local = ...;
+test.operation = ...;
+})();
+</code></pre><h2 id="operations-that-require-window-context"><a name="operations-that-require-window-context" href="#operations-that-require-window-context"></a>Operations that require window context</h2><p>Even if your app has only one window, there are still some DOM operations that cannot run under node.js context. For example, you may be tempted to wrap the Web SQL Database to a node.js module:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>// In index.html
+&amp;lt;script&amp;gt;
+global.window = window;
+var cache = require('./cache');
+console.log(cache);
+&amp;lt;/script&amp;gt;
+</code></pre>">// In index.html
+&lt;script&gt;
+global.window = window;
+var cache = require('./cache');
+console.log(cache);
+&lt;/script&gt;
+</code></pre><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// In cache.js
+var db = window.openDatabase(...);
+exports.get = function (key, callback) { ... }
+</code></pre>">// In cache.js
+var db = window.openDatabase(...);
+exports.get = function (key, callback) { ... }
+</code></pre><p>If you do so, you will find node-webkit’s renderer process crashed, that’s because the <code>window.openDatabase</code> requires to run under the browser window’s context, which is a limitation of WebKit, and it will just crash when running under node.js’s context. So when you want to use such functions, please don’t use them as node.js modules.</p><p>One thing need to be noted that if you call functions defined in context C1 from context C2, the V8 engine will automatically do the context switch (from C2 to C1) stuff for you. So regarding application architecture, maybe interfacing the code in 2 contexts with functions could be better than just sharing variables.</p>
+
+
+</body>
+</html>

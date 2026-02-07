@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>About-Node.js-server-side-script-in-nw.js.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>If you’re used to writing server side scripts, and have little experience writing mobile HTML apps, then this guide is absolutely for you. And if you think you’re an expert on node.js or mobile HTML apps, you should also read this guide carefully, too many ‘experts’ were restricted to their old experiences and failed to be aware of new possibilities.</p><h2 id="express?"><a name="express?" href="#express?"></a>Express?</h2><p>If you searched <code>write desktop apps in node.js</code> and found NW.js, the first thing you may do is trying to figure out how to make <code>Express</code> or other node web frameworks work, and I’ve get questions like this far too many times.</p><p>The answer is, you can still use <code>Express</code> in the same way you use with Node.js (create a HTTP server, etc), but that’s not the way in which you can fully unleash the power of NW.js. By using front-end libraries like jQuery or Angular and a healthy separation between views and controllers, the need for Node to render templates disappears.</p><h3 id="router"><a name="router" href="#router"></a>Router</h3><p>People who want <code>Express</code> are indeed finding two things: <code>router</code> and <code>template engine</code>.</p><p>As for <code>router</code>, it is used for showing different pages or API responses for different urls, like <code>/user/zcbenz</code> and <code>/article/901127</code>. For optimal efficiency, you may want to dig in to <a href="http://expressjs.com/api.html#router">Express’s routing mechanism</a> (or another of your choosing) in order to access it through the Node context instead of having to use HTTP.</p><p>As for static files, the <code>file:</code> protocol is preferred over other middleware (such as <code>express.static</code>). For example, if you have an app like this:</p><pre><code data-origin="<pre><code>app
+├── index.html
+└── views
+    ├── user.html
+    └── article.html
+</code></pre>">app
+├── index.html
+└── views
+    ├── user.html
+    └── article.html
+</code></pre><p>Then you you can navigate to a page by using <code>window.location = 'views/user.html#zcbenz'</code> and handle logics in <code>views/user.html</code> file.</p><p>However the recommended way is not opening a new window or changing the <code>window.location</code>, you should just replace part of your page with ajax, like <code>$('#main').load('views/user.html#zcbenz');</code>. Doing it this way users won’t have bad experience of having the page refresh/flicker, and the current javascript context is also kept.</p><h3 id="template-engine"><a name="template-engine" href="#template-engine"></a>Template Engine</h3><p>For template engine, node.js developers have always been comfortable with rendering at server side and then sending the result to clients. In NW.js everything is client side, you don’t need to render the template and then feed it to NW.js, you could just render everything after the page is loaded.</p><p>The basic idea is: use the template engine to generate contents on the fly, and then append dynamic contents into the DOM. like this:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;script&amp;gt;
+var jade = require('jade');
+var gen_files_view = jade.compile([
+    '- each file in files',
+    '  .file(data-path=&quot;#{file.path}&quot;)',
+    '    .icon',
+    '      img(src=&quot;icons/#{file.type}.png&quot;)',
+    '    .name #{file.name}',
+].join('\n'));
+
+$(document).ready(function() {
+  // read sth to files
+  // blabla...
+  $('#content').html(gen_files_view({ files: files }));
+});
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;script&gt;
+var jade = require('jade');
+var gen_files_view = jade.compile([
+    '- each file in files',
+    '  .file(data-path="#{file.path}")',
+    '    .icon',
+    '      img(src="icons/#{file.type}.png")',
+    '    .name #{file.name}',
+].join('\n'));
+
+$(document).ready(function() {
+  // read sth to files
+  // blabla...
+  $('#content').html(gen_files_view({ files: files }));
+});
+&lt;/script&gt;
+</code></pre><p>Another example is how I refresh the address bar and folder view in <a href="https://github.com/zcbenz/nw-sample-apps/tree/master/file-explorer">zcbenz/nw-file-explorer</a>, see <a href="https://github.com/zcbenz/nw-sample-apps/blob/master/file-explorer/node_modules/folder_view.js">node_modules/folder_view.js</a> and <a href="https://github.com/zcbenz/nw-sample-apps/blob/master/file-explorer/node_modules/address_bar.js">node_modules/address_bar.js</a>.</p><h3 id="why-not-the-router-way?"><a name="why-not-the-router-way?" href="#why-not-the-router-way?"></a>Why not the router way?</h3><p>One of the founding nature of NW.js is that you can call any Node modules you want from DOM <strong>directly</strong>. ‘directly’ means the Javascript objects of Node and DOM reside in the same V8 heap. So variables references are made directly like a pointer, and function calls don’t need to come across any kind of JSON marshalling/unmarshalling bridge between processes, or even threads.</p><p>Some may find their code in B/S architecture can be easily reused by launching a HTTP server in NW.js. By using an asynchronous API layer for either HTTP or it’s Node context you could account for the difference between desktop- and browser based clients transparently. It must be noted that making DOM calls to Node directly would give you a brand new way of writing applications, with benefits to both performance and architecture, but be limited as to code sharing with platforms that cannot call Node.</p><h2 id="coffeescript,-less-and-more"><a name="coffeescript,-less-and-more" href="#coffeescript,-less-and-more"></a>CoffeeScript, LESS and more</h2><p>Developers who code in node.js would also want languages that compile into javascript and CSS, the most famous ones are <code>CoffeeScript</code> and <code>LESS</code>. Usually people would compile the code on the server side and then send results to clients’ browsers, but instead you can use them directly on the browser side, by installing the compiler first and then evaluate the code on the fly.</p><p>For <code>CoffeScript</code>, you should first tag your coffeescript with the type <code>text/coffeescript</code>, and then include <a href="http://github.com/jashkenas/coffee-script/raw/master/extras/coffee-script.js">coffee-script.js</a> after all coffeescript is available on the page (this is the compiler that will evaluate and compile all coffeescript in order). Here is an example:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;script type=”text/javascript” src=”http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js”&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=”text/coffeescript”&amp;gt;
+ $ -&amp;gt; $('#header').css 'background-color', 'green'
+&amp;lt;/script&amp;gt;
+&amp;lt;script type=”text/javascript” src=”http://github.com/jashkenas/coffee-script/raw/master/extras/coffee-script.js”&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1 id=”header” style=”color:white”&amp;gt;CoffeeScript is alive!&amp;lt;/h1&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;html&gt;
+&lt;head&gt;
+&lt;script type=”text/javascript” src=”http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js”&gt;&lt;/script&gt;
+&lt;script type=”text/coffeescript”&gt;
+ $ -&gt; $('#header').css 'background-color', 'green'
+&lt;/script&gt;
+&lt;script type=”text/javascript” src=”http://github.com/jashkenas/coffee-script/raw/master/extras/coffee-script.js”&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1 id=”header” style=”color:white”&gt;CoffeeScript is alive!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>You can also load <code>CoffeeScript</code> files using the <code>require</code> function from Node. In order to do so, you must first locally install the <code>coffee-script</code> module in your project directory (<code>npm install coffee-script</code>). After that, all you need to do is just require the <code>coffee-script/register</code> module, which registers <code>.coffee</code> extension. Example:</p><p>index.html</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+ &amp;lt;head&amp;gt;
+  &amp;lt;script&amp;gt;
+   require('coffee-script/register');  // for versions &amp;lt; 1.7.0, use: require('coffee-script');
+   require('./app.coffee');
+  &amp;lt;/script&amp;gt;
+ &amp;lt;/head&amp;gt;
+ &amp;lt;body&amp;gt;
+ &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+ &lt;head&gt;
+  &lt;script&gt;
+   require('coffee-script/register');  // for versions &lt; 1.7.0, use: require('coffee-script');
+   require('./app.coffee');
+  &lt;/script&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+ &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>app.coffee</p><pre><code class="lang-coffeescript" data-origin="<pre><code class=&quot;lang-coffeescript&quot;>window.alert 'Hello!'
+</code></pre>">window.alert 'Hello!'
+</code></pre><p>For <code>LESS</code>, it also has an online compiler that translates your <code>.less</code> file into <code>.css</code> file in browser, to use it, just add following lines in <code>&lt;head&gt;</code> tag:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;link rel=&quot;stylesheet/less&quot; href=&quot;/link/to/your.less&quot; type=&quot;text/css&quot; /&amp;gt; 
+&amp;lt;script src=&quot;http://lesscss.googlecode.com/files/less-1.3.0.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+</code></pre>">&lt;link rel="stylesheet/less" href="/link/to/your.less" type="text/css" /&gt; 
+&lt;script src="http://lesscss.googlecode.com/files/less-1.3.0.min.js"&gt;&lt;/script&gt;
+</code></pre><p>And of course you can always choose to compile the code before packing your app, and only deliver the complied files to end users.</p><h2 id="page-navigation-and-multiple-windows"><a name="page-navigation-and-multiple-windows" href="#page-navigation-and-multiple-windows"></a>Page navigation and multiple windows</h2><p>If you have written server side scripts, you would be familiar with navigating user to different pages when they click a link, and save users’ session information in <code>cookies</code> or in server.</p><p>In NW.js, you can basically do the same thing by using <code>window.location</code>, you can install it in the <code>onclick</code> event of a link and NW.js will navigate to a new page when user clicks it. But by doing this you would lose everything in <code>window</code> context, you can save everything in cookies like old web pages, or you can save things in the <code>global</code> variable, which resides in Node.js’s context and will live through your app.</p><p>But a better way is just refreshing part of your pages, not navigating to a new one, you can search for <code>ajax</code> to get basic ideas.</p><p>The <code>global</code> variable is also useful for apps that have multiple windows. Every opened window will share a same <code>global</code>, so you can use it to transfer messages across different windows. And the normal HTML way of using the return value of <code>window.open</code> is also available, for more you can have a look at <a href="Play-with-window.html">Play with window</a>.</p>
+
+
+</body>
+</html>

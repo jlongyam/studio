@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Build-native-modules-with-nw-gyp.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>nw-gyp is supported from version 0.3.2</em></p><p>nw-gyp is a hack on node-gyp to support node-webkit specific headers and libraries. </p><p>The usage is the same with node-gyp, except that you need to specify the version of node-webkit manually. </p><pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;>$ npm install -g nw-gyp
+$ cd myaddon
+$ nw-gyp configure --target=0.12.2
+$ nw-gyp build
+</code></pre>">$ npm install -g nw-gyp
+$ cd myaddon
+$ nw-gyp configure --target=0.12.2
+$ nw-gyp build
+</code></pre><p>Please see <a href="https://github.com/nwjs/nw-gyp">https://github.com/nwjs/nw-gyp</a> for more details.</p><p>Note: you do not need to build NW.js, Chromium or Node.js from source in order to use nw-gyp; because when calling <code>nw-gyp configure --target=&lt;version&gt;</code> it will download and cache the headers you need (<code>v8.h</code> and <code>node.h</code>) for that version of NW.js.</p><p>For some packages you may need to use <a href="https://github.com/mapbox/node-pre-gyp">node-pre-gyp</a> (e.g. when you get the error “Undefined variable module_name in binding.gyp while trying to load binding.gyp”), which supports building for both node.js and node-webkit by using either node-gyp or nw-gyp.</p><pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;>$ npm install node-pre-gyp
+$ node-pre-gyp build --runtime=node-webkit --target=0.3.3
+</code></pre>">$ npm install node-pre-gyp
+$ node-pre-gyp build --runtime=node-webkit --target=0.3.3
+</code></pre><h2 id="known-issues-and-limitations"><a name="known-issues-and-limitations" href="#known-issues-and-limitations"></a>Known issues and limitations</h2><p><strong>NOTE</strong>: The V8 version in node-webkit is different with the version in Node.js. And because V8 doesn’t have any stable API, your native module could be broken. But we are trying our best to support native modules, deprecated API is supported to maintain backward compatibility. And if you find your module can’t be built, file an issue.</p><p>On Windows, the executable file <code>nw.exe</code> cannot be renamed, or the native module cannot be loaded since it will try to find <code>nw.exe</code>. See <a href="https://github.com/nwjs/nw.js/issues/199">https://github.com/nwjs/nw.js/issues/199</a></p><p>On OS X, Webkit is only 32-bit (i386) but newer versions of Node are build as 64-bit (x86_64) so you might need ensure libraries your module links to are universal builds.</p>
+
+
+</body>
+</html>

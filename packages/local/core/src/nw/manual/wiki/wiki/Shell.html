@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Shell.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>Shell API requires node-webkit &gt;= v0.3.0</em></p><p><code>Shell</code> is a collection of APIs that do desktop related jobs.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Load native UI library.
+var gui = require('nw.gui');
+
+// Open URL with default browser.
+gui.Shell.openExternal('https://github.com/rogerwang/node-webkit');
+
+// Open a text file with default text editor.
+gui.Shell.openItem('test.txt');
+
+// Open a file in file explorer.
+gui.Shell.showItemInFolder('test.txt');
+</code></pre>">// Load native UI library.
+var gui = require('nw.gui');
+
+// Open URL with default browser.
+gui.Shell.openExternal('https://github.com/rogerwang/node-webkit');
+
+// Open a text file with default text editor.
+gui.Shell.openItem('test.txt');
+
+// Open a file in file explorer.
+gui.Shell.showItemInFolder('test.txt');
+</code></pre><h2 id="reference"><a name="reference" href="#reference"></a>Reference</h2><h3 id="openexternal(uri)"><a name="openexternal(uri)" href="#openexternal(uri)"></a>openExternal(URI)</h3><p>Open the given external protocol <code>URI</code> in the desktop’s default manner. (For example, mailto: URLs in the default mail user agent.)</p><h3 id="openitem(file_path)"><a name="openitem(file_path)" href="#openitem(file_path)"></a>openItem(file_path)</h3><p>Open the given <code>file_path</code> in the desktop’s default manner.</p><h3 id="showiteminfolder(file_path)"><a name="showiteminfolder(file_path)" href="#showiteminfolder(file_path)"></a>showItemInFolder(file_path)</h3><p>Show the given <code>file_path</code> in a file manager. If possible, select the file.</p>
+
+
+</body>
+</html>

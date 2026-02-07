@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Shell</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="shell"><a name="shell" href="#shell"></a>Shell</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#synopsis" html="Synopsis">Synopsis</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#shell.openexternal(uri)" html="Shell.openExternal(uri)">Shell.openExternal(uri)</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#shell.openitem(file_path)" html="Shell.openItem(file_path)">Shell.openItem(file_path)</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#shell.showiteminfolder(file_path)" html="Shell.showItemInFolder(file_path)">Shell.showItemInFolder(file_path)</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p><code>Shell</code> is a collection of APIs that do desktop related jobs.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre class="javascript hljs"><span class="hljs-comment">// Open URL with default browser.</span>
+nw.Shell.openExternal(<span class="hljs-string">'https://github.com/nwjs/nw.js'</span>);
+
+<span class="hljs-comment">// Open a text file with default text editor.</span>
+nw.Shell.openItem(<span class="hljs-string">'test.txt'</span>);
+
+<span class="hljs-comment">// Show a file in parent folder with file manager.</span>
+nw.Shell.showItemInFolder(<span class="hljs-string">'test.txt'</span>);
+</pre><h2 id="shell.openexternal(uri)"><a name="shell.openexternal(uri)" href="#shell.openexternal(uri)"></a>Shell.openExternal(uri)</h2><ul>
+<li><code>uri</code> <code>{String}</code> A URL to open in system default manner.</li></ul><p>Open the given external URI in the desktop’s default manner. For example, mailto: URLs in the default mail user agent.</p><h2 id="shell.openitem(file_path)"><a name="shell.openitem(file_path)" href="#shell.openitem(file_path)"></a>Shell.openItem(file_path)</h2><ul>
+<li><code>file_path</code> <code>{String}</code> path to a local file</li></ul><p>Open the given <code>file_path</code> in the desktop’s default manner.</p><h2 id="shell.showiteminfolder(file_path)"><a name="shell.showiteminfolder(file_path)" href="#shell.showiteminfolder(file_path)"></a>Shell.showItemInFolder(file_path)</h2><ul>
+<li><code>file_path</code> <code>{String}</code> path to a local file</li></ul><p>Show the given <code>file_path</code> in the parent folder with file manager. If possible, select the file.</p>
+
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Mini-browser-in-iframe.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>node-webkit has special support to let you load external websites in an iframe in your application. 3 attributes <code>nwdisable</code>, <code>nwfaketop</code> and <code>nwUserAgent</code> of the iframe element are introduced to do this:</p><ul>
+<li><code>nwdisable</code> (since 0.5.0) is used to disable Node support in the iframe and make it a <code>Normal frame</code> (see <a href="Security.html">Security</a>)</li><li><code>nwfaketop</code> (since 0.5.1) is used to trap the navigation and the access (such as window.top, window.parent) in this iframe.</li><li><code>nwUserAgent</code> (since 0.9.0-rc1) is used to specify the <code>User-Agent</code> header of HTTP requests. See <a href="Changes-to-DOM.html">Changes-to-DOM</a></li></ul><p>For more discussion, see <a href="https://github.com/rogerwang/node-webkit/issues/534">https://github.com/rogerwang/node-webkit/issues/534</a></p><p>More features which would help on this topic:  </p><ul>
+<li><code>Window.eval()</code>, <code>inject-js-start</code>, <code>inject-js-end</code>, <code>document-start</code> and <code>document-end</code> in <a href="Window.html">Window</a></li><li>Ignoring <code>X-Frame-Options</code> HTTP header. See <a href="Security.html">Security</a>.</li></ul>
+
+
+</body>
+</html>

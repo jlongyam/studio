@@ -24,9 +24,10 @@
     "studio": "./scripts/studio.js"
   },
   "workspaces": [
+    "packages/global/tester",
     "packages/global/env",
     "packages/global/ansi",
-    "packages/global/tester",
+    
     "packages/global/fs",
     "packages/global/legacy"
   ],

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Changes-to-DOM.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p>The following changes to DOM is made to support native applications better:</p><p>Features marked with <code>node only</code> means that only <code>Node frames</code> can do this. <code>Normal frames</code> still follow the W3C standard. For definition of <code>Node frames</code> and <code>Normal frames</code>, see <a href="Security">Security</a></p><h3 id="setting-value-of-file-input-element-(node-only)"><a name="setting-value-of-file-input-element-(node-only)" href="#setting-value-of-file-input-element-(node-only)"></a>setting value of file input element (node only)</h3><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// This behaviour is currently broken. See https://github.com/nwjs/nw.js/issues/7958
+var f = new File('/path/to/file', 'name');
+var files = new FileList();
+files.append(f);
+document.getElementById('input0').files = files;
+</code></pre>">// This behaviour is currently broken. See https://github.com/nwjs/nw.js/issues/7958
+var f = new File('/path/to/file', 'name');
+var files = new FileList();
+files.append(f);
+document.getElementById('input0').files = files;
+</code></pre><h3 id="script-can-emulate-user-gestures"><a name="script-can-emulate-user-gestures" href="#script-can-emulate-user-gestures"></a>script can emulate user gestures</h3><p>JavaScripts can emulate user gestures while in browsers they can’t. e.g. Triggering <code>click</code> event on file input. See [[File-dialogs]]</p><h3 id="nwuseragent"><a name="nwuseragent" href="#nwuseragent"></a>nwUserAgent</h3><p><em>since v0.9.0-rc1</em></p><p>A new attribute <code>nwUserAgent</code> is added to the <code>iframe</code> element. The value is used as the <code>User-Agent</code> header from HTTP requests from that iframe, or its descendants.</p><h3 id="nwdisable"><a name="nwdisable" href="#nwdisable"></a>nwdisable</h3><p><em>since v0.5.0</em><br>See <a href="Mini-browser-in-iframe.html">Mini-browser-in-iframe</a></p><h3 id="nwfaketop"><a name="nwfaketop" href="#nwfaketop"></a>nwfaketop</h3><p><em>since v0.5.1</em><br>See <a href="Mini-browser-in-iframe.html">Mini-browser-in-iframe</a></p>
+
+
+</body>
+</html>

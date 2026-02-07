@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Tray</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="tray"><a name="tray" href="#tray"></a>Tray</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#synopsis" html="Synopsis">Synopsis</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#new-tray(option)" html="new Tray(option)">new Tray(option)</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#tray.html" html="tray.html">tray.html</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#tray.tooltip" html="tray.tooltip">tray.tooltip</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#tray.icon" html="tray.icon">tray.icon</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#tray.alticon-(mac)" html="tray.alticon (Mac)">tray.alticon (Mac)</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+<li><span class="html">
+<a href="#tray.iconsaretemplates-(mac)" html="tray.iconsAreTemplates (Mac)">tray.iconsAreTemplates (Mac)</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#tray.menu" html="tray.menu">tray.menu</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+<li><span class="html">
+<a href="#tray.remove()" html="tray.remove()">tray.remove()</a>
+</span>
+<!--span class="number">
+8
+</span-->
+</li>
+<li><span class="html">
+<a href="#event:-click" html="Event: click">Event: click</a>
+</span>
+<!--span class="number">
+9
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p><code>Tray</code> is an abstraction of different controls on different platforms, usually it’s a small icon shown on the OS’s notification area. On Mac OS X it’s called <code>Status Item</code>, on GTK it’s <code>Status Icon</code>, and on Windows it’s <code>System Tray Icon</code>.</p><h2 id="synopsis"><a name="synopsis" href="#synopsis"></a>Synopsis</h2><pre class="javascript hljs"><span class="hljs-comment">// Create a tray icon</span>
+<span class="hljs-keyword">var</span> tray = <span class="hljs-keyword">new</span> nw.Tray({ html: <span class="hljs-string">'Tray'</span>, icon: <span class="hljs-string">'img/icon.png'</span> });
+
+<span class="hljs-comment">// Give it a menu</span>
+<span class="hljs-keyword">var</span> menu = <span class="hljs-keyword">new</span> nw.Menu();
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ type: <span class="hljs-string">'checkbox'</span>, label: <span class="hljs-string">'box1'</span> }));
+tray.menu = menu;
+
+<span class="hljs-comment">// Remove the tray</span>
+tray.remove();
+tray = <span class="hljs-literal">null</span>;
+</pre><p>!!! warning “Using Tray With Page Navigation”<br>    Trays created in the page that can be navigated will not be functional after a reload or navigation. The reason is that the tray and even the web page will be garbage collected by JS engine after navigation to prevent memory leak. So it’s recommended to use trays in <strong>background page</strong>, which is existed for the life cycle of your app. See <a href="Manifest Format.html#bg-script"><code>bg-script</code></a> and <a href="Manifest Format.html#main"><code>main</code></a> for how to execute scripts in the background page.</p><h2 id="new-tray(option)"><a name="new-tray(option)" href="#new-tray(option)"></a>new Tray(option)</h2><ul>
+<li><code>option</code> <code>{Object}</code><ul>
+<li><code>html</code> <code>{String}</code> html</li><li><code>tooltip</code> <code>{String}</code> tooltip</li><li><code>icon</code> <code>{String}</code> icon</li><li><code>alticon</code> <code>{String}</code> alternate</li><li><code>iconsAreTemplates</code> <code>{Boolean}</code> whether icons are templates</li><li><code>menu</code> <code>{Menu}</code> popup menu</li></ul>
+</li></ul><p>Create a new <code>Tray</code>, <code>option</code> is an object contains initial settings for the <code>Tray</code>. Every field has its own property in the <code>Tray</code>, see documentation of each property for details.</p><h2 id="tray.html"><a name="tray.html" href="#tray.html"></a>tray.html</h2><p>Get or set the <code>html</code> of the tray.</p><p>On Mac OS X <code>html</code> will be showed on status bar along with its <code>icon</code>, but it doesn’t have effects on GTK and Windows, since the latter two platforms only support tray to be showed as icons.</p><h2 id="tray.tooltip"><a name="tray.tooltip" href="#tray.tooltip"></a>tray.tooltip</h2><p>Get or set the <code>tooltip</code> of the tray. <code>tooltip</code> shows when you hover the <code>Tray</code> with mouse.</p><p>!!! note<br>    <code>tooltip</code> is showed on all three platforms. Should be set as <code>Tray</code> property rather from <code>option</code> object constructor.</p><h2 id="tray.icon"><a name="tray.icon" href="#tray.icon"></a>tray.icon</h2><p>Get or set the <code>icon</code> of the tray, <code>icon</code> must a path to your icon file. It can be a relative path which points to an icon in your app, or an absolute path pointing to a file in user’s system.</p><p>!!! note “Mac”<br>    Mac OS X caveat: when used in notification context, png icon is not sized down like in windows notification area, it is rather displayed in 1:1 ratio.</p><h2 id="tray.alticon-(mac)"><a name="tray.alticon-(mac)" href="#tray.alticon-(mac)"></a>tray.alticon (Mac)</h2><p>Get or set the alternate (active) tray icon.</p><h2 id="tray.iconsaretemplates-(mac)"><a name="tray.iconsaretemplates-(mac)" href="#tray.iconsaretemplates-(mac)"></a>tray.iconsAreTemplates (Mac)</h2><p>Get or set whether <code>icon</code> and <code>alticon</code> images are treated as “templates” (<code>true</code> by default). When the property is set to <code>true</code> the images are treated as “templates” and the system automatically ensures proper styling according to the various states of the status item (e.g. dark menu, light menu, etc.). Template images should consist only of black and clear colours and can use the alpha channel in the image to adjust the opacity of black content.</p><h2 id="tray.menu"><a name="tray.menu" href="#tray.menu"></a>tray.menu</h2><p>Get or set the <code>menu</code> of the tray, <code>menu</code> will be showed when you click on the tray icon.</p><p>On Mac OS X the menu will be showed when you click on the tray (which is the only action available for tray icons on Mac OS X). On Windows and Linux, the menu will be showed when you single click on the tray with right mouse button, clicking with left mouse button sends the <code>click</code> event and does not show a menu.</p><p>In order to reduce differences from different platforms, setting <code>menu</code> property is the only way to bind a menu to tray, there’s no way to popup a menu with left mouse button click on Linux and Windows.</p><h2 id="tray.remove()"><a name="tray.remove()" href="#tray.remove()"></a>tray.remove()</h2><p>Remove the tray.</p><p>Once removed, you will not be able to show it again and you should set your tray variable to <code>null</code> to make it garbage collected. There is no way temporarily hide a tray icon.</p><h2 id="event:-click"><a name="event:-click" href="#event:-click"></a>Event: click</h2><p>Emitted when user clicks the menu item with left mouse button.</p><p>You cannot catch click with right mouse button, because it is used to show menu. Even if you’re not binding a menu to a tray, you still can not listen to it. Double click events are also ignored.</p><p>!!! note “Mac”<br>    NW.js does not support menulet (<kbd>⌘</kbd>+drag) since it will prohibit NW.js apps from being distributed in the App Store.</p>
+
+
+</body>
+</html>

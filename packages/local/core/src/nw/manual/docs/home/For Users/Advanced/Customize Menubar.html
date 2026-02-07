@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Customize Menubar</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="customize-menubar"><a name="customize-menubar" href="#customize-menubar"></a>Customize Menubar</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#create-and-set-menubar" html="Create and Set Menubar">Create and Set Menubar</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#platform-differences" html="Platform Differences">Platform Differences</a>
+</span>
+<!--span class="number">
+1
+</span-->
+<ul>
+<li><span class="html">
+<a href="#windows-&amp;-linux" html="Windows &amp; Linux">Windows &amp; Linux</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+<li><span class="html">
+<a href="#mac-os-x" html="Mac OS X">Mac OS X</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#best-practice" html="Best practice">Best practice</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><p>Different platforms has different meanings of window menu, following discussions will show you the differences and provide best practice to keep window menu working decently on all platforms.</p><h2 id="create-and-set-menubar"><a name="create-and-set-menubar" href="#create-and-set-menubar"></a>Create and Set Menubar</h2><p>To create a menubar, you just need to specify <code>type: 'menubar'</code> in the option when you create the menu:</p><pre class="javascript hljs"><span class="hljs-keyword">var</span> your_menu = <span class="hljs-keyword">new</span> nw.Menu({ type: <span class="hljs-string">'menubar'</span> });
+</pre><p>And make sure every item appended to the menubar has a submenu. A normal text-only menu item on menubar makes no sense on most platforms.</p><pre class="javascript hljs"><span class="hljs-keyword">var</span> submenu = <span class="hljs-keyword">new</span> nw.Menu();
+submenu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item A'</span> }));
+submenu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item B'</span> }));
+
+<span class="hljs-comment">// the menu item appended should have a submenu</span>
+your_menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({
+  label: <span class="hljs-string">'First Menu'</span>,
+  submenu: submenu
+}));
+</pre><p>Then you can set the window menu by setting the <code>menu</code> property of the window:</p><pre class="javascript hljs">nw.Window.get().menu = your_menu;
+</pre><p>See both <a href="../../References/Menu.html">Menu</a> and <a href="../../References/Window.html">Window</a> for details of the API.</p><h2 id="platform-differences"><a name="platform-differences" href="#platform-differences"></a>Platform Differences</h2><h3 id="windows-&amp;-linux"><a name="windows-&amp;-linux" href="#windows-&amp;-linux"></a>Windows &amp; Linux</h3><p>On Windows and Linux, the menubars behave exactly the same. Each window can have one menubar and they all reside bellow the htmlbar.</p><p>!!! tip “Menubar in Fullscreen / Kiosk Mode”<br>    In fullscreen or kiosk mode, menubar is visible on top of the window on Windows and Linux. Setting <code>win.menu</code> to <code>null</code> can completely remove the menubar. See also <a href="../../References/Window.html#winmenu"><code>win.menu</code></a>.</p><h3 id="mac-os-x"><a name="mac-os-x" href="#mac-os-x"></a>Mac OS X</h3><p>!!! warning “Behavior Changed”<br>    The behavior of the feature is changed since 0.13.0. Please see <a href="../Migration/From 0.12 to 0.13.html#menu">Migration Notes from 0.12 to 0.13</a>.</p><p>On Mac, one app can only have one menu, which is called application menu, no matter how many windows the app may have. And many key shortcuts rely on the existence of application menu, such as <em>Quit</em>, <em>Close</em> and <em>Copy</em>.</p><p>By default, NW.js app will start with default menus, including <em>your-app-name</em>, <em>Edit</em> and <em>Window</em>. You can get the default menus using the <a href="../../References/Menu.html#menucreatemacbuiltinappname-options-mac">menu.createMacBuiltin</a> method and customize it as you need:</p><pre class="javascript hljs"><span class="hljs-keyword">var</span> mb = <span class="hljs-keyword">new</span> nw.Menu({type:<span class="hljs-string">"menubar"</span>});
+mb.createMacBuiltin(<span class="hljs-string">"your-app-name"</span>);
+<span class="hljs-comment">// append, insert or delete items of `mb` to customize your own menu</span>
+<span class="hljs-comment">// then ...</span>
+nw.Window.get().menu = mb;
+</pre><p>!!! note “Fix the html of Application Menu”<br>    The first item of application menu shows <em>nwjs</em> instead of <em>your-app-name</em>. To fix it, you need to set the value of <code>CFBundleName</code> in all files of <code>nwjs.app/Contents/Resources/*.lproj/InfoPlist.strings</code> to <code>your-app-name</code> instead of <code>nwjs</code>.</p><h2 id="best-practice"><a name="best-practice" href="#best-practice"></a>Best practice</h2><p>As mentioned above, on Windows and Linux each window can have one menubar, while on Mac an app can have only one application menu. So generally you should set menu for only your main window and avoid using window menu when you may have multiple main windows.</p><p>And it may happens that you want to design different menus for different platforms, then you can use <a href="http://nodejs.org/api/process.html#process_process_platform">process.platform</a> to get which platform you’re in.</p>
+
+
+</body>
+</html>

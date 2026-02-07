@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Using-MP3-&-MP4-(H.264)-using-the--video--&--audio--tags..html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p>Due to licensing issues, the pre-built binary doesn’t ship with the necessary codecs for patented media formats. If you require support for these formats, see the instructions below.</p><p><em><strong>Consult a lawyer if you do not understand the licensing constraints and require patented media formats in your application.</strong></em></p><h1 id="overview"><a name="overview" href="#overview"></a>Overview</h1><p>In the pre-built libffmpegsumo.dll, the following codecs are supported:</p><pre><code data-origin="<pre><code>theora,vorbis,vp8,pcm_u8,pcm_s16le,pcm_s24le,pcm_f32le,pcm_s16be,pcm_s24be
+</code></pre>">theora,vorbis,vp8,pcm_u8,pcm_s16le,pcm_s24le,pcm_f32le,pcm_s16be,pcm_s24be
+</code></pre><p>The following demuxers are supported:</p><pre><code data-origin="<pre><code>ogg,matroska,wav
+</code></pre>">ogg,matroska,wav
+</code></pre><p>As nw.js is based on Chromium, the media components are essentially the same. In order to use MP3 and H.264, you’ll need to compile ffmpeg with corresponding options. <em>(Please note that MP3 and H.264 codecs are licensed under the GPL in ffmpeg).</em></p><p>Alternatively, you can try to use the media libraries from Chrome. It has been reported to work, but it hasn’t been properly tested, so it may or may not work for you in latest version.</p><p><strong>Warning: linking code licensed under the GPL code requires you to license your code under the GPL as well</strong></p><h1 id="windows"><a name="windows" href="#windows"></a>Windows</h1><p>You will need files from the matching Chrome version. (For example, 0.6.x is based on Chromium 28)</p><ol>
+<li><p>Locate the Chrome\Application folder (e.g. C:\Program Files\Google)</p>
+</li><li><p>Copy <code>ffmpegsumo.dll</code> to your nw.js distribution directory.</p>
+</li></ol><h1 id="linux"><a name="linux" href="#linux"></a>Linux</h1><p>The directory location may vary according to the Linux distribution you are using. Under Ubuntu, it’s located at <code>/opt/google/chrome</code>. Copy <code>libffmpegsumo.so</code> to the nw.js folder.</p><h1 id="mac"><a name="mac" href="#mac"></a>Mac</h1><p>Head to your Applications folder and right-click on Google Chrome. Select Show Package Contents and navigate to Versions &gt; Most recent # &gt; Framework &gt; Libraries.</p><p>Copy <code>ffmpegsumo.so</code> to <code>nwjs.app/Contents/Frameworks/nwjs Framework.framework/Libraries/</code>.</p><h1 id="build-it-yourself"><a name="build-it-yourself" href="#build-it-yourself"></a>Build it Yourself</h1><p>If you are building nw.js, open <code>src/third_party/ffmpeg/chromium/scripts/build_ffmpeg.sh</code>, and search around line 379 for the following directives:</p><pre><code class="lang-sh" data-origin="<pre><code class=&quot;lang-sh&quot;># Google Chrome &amp;amp; ChromeOS specific configuration.
+add_flag_chrome --enable-decoder=aac,h264,mp3
+add_flag_chrome --enable-demuxer=mp3,mov
+add_flag_chrome --enable-parser=aac,h264,mpegaudio
+</code></pre>"># Google Chrome &amp; ChromeOS specific configuration.
+add_flag_chrome --enable-decoder=aac,h264,mp3
+add_flag_chrome --enable-demuxer=mp3,mov
+add_flag_chrome --enable-parser=aac,h264,mpegaudio
+</code></pre><p>Change them to:</p><pre><code class="lang-sh" data-origin="<pre><code class=&quot;lang-sh&quot;>add_flag_common --enable-decoder=aac,h264,mp3
+add_flag_common --enable-demuxer=mp3,mov
+add_flag_common --enable-parser=aac,h264,mpegaudio
+</code></pre>">add_flag_common --enable-decoder=aac,h264,mp3
+add_flag_common --enable-demuxer=mp3,mov
+add_flag_common --enable-parser=aac,h264,mpegaudio
+</code></pre><p>Then follow the short directions here:<br><a href="https://src.chromium.org/viewvc/chrome/trunk/deps/third_party/ffmpeg/README.chromium"></a><a href="https://src.chromium.org/viewvc/chrome/trunk/deps/third_party/ffmpeg/README.chromium">https://src.chromium.org/viewvc/chrome/trunk/deps/third_party/ffmpeg/README.chromium</a></p><p>You’ll also need to patch the ffmpeg repo (or define the <code>branding</code> gyp variable to <code>Chrome</code>, untested)</p><pre><code class="lang-patch" data-origin="<pre><code class=&quot;lang-patch&quot;>diff --git a/ffmpeg.gyp b/ffmpeg.gyp
+index ac059f0..1b0424c 100644
+--- a/ffmpeg.gyp
++++ b/ffmpeg.gyp
+@@ -54,7 +54,7 @@
+       ['chromeos == 1', {
+         'ffmpeg_branding%': '&amp;lt;(branding)OS',
+       }, {  # otherwise, assume Chrome/Chromium.
+-        'ffmpeg_branding%': '&amp;lt;(branding)',
++        'ffmpeg_branding%': 'Chrome',
+       }],
+     ],
+</code></pre>">diff --git a/ffmpeg.gyp b/ffmpeg.gyp
+index ac059f0..1b0424c 100644
+--- a/ffmpeg.gyp
++++ b/ffmpeg.gyp
+@@ -54,7 +54,7 @@
+       ['chromeos == 1', {
+         'ffmpeg_branding%': '&lt;(branding)OS',
+       }, {  # otherwise, assume Chrome/Chromium.
+-        'ffmpeg_branding%': '&lt;(branding)',
++        'ffmpeg_branding%': 'Chrome',
+       }],
+     ],
+</code></pre><p>(see <a href="https://github.com/nwjs/nw.js/issues/1461#issuecomment-32009915"></a><a href="https://github.com/nwjs/nw.js/issues/1461#issuecomment-32009915">https://github.com/nwjs/nw.js/issues/1461#issuecomment-32009915</a>)</p><p>You’ll also need to turn on the resource loader’s support in Chromium’s code, or your format will be treated as a non standard d MIME type and won’t be loaded. See src/net/base/mime_util.cc for more. You might also want to look into code in other files guarded by the <code>'USE_PROPRIETARY_CODECS'</code> macro. </p><p><strong>Update</strong></p><p>the <code>'USE_PROPRIETARY_CODECS'</code> macro can be done by setting <code>'proprietary_codecs%': 1</code> in file <code>build/common.gypi</code></p>
+
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Console-and-timers.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p>Node.js and Chromium each has its own implementation of <code>setTimeout</code> and <code>console</code>. Currently, for <code>console</code>, we use Chromium’s implementation everywhere, because it can print in devtools and have more information exposed.</p><p>As for <code>setTimeout</code> family, we just keep things as they are. In webpages <code>setTimeout</code> will call <code>window.setTimeout</code>, i.e. the WebKit’s implementation. In node modules <code>setTimeout</code> will call <code>global.setTimeout</code>, i.e. the node’s implementation. In this way, we can make sure those low level hacks on timers will still work in node-webkit.</p><p>And please note that since we have implemented renderer’s message loop in libuv, node’s implementation of timers will be more accurate than WebKit’s. So if you’re doing something that needs accurate clock, please use <code>global.setTimeout</code>.</p>
+
+
+</body>
+</html>

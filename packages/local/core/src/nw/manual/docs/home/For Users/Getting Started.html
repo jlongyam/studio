@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Getting Started</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+<body class="markdown clearness-dark">
+<h1 id="getting-started-with-nw.js"><a name="getting-started-with-nw.js" href="#getting-started-with-nw.js"></a>Getting Started with NW.js</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#what-can-nw.js-do?" html="What can NW.js do?">What can NW.js do?</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#get-nw.js" html="Get NW.js">Get NW.js</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#write-nw.js-app" html="Write NW.js App">Write NW.js App</a>
+</span>
+<!--span class="number">
+2
+</span-->
+<ul>
+<li><span class="html">
+<a href="#example-1---hello-world" html="Example 1 - Hello World">Example 1 - Hello World</a>
+</span>
+<!--span class="number">
+3
+</span-->
+</li>
+<li><span class="html">
+<a href="#example-2---using-nw.js-apis" html="Example 2 - Using NW.js APIs">Example 2 - Using NW.js APIs</a>
+</span>
+<!--span class="number">
+4
+</span-->
+</li>
+<li><span class="html">
+<a href="#example-3---using-node.js-api" html="Example 3 - Using Node.js API">Example 3 - Using Node.js API</a>
+</span>
+<!--span class="number">
+5
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="html">
+<a href="#what's-next" html="What’s next">What’s next</a>
+</span>
+<!--span class="number">
+6
+</span-->
+</li>
+<li><span class="html">
+<a href="#getting-help" html="Getting Help">Getting Help</a>
+</span>
+<!--span class="number">
+7
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="what-can-nw.js-do?"><a name="what-can-nw.js-do?" href="#what-can-nw.js-do?"></a>What can NW.js do?</h2><p>NW.js is based on <a href="http://www.chromium.org">Chromium</a> and <a href="http://nodejs.org/">Node.js</a>. It lets you call Node.js code and modules directly from browser and also use Web technologies in your app. Further, you can easily package a web application to a native application.</p><h2 id="get-nw.js"><a name="get-nw.js" href="#get-nw.js"></a>Get NW.js</h2><p>You can get the latest binaries from official website <a href="http://nwjs.io">http://nwjs.io</a>. Or you can also build NW.js binaries yourself by following the instructions in <a href="../For Developers/Building NW.js.html">Building NW.js</a>.</p><p>!!! tip<br>    You are recommended to choose SDK build flavor to develop your app, which enables you to use DevTools to debug your app. See <a href="Advanced/Build Flavors.html">Build Flavors</a> for the differences between build flavors.</p><h2 id="write-nw.js-app"><a name="write-nw.js-app" href="#write-nw.js-app"></a>Write NW.js App</h2><h3 id="example-1---hello-world"><a name="example-1---hello-world" href="#example-1---hello-world"></a>Example 1 - Hello World</h3><p>This the basic example shows how to write an NW.js app.</p><p><strong>Step 1.</strong> Create <code>package.json</code>:</p><pre class="json hljs">{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"helloworld"</span></span>,
+  "<span class="hljs-attribute">main</span>": <span class="hljs-value"><span class="hljs-string">"index.html"</span>
+</span>}
+</pre><p><code>package.json</code> is the manifest file in your app. It is written in <a href="http://www.json.org/">JSON format</a>. The <code>main</code> field figures out the first page opened by the NW.js if referenced to an HTML file, <code>"index.html"</code> in this example. And the <code>name</code> field is the unique name used among NW.js apps. See <a href="../References/Manifest Format.html">Manifest Format</a> for more details.</p><p>!!! tip “Use JS File as Main”<br>    You can set JS file as in <code>"main"</code> field as well, like <code>"main.js"</code>. Then the JS file will be loaded in the background page on start and no window is opened by default. Usually you can do some initialization and open the window manually later. For example,</p><pre class="javascript hljs"><span class="hljs-comment">// initialize your app</span>
+<span class="hljs-comment">// and ...</span>
+nw.Window.open(<span class="hljs-string">'index.html'</span>, {}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">win</span>) </span>{});
+</pre><p><strong>Step 2.</strong> Create <code>index.html</code>:</p><pre class="xml hljs"><span class="hljs-doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-html">html</span>&gt;</span>Hello World!<span class="hljs-tag">&lt;/<span class="hljs-html">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-html">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-html">h1</span>&gt;</span>Hello World!<span class="hljs-tag">&lt;/<span class="hljs-html">h1</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-html">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">html</span>&gt;</span>
+</pre><p>This is the normal HTML file. You can use any web technologies supported by latest browsers.</p><p><strong>Step 3.</strong> Run your app</p><pre class="bash hljs"><span class="hljs-built_in">cd</span> /path/to/your/app
+/path/to/nw .
+</pre><p><code>/path/to/nw</code> is the binary file of NW.js. On Windows, it’s <code>nw.exe</code>; On Linux, it’s <code>nw</code>; On Mac, it’s <code>nwjs.app/Contents/MacOS/nwjs</code>.</p><p>!!! tip “Drag &amp; Drop on Windows”<br>    On Windows, you can drag the <code>folder containing package.json</code> to <code>nw.exe</code> to run your app.</p><h3 id="example-2---using-nw.js-apis"><a name="example-2---using-nw.js-apis" href="#example-2---using-nw.js-apis"></a>Example 2 - Using NW.js APIs</h3><p>All NW.js APIs are loaded in <code>nw</code> object globally and can be used directly in JavaScript files. See <a href="../index.html#references">API References</a> for full list of supported APIs.</p><p>This example shows how to create a native context menu in your NW.js app. You can create <code>index.html</code> with following content:</p><pre class="xml hljs"><span class="hljs-doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">html</span>&gt;</span>Context Menu<span class="hljs-tag">&lt;/<span class="hljs-html">html</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">body</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-html">p</span>&gt;</span>'Right click' here to show context menu.<span class="hljs-tag">&lt;/<span class="hljs-html">p</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-html">script</span>&gt;</span><span class="javascript">
+<span class="hljs-comment">// Create an empty context menu</span>
+<span class="hljs-keyword">var</span> menu = <span class="hljs-keyword">new</span> nw.Menu();
+
+<span class="hljs-comment">// Add some items with label</span>
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({
+  label: <span class="hljs-string">'Item A'</span>,
+  click: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    alert(<span class="hljs-string">'You have clicked at "Item A"'</span>);
+  }
+}));
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item B'</span> }));
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ type: <span class="hljs-string">'separator'</span> }));
+menu.append(<span class="hljs-keyword">new</span> nw.MenuItem({ label: <span class="hljs-string">'Item C'</span> }));
+
+<span class="hljs-comment">// Hooks the "contextmenu" event</span>
+<span class="hljs-built_in">document</span>.body.addEventListener(<span class="hljs-string">'contextmenu'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ev</span>) </span>{
+  <span class="hljs-comment">// Prevent showing default context menu</span>
+  ev.preventDefault();
+  <span class="hljs-comment">// Popup the native context menu at place you click</span>
+  menu.popup(ev.x, ev.y);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}, <span class="hljs-literal">false</span>);
+
+</span><span class="hljs-tag">&lt;/<span class="hljs-html">script</span>&gt;</span>  
+<span class="hljs-tag">&lt;/<span class="hljs-html">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">html</span>&gt;</span>
+</pre><p>… then run your app:</p><pre class="bash hljs"><span class="hljs-built_in">cd</span> /path/to/your/app
+/path/to/nw .
+</pre><p>!!! tip “require(‘nw.gui’)”<br>    The legacy way of loading NW.js APIs using <code>require('nw.gui')</code> is also supported. It returns the same <code>nw</code> object.</p><h3 id="example-3---using-node.js-api"><a name="example-3---using-node.js-api" href="#example-3---using-node.js-api"></a>Example 3 - Using Node.js API</h3><p>You can call node.js and modules directly from the DOM. So it enables endless possibilities for writing apps with nw.js.</p><p>This example shows how to query the OS platform with <code>os</code> module of Node.js. Simply create the <code>index.html</code> file with following content and run it with NW.js.</p><pre class="xml hljs"><span class="hljs-doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-html">html</span>&gt;</span>My OS Platform<span class="hljs-tag">&lt;/<span class="hljs-html">html</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">body</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-html">script</span>&gt;</span><span class="javascript">
+<span class="hljs-comment">// get the system platform using node.js</span>
+<span class="hljs-keyword">var</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os'</span>);
+<span class="hljs-built_in">document</span>.write(<span class="hljs-string">'You are running on '</span>, os.platform());
+</span><span class="hljs-tag">&lt;/<span class="hljs-html">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-html">html</span>&gt;</span>
+</pre><p>You could also use the modules installed by <a href="https://www.npmjs.com/"><code>npm</code></a> with NW.js.</p><p>!!! note “Native Node Modules”<br>    Native Node modules, built when running <code>npm install</code>, are not compatible with NW.js ABI. To use them, you have to rebuild it from source code with <a href="https://github.com/nwjs/nw-gyp"><code>nw-gyp</code></a>. See <a href="Advanced/Use Native Node Modules.html">Use Native Node Modules</a> for details.</p><h2 id="what's-next"><a name="what's-next" href="#what's-next"></a>What’s next</h2><p>See <a href="Debugging with DevTools.html">Debugging with DevTools</a> for debugging NW.js apps.</p><p>See <a href="Package and Distribute.html">Package and Distribute</a> for packaging and redistribute your app in production.</p><p>See <a href="FAQ.html">FAQ</a> for issues you may encounter.</p><p>See <a href="Migration/From 0.12 to 0.13.html">the migration notes</a>, if you are migrating your app from NW.js 0.12 or older versions.</p><h2 id="getting-help"><a name="getting-help" href="#getting-help"></a>Getting Help</h2><p>There are lots of useful information on <a href="https://github.com/nwjs/nw.js/wiki">NW.js wiki</a>. The wiki is also open for everyone, and you are encouraged to publish your knowledge on wiki.</p><p>You can also ask questions on <a href="https://groups.google.com/forum/#!forum/nwjs-general">mail list on Google group</a> or chat on <a href="https://gitter.im/nwjs/nw.js">Gitter</a>.</p><p>Please report bugs or submit requirements on <a href="https://github.com/nwjs/nw.js/issues">GitHub</a> to make NW.js more powerful.</p>
+
+
+</body>
+</html>

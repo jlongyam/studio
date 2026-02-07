@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Frameless-window.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>Frameless window requires node-webkit &gt;= v0.3.0</em></p><p>A frameless window is a window without standard frames and window buttons, usually you would use a frameless window to custom titlebar and other standard window buttons. To have a quick glance of it, you can visit the <a href="https://github.com/zcbenz/nw-sample-apps/tree/master/frameless-window">frameless-window</a> and <a href="https://github.com/zcbenz/nw-sample-apps/tree/master/webgl">webgl</a> demo in <a href="https://github.com/zcbenz/nw-sample-apps">zcbenz/nw-sample-apps</a>.</p><h2 id="enable-frameless-window"><a name="enable-frameless-window" href="#enable-frameless-window"></a>Enable frameless window</h2><p>To make your window frameless, you just need to add <code>"frame": false</code> in your app’s <code>package.json</code>‘s <code>window</code> field, toolbar need to be disabled as well:</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>{
+  &quot;window&quot;: {
+    &quot;frame&quot;: false,
+    &quot;toolbar&quot;: false
+  }
+}
+</code></pre>">{
+  "window": {
+    "frame": false,
+    "toolbar": false
+  }
+}
+</code></pre><p>then your main window will be frameless. To open additional frameless windows from within your app you must also pass them the frameless options.</p><pre><code data-origin="<pre><code>gui = require('nw.gui');
+gui.Window.open('http://google.com',{toolbar:false,frame:false});
+</code></pre>">gui = require('nw.gui');
+gui.Window.open('http://google.com',{toolbar:false,frame:false});
+</code></pre><h2 id="make-your-window-draggable"><a name="make-your-window-draggable" href="#make-your-window-draggable"></a>Make your window draggable</h2><p>By default, the frameless window is non-draggable. The app needs to use <code>-webkit-app-region: drag</code> to specify the draggable region and use <code>-webkit-app-region: no-drag</code> to exclude the non-draggable area from the draggable region. Note that only rectangular shape is currently supported.</p><p>To make the whole window draggable, you can add <code>-webkit-app-region: drag</code> as <code>body</code>‘s style:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;body style=&quot;-webkit-app-region: drag&quot;&amp;gt;
+&amp;lt;/body&amp;gt;
+</code></pre>">&lt;body style="-webkit-app-region: drag"&gt;
+&lt;/body&gt;
+</code></pre><p>And note that if you have made the whole window draggable,  you must also <strong>mark buttons and custom window buttons as non-draggable</strong>, otherwise it would be very hard for users to click on them:</p><pre><code class="lang-css" data-origin="<pre><code class=&quot;lang-css&quot;>button {
+  -webkit-app-region: no-drag;
+}
+</code></pre>">button {
+  -webkit-app-region: no-drag;
+}
+</code></pre><p>If you’re only using a custom titlebar, you also need to make buttons in titlebar non-draggable.</p><h2 id="mouse-events"><a name="mouse-events" href="#mouse-events"></a>Mouse Events</h2><p>Elements configured as drag regions will not emit mouse events such as <code>mouseenter</code> or <code>mousemove</code>. This prevents the <code>:hover</code> metaclass from activating. An effective workaround is to use a “screen” Element to capture the initial events and bubble them up where they belong. In this example, the screen only remains long enough to send <code>mouseenter</code> (and one <code>mousemove</code> event) which is enough to activate the correct <code>:hover</code> behavior.</p><p>There is currently no workaround for full <code>mousemove</code> support in a drag region.</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;html&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;Controls&quot;&amp;gt;
+      &amp;lt;div class=&quot;screen&quot;&amp;gt;&amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;html&gt;
+  &lt;body&gt;
+    &lt;div id="Controls"&gt;
+      &lt;div class="screen"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><pre><code class="lang-css" data-origin="<pre><code class=&quot;lang-css&quot;>#Controls {
+  -webkit-app-region: drag;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+.screen {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+#Controls:hover .screen {
+  display: none;
+}
+</code></pre>">#Controls {
+  -webkit-app-region: drag;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+.screen {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+#Controls:hover .screen {
+  display: none;
+}
+</code></pre><h2 id="text-selection"><a name="text-selection" href="#text-selection"></a>Text selection</h2><p>One thing on frameless window is that the dragging behaviour may conflict with selecting text, for example, when you drag the titlebar, you may accidentally select the text on titlebar. To prevent this, you need to disable text selection on dragging area like this:</p><pre><code class="lang-css" data-origin="<pre><code class=&quot;lang-css&quot;>.titlebar {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+</code></pre>">.titlebar {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+</code></pre><p>And also remember not to mark text area as draggable.</p><h2 id="context-menu"><a name="context-menu" href="#context-menu"></a>Context menu</h2><p>On some platforms, the OS will treat non-draggable area as non-client frame, and when you right click on it a system window menu will popup. So you should not abuse non-draggable area and only use it for custom frame and titlebars, and you should never try to listen to <code>contextmenu</code>  event on non-draggable areas.</p><h2 id="window-operations"><a name="window-operations" href="#window-operations"></a>Window operations</h2><p>After the standard frame is removed, you need to provide ways for users to close/minimize the window. The pure javascript way to close a window is <code>window.close()</code>, if you want more, you can use node-webkit’s native <a href="Window.html">Window</a> API.</p>
+
+
+</body>
+</html>

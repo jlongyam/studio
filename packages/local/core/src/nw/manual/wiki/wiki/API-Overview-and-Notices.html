@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>API-Overview-and-Notices.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><em>Native UI API requires node-webkit &gt;= 0.3.0</em></p><h2 id="overview"><a name="overview" href="#overview"></a>Overview</h2><p>Here is our APIs for creating native UI controls in node-webkit. Generally, to load our Native UI library, you need first to use <code>require</code> function to load <code>nw.gui</code> module (our module name did not follow node’s standard, so you wouldn’t encounter module name clashes):</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var gui = require('nw.gui');
+</code></pre>">var gui = require('nw.gui');
+</code></pre><p>Then you create a GUI element the way you create a javascript object:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Standard way of creating elements
+var element = new gui.ElementName(option);
+
+// Example of creating a menu
+var menu = new gui.Menu({ title: 'Menu Title' });
+</code></pre>">// Standard way of creating elements
+var element = new gui.ElementName(option);
+
+// Example of creating a menu
+var menu = new gui.Menu({ title: 'Menu Title' });
+</code></pre><p>The properties like <code>title</code>, <code>label</code>, <code>icon</code> and <code>menu</code> are set/get via directly using object’s attributes, like what you did in DOM, such as:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>menu.title = 'New Title';
+console.log('Menu title is', menu.title);
+</code></pre>">menu.title = 'New Title';
+console.log('Menu title is', menu.title);
+</code></pre><p>And methods like <code>remove</code>, <code>append</code> and <code>insert</code>, are of course, methods of GUI objects:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>menu.append(new gui.MenuItem({ label: 'Im an item' }));
+menu.removeAt(0);
+</code></pre>">menu.append(new gui.MenuItem({ label: 'Im an item' }));
+menu.removeAt(0);
+</code></pre><p>Child elements are usually stored in <code>items</code> field, and can be got via index accessing:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>for (var i = 0; i &amp;lt; menu.items.length; ++i) {
+  console.log('MenuItem', i, menu.items[i]);
+}
+</code></pre>">for (var i = 0; i &lt; menu.items.length; ++i) {
+  console.log('MenuItem', i, menu.items[i]);
+}
+</code></pre><p>And please don’t directly change elements via reassigning like <code>menu.items[2] = new gui.MenuItem(...);</code>, it’s absolutely wrong. To update an element, just change it like <code>menu.items[2].title = 'New Title'</code>, to replace an element, first <code>remove</code> it and then do an <code>insert</code>.</p><p>Another thing is we don’t throw exceptions when you’re doing something wrong in UI API, <strong>we crash</strong>. So be careful on using it. If you’re reusing a deleted element, or passing wrong types, we will crash without warning you.</p><p>One thing you may not notice is after deleting objects, you should always assign <code>null</code> to a deleted UI object, in case you accidentally reuse it, an example is:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var tray = new gui.Tray(...);
+// blablabla...
+// We are done with it
+tray.remove();
+tray = null; // This line is very important
+</code></pre>">var tray = new gui.Tray(...);
+// blablabla...
+// We are done with it
+tray.remove();
+tray = null; // This line is very important
+</code></pre><h2 id="eventemitter"><a name="eventemitter" href="#eventemitter"></a>EventEmitter</h2><p>In node-webkit, every UI element inherits from Node.js’s <a href="http://nodejs.org/api/events.html">EventEmitter</a>, so you can listen to element’s events with this style:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>menuitem.on('click', function() {
+  console.log('Item is clicked');
+});
+</code></pre>">menuitem.on('click', function() {
+  console.log('Item is clicked');
+});
+</code></pre><h2 id="don'ts"><a name="don'ts" href="#don'ts"></a>Don’ts</h2><p>In summary, please <strong>DO NOT</strong> do following things:</p><ul>
+<li>Do not recreate UI elements, reuse them.</li><li>Do not reassign an element, ie. don’t do this <code>menu.items[0] = item</code> or <code>item = new gui.MenuItem({})</code>.</li><li>Do not delete an element, remove it using <code>delete item</code>.</li><li>Do not change UI types’ prototype.</li></ul>
+
+
+</body>
+</html>

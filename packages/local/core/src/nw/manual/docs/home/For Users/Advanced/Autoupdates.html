@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Autoupdates</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="autoupdates"><a name="autoupdates" href="#autoupdates"></a>Autoupdates</h1><p>NW.js tend to support the update solution made by community, not a built-in one. Below is the list of existing soutions, which worth checking.</p><ul>
+<li><a href="https://github.com/edjafarov/node-webkit-updater">node-webkit-updater</a> (by <a href="https://github.com/edjafarov">@edjafarov</a>)</li><li><a href="https://github.com/oaleynik/nwjs-autoupdater">nwjs-autoupdater</a> (by <a href="https://github.com/oaleynik">@oaleynik</a>)</li><li><a href="https://github.com/dsheiko/nw-autoupdater">nw-autoupdater</a> (by <a href="https://github.com/dsheiko">@dsheiko</a>)</li></ul><h2 id="node-webkit-updater"><a name="node-webkit-updater" href="#node-webkit-updater"></a>node-webkit-updater</h2><p>NPM module which gives you the low-level API to:</p><ul>
+<li>Check the manifest for version (from your running “old” app).</li><li>If the version is different from the running one, download new package to a temp directory.</li><li>Unpack the package in temp.</li><li>Run new app from temp and kill the old one (i.e. still all from the running app).</li><li>The new app (in temp) will copy itself to the original folder, overwriting the old app.</li><li>The new app will run itself from original folder and exit the process.</li></ul><p>You should build this logic by yourself though (<a href="https://github.com/edjafarov/node-webkit-updater/blob/master/examples/basic.js">basic example</a>).</p><h2 id="nwjs-autoupdater"><a name="nwjs-autoupdater" href="#nwjs-autoupdater"></a>nwjs-autoupdater</h2><p>The tiny golang application (when built it is just ~2MB), which can be bundled with NW.js application and then used to unpack updates.<br>To update target application updater needs to know two things - where zip archive with the new version is located and where is the app’s executable to restart application after update. These can be passed to updater via command line arguments <code>--bundle</code> and <code>--inst-dir</code>, where <code>--bundle</code> is the path to the zip archive with the new app version and <code>--inst-dir</code> is the path to app’s executable.</p><p>There are multiple advantages over <code>node-webkit-updater</code>:</p><ul>
+<li>It can update the updater itself.</li><li>Doesn’t require elevated privilegies (unless application itself has been installed in the folder which require elevated privilegies).</li><li>Updater’s executalbe has way smaller size as it doesn’t require bundling the whole new NW.js application with the main application.</li></ul><p>The logic to check for updates needs to be built on your own too. The <a href="https://github.com/oaleynik/nwjs-autoupdater/blob/master/examples/index.js">example</a> shows the way how to use javascript module as an entry point for NW.js application and check for updates in background.</p><h2 id="nw-autoupdater"><a name="nw-autoupdater" href="#nw-autoupdater"></a>nw-autoupdater</h2><p>The NPM module provides API similar to one of <code>node-webkit-updater</code>, but extended, adapted for NW.js with Node 7.x and based on clean async/await syntax. Namely it allows to:</p><ul>
+<li>Read the manifest from the remote release server</li><li>Check if the version in the remote manifest greater than one of the local manifest</li><li>Download the latest available version matching the host platform (according to the <code>packages</code> map of the remote manifest)<ul>
+<li>Subscribe for download progress events</li></ul>
+</li><li>Unpack it in a temporary directory (zip or tar.gz)<ul>
+<li>Subscribe for install progress events</li></ul>
+</li><li>Close the app and launch it (as a detached process) from the downloaded release (from temporary directory)</li><li>Backup actual version and replace it with the new one</li><li>Restart the updated app from its original location</li></ul><p>The package includes examples of release server and client.</p>
+
+
+</body>
+</html>

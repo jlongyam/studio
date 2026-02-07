@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Transparency.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><em>Transparency requires node-webkit &gt;= v0.11.2</em></p><p>in your html body, specify the alpha of the background colour, in my example below, I set it to be full transparent</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-HTML&quot;>&amp;lt;body style=&quot;background-color:rgba(0,0,0,0);&quot;&amp;gt;
+</code></pre>">&lt;body style="background-color:rgba(0,0,0,0);"&gt;
+</code></pre><p>you can set the window’s transparency “on the fly” using</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var gui = require('nw.gui');
+var win = gui.Window.get();
+win.setTransparent(!win.isTransparent);
+</code></pre>">var gui = require('nw.gui');
+var win = gui.Window.get();
+win.setTransparent(!win.isTransparent);
+</code></pre><p>you can also specify it in package.json</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>  &quot;window&quot;: {
+    &quot;transparent&quot;: true
+  }
+</code></pre>">  "window": {
+    "transparent": true
+  }
+</code></pre><h3 id="windows"><a name="windows" href="#windows"></a>Windows</h3><p>support only windows vista and above, DWM (Desktop Window Manager) must be enabled (i.e. transparency might not work on classic theme / basic version of the OS / using remote desktop)</p><h3 id="linux"><a name="linux" href="#linux"></a>Linux</h3><p>you need to run node webkit with these params</p><pre><code class="lang-params" data-origin="<pre><code class=&quot;lang-params&quot;>--enable-transparent-visuals --disable-gpu
+</code></pre>">--enable-transparent-visuals --disable-gpu
+</code></pre><p>and your window manager needs to support <strong>compositing</strong></p><h2 id="click-through-transparency"><a name="click-through-transparency" href="#click-through-transparency"></a>Click through transparency</h2><p><em>Click through transparency requires node-webkit &gt;= v0.11.4</em></p><p>to enable Transparency clickthrough (currently only supported on OSX / WIN)<br>you must run with these args</p><pre><code class="lang-params" data-origin="<pre><code class=&quot;lang-params&quot;>--disable-gpu --force-cpu-draw
+</code></pre>">--disable-gpu --force-cpu-draw
+</code></pre><p>the click through is only supported for <strong>frameless</strong>, <strong>non resizable</strong> frame, though it might work for other configuration, depending on the OS.<br>Click through only works if the alpha value in the pixel is 0</p>
+
+
+</body>
+</html>

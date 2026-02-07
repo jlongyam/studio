@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Protect-JavaScript-source-code-with-v8-snapshot.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><strong>NOTE: some content in this wiki applies only to 0.12 and earlier versions. For official documentation on 0.13 and later, see <a href="http://docs.nwjs.io">http://docs.nwjs.io</a></strong></p><p><em>Since v0.4.2</em></p><p><strong>There is a bug in 0.8.x that would make source code exposed. Do not use this feature with 0.8.x. It is fixed in 0.9.x</strong></p><p>The JavaScript source code of your application can be protected by compiling to native code. Only the native code is distributed with the application and is loaded by the application.</p><p><del>There are important limitations in the current implementation. Please see the ‘Limitation’ section.</del></p><p>This feature is the fix for <a href="https://github.com/rogerwang/node-webkit/issues/269">issue 269</a></p><h3 id="compilation"><a name="compilation" href="#compilation"></a>Compilation</h3><p>JS source code is compiled to native code (aka. ‘snapshot’) with the tool <code>nwjc</code> (before 0.12.0-rc1 it’s supported by <code>nwsnapshot</code> tool, refer to the section below), which is provided in the binary download. To use it:</p><pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;>nwjc source.js binary.bin
+</code></pre>">nwjc source.js binary.bin
+</code></pre><p>The <code>*.bin</code> file is needed to be distributed with your application. You can name it whatever you want.</p><h3 id="load-the-compiled-js-in-your-app"><a name="load-the-compiled-js-in-your-app" href="#load-the-compiled-js-in-your-app"></a>Load the compiled JS in your app</h3><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>require('nw.gui').Window.get().evalNWBin(null, 'binary.bin');
+</code></pre>">require('nw.gui').Window.get().evalNWBin(null, 'binary.bin');
+</code></pre><p>The arguments of the <a href="https://github.com/nwjs/nw.js/wiki/Window#windowevalnwbinframe-path">evalNWBin()</a> method are similar with the <code>Window.eval()</code> method, where the first parameter is the target iframe (‘null’ for main frame), and the 2nd parameter is the binary code file.</p><h3 id="sample-for-nwjc"><a name="sample-for-nwjc" href="#sample-for-nwjc"></a>Sample for nwjc</h3><p>mytest.js: (this is the JS code to be protected)</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>function mytest(a) {
+    document.write(a + 42);
+}
+</code></pre>">function mytest(a) {
+    document.write(a + 42);
+}
+</code></pre><p>Compile <code>mytest.js</code> to native code:</p><pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;>nwjc mytest.js mytest.bin
+</code></pre>">nwjc mytest.js mytest.bin
+</code></pre><p>package.json:</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>{
+  &quot;name&quot;: &quot;nw-demo&quot;,
+  &quot;main&quot;: &quot;index.html&quot;
+}
+</code></pre>">{
+  "name": "nw-demo",
+  "main": "index.html"
+}
+</code></pre><p>index.html: (note that we don’t need to distribute ‘mytest.js’ with it)</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;
+  &amp;lt;title&amp;gt;snapshot demo&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+  &amp;lt;script&amp;gt;
+  require('nw.gui').Window.get().evalNWBin(null, 'mytest.bin');
+  mytest(2); 
+  console.log(mytest);
+  &amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;
+</code></pre>">&lt;html&gt;&lt;head&gt;
+  &lt;title&gt;snapshot demo&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script&gt;
+  require('nw.gui').Window.get().evalNWBin(null, 'mytest.bin');
+  mytest(2); 
+  console.log(mytest);
+  &lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre><h3 id="limitation-of-nwjc"><a name="limitation-of-nwjc" href="#limitation-of-nwjc"></a>Limitation of nwjc</h3><p><del>The compiled code runs <strong>slower than normal JS</strong>: 30% performance according to v8bench. Normal JS source code will not be affected. Again, if you have a real need against this limit, please file an issue and we’ll find time to fix it.</del><br>The performance issue is fixed in 0.22: <a href="https://nwjs.io/blog/js-src-protect-perf/">https://nwjs.io/blog/js-src-protect-perf/</a></p><p>The compiled code is <strong>not cross-platform nor compatible between versions</strong> of node-webkit. So you’ll need to run <code>nwjc</code> for each of the platforms when you package your application.</p><h2 id="usage-of-the-deprecated-nwsnapshot-way"><a name="usage-of-the-deprecated-nwsnapshot-way" href="#usage-of-the-deprecated-nwsnapshot-way"></a>Usage of the deprecated nwsnapshot way</h2><h3 id="compilation"><a name="compilation" href="#compilation"></a>Compilation</h3><pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;>nwsnapshot --extra_code source.js snapshot.bin
+</code></pre>">nwsnapshot --extra_code source.js snapshot.bin
+</code></pre><h3 id="package"><a name="package" href="#package"></a>Package</h3><p>Add the following field to <code>package.json</code>:</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>&quot;snapshot&quot; : &quot;snapshot.bin&quot;
+</code></pre>">"snapshot" : "snapshot.bin"
+</code></pre><h3 id="run"><a name="run" href="#run"></a>Run</h3><p>It’s important to remember that the code being compiled is evaluated <strong>when you launch <code>nwsnapshot</code></strong>. Then the JS heap state is saved to the binary file (e.g. <code>snapshot.bin</code>) and restored right before JS context creation (and before your application launches). So you may not want to run any code in the top level scope. So it’s better to just define functions or variables there.</p><p>And the scripts runs/loads loads very early (you can assume it’s earlier than context creation) so Node and DOM objects such as <code>window</code> is not defined. So you may want to defined functions and pass <code>window</code> as argument.</p><p>The snapshot is used by V8 as a kind of ‘template’ to create JS contexts. So the objects defined there will be in every JS contexts.</p><h3 id="limitation-of-nwsnapshot"><a name="limitation-of-nwsnapshot" href="#limitation-of-nwsnapshot"></a>Limitation of nwsnapshot</h3><p>The source code being compiled <strong>cannot be too big</strong>. <code>nwsnapshot</code> will report error when this happens. </p><p>Experiments show that 3 copies of the jquery library will exceed this limit. If you feel this is too small for your application, consider split your code into 2 parts: compiled and plain source. If you have a real need against this limit, please file an issue and we’ll find time to fix it.</p><p><del>The compiled code runs <strong>slower than normal JS</strong>: 30% performance according to v8bench. Normal JS source code will not be affected. Again, if you have a real need against this limit, please file an issue and we’ll find time to fix it.</del><br>The performance issue is fixed in 0.22: <a href="https://nwjs.io/blog/js-src-protect-perf/">https://nwjs.io/blog/js-src-protect-perf/</a></p><p>The compiled code is <strong>not cross-platform nor compatible between versions</strong> of node-webkit. So you’ll need to run <code>nwsnapshot</code> for each of the platforms when you package your application.</p><p>You cannot create closure in your code like this:</p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>var sampleFunction;
+
+(function()
+{
+    var privateVar = 'private';
+
+    sampleFunction = function()
+    {   
+        return privateVar+'67868';
+    };
+})();
+</code></pre>">var sampleFunction;
+
+(function()
+{
+    var privateVar = 'private';
+
+    sampleFunction = function()
+    {   
+        return privateVar+'67868';
+    };
+})();
+</code></pre><p>It should be written like below instead:  </p><pre><code class="lang-js" data-origin="<pre><code class=&quot;lang-js&quot;>function sampleFunction()
+{
+    var privateVar = 'private';
+
+        return privateVar+'67868';
+}
+</code></pre>">function sampleFunction()
+{
+    var privateVar = 'private';
+
+        return privateVar+'67868';
+}
+</code></pre><p>If you have a large piece of code like this then you could wrap it inside a function and then compile it.</p><h3 id="sample-for-nwsnapshot"><a name="sample-for-nwsnapshot" href="#sample-for-nwsnapshot"></a>Sample for nwsnapshot</h3><p>mytest.js: (this is the JS code to be protected)</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>function mytest(a) {
+    document.write(a + 42);
+}
+</code></pre>">function mytest(a) {
+    document.write(a + 42);
+}
+</code></pre><p>Compile <code>mytest.js</code> to native code:</p><pre><code class="lang-bash" data-origin="<pre><code class=&quot;lang-bash&quot;>nwsnapshot --extra_code mytest.js mytest.bin
+</code></pre>">nwsnapshot --extra_code mytest.js mytest.bin
+</code></pre><p>package.json:</p><pre><code class="lang-json" data-origin="<pre><code class=&quot;lang-json&quot;>{
+  &quot;name&quot;: &quot;nw-demo&quot;,
+  &quot;main&quot;: &quot;index.html&quot;,
+  &quot;snapshot&quot;: &quot;mytest.bin&quot;
+}
+</code></pre>">{
+  "name": "nw-demo",
+  "main": "index.html",
+  "snapshot": "mytest.bin"
+}
+</code></pre><p>index.html: (note that we don’t need to distribute ‘mytest.js’ with it)</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;
+  &amp;lt;title&amp;gt;snapshot demo&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+  &amp;lt;script&amp;gt;
+  mytest(2); 
+  &amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;
+</code></pre>">&lt;html&gt;&lt;head&gt;
+  &lt;title&gt;snapshot demo&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script&gt;
+  mytest(2); 
+  &lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre><h2 id="troubleshooting"><a name="troubleshooting" href="#troubleshooting"></a>Troubleshooting</h2><p>For some unknown reason, nwsnapshot will sometimes silently fail and provide a bad snapshot see <a href="https://github.com/nwjs/nw.js/issues/1295">issue#1295</a>. To make sure that you always have a valid snapshot, you can use  <a href="https://github.com/miklschmidt/node-nw-snapshot">node-nw-snapshot</a>.</p>
+
+
+</body>
+</html>

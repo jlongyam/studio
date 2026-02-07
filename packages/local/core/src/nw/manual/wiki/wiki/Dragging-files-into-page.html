@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Dragging-files-into-page.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><em>Following content requires node-webkit &gt;= v0.2.5</em></p><p>node-webkit allows directly dragging files into page, developers can use it the same way as HTML5 specifies. The bonus is a <code>path</code> field is provided in <code>File</code> object so you can use <code>fs</code> module to directly operate files dragged into page.</p><p>An example is:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;style&amp;gt;
+      #holder { border: 10px dashed #ccc; width: 300px; height: 300px; margin: 20px auto;}
+      #holder.hover { border: 10px dashed #333; }
+    &amp;lt;/style&amp;gt;
+    &amp;lt;script&amp;gt;
+
+      //Same as $(document).ready();
+      function ready(fn) {
+        if (document.readyState != 'loading'){
+          fn();
+        } else {
+          document.addEventListener('DOMContentLoaded', fn);
+        }
+      }
+
+      //When the page has loaded, run this code
+      ready(function(){
+        // prevent default behavior from changing page on dropped file
+        window.ondragover = function(e) { e.preventDefault(); return false };
+        // NOTE: ondrop events WILL NOT WORK if you do not &quot;preventDefault&quot; in the ondragover event!!
+        window.ondrop = function(e) { e.preventDefault(); return false };
+
+        const holder = document.getElementById('holder');
+        holder.ondragover = function () { this.className = 'hover'; return false; };
+        holder.ondragleave = function () { this.className = ''; return false; };
+        holder.ondrop = function (e) {
+          e.preventDefault();
+
+          for (let i = 0; i &amp;lt; e.dataTransfer.files.length; ++i) {
+            console.log(e.dataTransfer.files[i].path);
+          }
+          return false;
+        };
+      });
+  &amp;lt;/script&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;holder&quot;&amp;gt;&amp;lt;/div&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      #holder { border: 10px dashed #ccc; width: 300px; height: 300px; margin: 20px auto;}
+      #holder.hover { border: 10px dashed #333; }
+    &lt;/style&gt;
+    &lt;script&gt;
+
+      //Same as $(document).ready();
+      function ready(fn) {
+        if (document.readyState != 'loading'){
+          fn();
+        } else {
+          document.addEventListener('DOMContentLoaded', fn);
+        }
+      }
+
+      //When the page has loaded, run this code
+      ready(function(){
+        // prevent default behavior from changing page on dropped file
+        window.ondragover = function(e) { e.preventDefault(); return false };
+        // NOTE: ondrop events WILL NOT WORK if you do not "preventDefault" in the ondragover event!!
+        window.ondrop = function(e) { e.preventDefault(); return false };
+
+        const holder = document.getElementById('holder');
+        holder.ondragover = function () { this.className = 'hover'; return false; };
+        holder.ondragleave = function () { this.className = ''; return false; };
+        holder.ondrop = function (e) {
+          e.preventDefault();
+
+          for (let i = 0; i &lt; e.dataTransfer.files.length; ++i) {
+            console.log(e.dataTransfer.files[i].path);
+          }
+          return false;
+        };
+      });
+  &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="holder"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>And the standard HTML5 way of reading files is also supported too:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>holder.ondrop = function (e) {
+  e.preventDefault();
+
+  const file = e.dataTransfer.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function (event) {
+    console.log(event.target);
+  };
+  console.log(file);
+  reader.readAsDataURL(file);
+
+  return false;
+};
+</code></pre>">holder.ondrop = function (e) {
+  e.preventDefault();
+
+  const file = e.dataTransfer.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function (event) {
+    console.log(event.target);
+  };
+  console.log(file);
+  reader.readAsDataURL(file);
+
+  return false;
+};
+</code></pre><p>If you need to handle file or folder:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>holder.ondrop = function (e) {
+  e.preventDefault();
+
+  const item = e.dataTransfer.items[0];
+  const entry = item.webkitGetAsEntry();
+  if (entry.isFile) {
+    const file = item.getAsFile();
+    // Do magic with file
+  } else if (entry.isDirectory) {
+    // Do magic with directory
+    const dir = item.getAsFile();
+  }
+
+  return false;
+};
+</code></pre>">holder.ondrop = function (e) {
+  e.preventDefault();
+
+  const item = e.dataTransfer.items[0];
+  const entry = item.webkitGetAsEntry();
+  if (entry.isFile) {
+    const file = item.getAsFile();
+    // Do magic with file
+  } else if (entry.isDirectory) {
+    // Do magic with directory
+    const dir = item.getAsFile();
+  }
+
+  return false;
+};
+</code></pre><p>If you’re using jQuery to bind your drag / drop events, keep in mind that the event object passed back to your handlers is a jQuery event object, not the original HTML5 event object. Therefore, when you need to access the <code>dataTransfer</code> object, you have to use the <code>e.originalEvent.dataTransfer</code> field.</p>
+
+
+</body>
+</html>

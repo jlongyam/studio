@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Control-camera-and-microphone-with-getusermedia-api.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><em>getUserMedia API requires node-webkit &gt;= v0.2.5</em></p><p>The <a href="http://www.html5rocks.com/en/tutorials/getusermedia/intro/">getUserMedia API</a> lets users grant web apps access to their camera and microphone without a plug-in. This is the first step in enabling high quality video and audio communication as part of WebRTC, a powerful new real-time communications standard for the open web platform.</p><p>In addition, getUserMedia can be combined with other platform features like CSS filters and WebGL to render effects as the <video> is captured. For example, you can <a href="http://www.youtube.com/watch?v=PNzmXDa1JLA">rotate the video and add hipstery filters</a>, <a href="http://www.soundstep.com/blog/experiments/jsdetection/">play a xylophone with motion detection</a>, <a href="http://neave.github.com/face-detection/">try on glasses with face detection</a>, and <a href="http://neave.com/webcam/html5/">step into a photobooth with crazy effects like “Snow” and “Fire”</a>. The good news is, those features are all possible in node-webkit.</video></p><h3 id="how-to-use"><a name="how-to-use" href="#how-to-use"></a>How to use</h3><p>First, since the getUserMedia API is currently an experimental feature, the API name is called <code>navigator.webkitGetUserMedia</code>, not the <code>navigator.getUserMedia</code>, you may want to dynamically detect it if you also develop apps on mobile platforms.</p><p>To use the webcam or microphone, we need to request permission. The first parameter to getUserMedia() is an object specifying the type of media you want to access. For example, if you want to access the webcam, the first parameter should be {video: true}. To use both the microphone and camera, pass {video: true, audio: true}:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;title&amp;gt;webRTC Test&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body onload=&quot;init();&quot; style=&quot;background-color:#ababab;&quot; &amp;gt;
+&amp;lt;div style=&quot;width:352px; height:625px; margin:0 auto; background-color:#fff;&quot; &amp;gt;
+    &amp;lt;div&amp;gt;
+      &amp;lt;video id=&quot;camFeed&quot; width=&quot;320&quot; height=&quot;240&quot; autoplay&amp;gt;
+    &amp;lt;/video&amp;gt;
+  &amp;lt;/div&amp;gt;
+
+    &amp;lt;div&amp;gt;
+        &amp;lt;canvas id=&quot;photo&quot; width=&quot;320&quot; height=&quot;240&quot;&amp;gt;
+        &amp;lt;/canvas&amp;gt;
+    &amp;lt;/div&amp;gt;
+
+    &amp;lt;div style=&quot;margin:0 auto; width:82px;&quot;&amp;gt;
+        &amp;lt;input type=&quot;button&quot; value=&quot;Take Photo&quot; onclick=&quot;takePhoto();&quot;&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;script&amp;gt;
+function init()
+{
+    if(navigator.webkitGetUserMedia)
+    {
+        navigator.webkitGetUserMedia({video:true}, onSuccess, onFail);
+    }
+    else
+    {
+        alert('webRTC not available');
+    }
+}
+
+function onSuccess(stream)
+{
+    document.getElementById('camFeed').srcObject = stream;
+}
+
+function onFail()
+{
+    alert('could not connect stream');
+}
+
+function takePhoto()
+{
+    var c = document.getElementById('photo');
+    var v = document.getElementById('camFeed');
+    c.getContext('2d').drawImage(v, 0, 0, 320, 240);
+}
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;webRTC Test&lt;/title&gt;
+&lt;/head&gt;
+&lt;body onload="init();" style="background-color:#ababab;" &gt;
+&lt;div style="width:352px; height:625px; margin:0 auto; background-color:#fff;" &gt;
+    &lt;div&gt;
+      &lt;video id="camFeed" width="320" height="240" autoplay&gt;
+    &lt;/video&gt;
+  &lt;/div&gt;
+
+    &lt;div&gt;
+        &lt;canvas id="photo" width="320" height="240"&gt;
+        &lt;/canvas&gt;
+    &lt;/div&gt;
+
+    &lt;div style="margin:0 auto; width:82px;"&gt;
+        &lt;input type="button" value="Take Photo" onclick="takePhoto();"&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+function init()
+{
+    if(navigator.webkitGetUserMedia)
+    {
+        navigator.webkitGetUserMedia({video:true}, onSuccess, onFail);
+    }
+    else
+    {
+        alert('webRTC not available');
+    }
+}
+
+function onSuccess(stream)
+{
+    document.getElementById('camFeed').srcObject = stream;
+}
+
+function onFail()
+{
+    alert('could not connect stream');
+}
+
+function takePhoto()
+{
+    var c = document.getElementById('photo');
+    var v = document.getElementById('camFeed');
+    c.getContext('2d').drawImage(v, 0, 0, 320, 240);
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h3 id="applying-effects"><a name="applying-effects" href="#applying-effects"></a>Applying effects</h3><p>Using CSS Filters, we can apply some gnarly effects to the video as it is captured:</p><pre><code class="lang-html" data-origin="<pre><code class=&quot;lang-html&quot;>&amp;lt;style&amp;gt;
+video {
+  width: 307px;
+  height: 250px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid #ccc;
+}
+.grayscale {
+  +filter: grayscale(1);
+}
+.sepia {
+  +filter: sepia(1);
+}
+.blur {
+  +filter: blur(3px);
+}
+/* ... */
+&amp;lt;/style&amp;gt;
+
+&amp;lt;video autoplay&amp;gt;&amp;lt;/video&amp;gt;
+
+&amp;lt;script&amp;gt;
+var idx = 0;
+var filters = ['grayscale', 'sepia', 'blur', 'brightness', 'contrast', 'hue-rotate',
+               'hue-rotate2', 'hue-rotate3', 'saturate', 'invert', ''];
+
+function changeFilter(e) {
+  var el = e.target;
+  el.className = '';
+  var effect = filters[idx++ % filters.length]; // loop through filters.
+  if (effect) {
+    el.classList.add(effect);
+  }
+}
+
+document.querySelector('video').addEventListener('click', changeFilter, false);
+&amp;lt;/script&amp;gt;
+</code></pre>">&lt;style&gt;
+video {
+  width: 307px;
+  height: 250px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid #ccc;
+}
+.grayscale {
+  +filter: grayscale(1);
+}
+.sepia {
+  +filter: sepia(1);
+}
+.blur {
+  +filter: blur(3px);
+}
+/* ... */
+&lt;/style&gt;
+
+&lt;video autoplay&gt;&lt;/video&gt;
+
+&lt;script&gt;
+var idx = 0;
+var filters = ['grayscale', 'sepia', 'blur', 'brightness', 'contrast', 'hue-rotate',
+               'hue-rotate2', 'hue-rotate3', 'saturate', 'invert', ''];
+
+function changeFilter(e) {
+  var el = e.target;
+  el.className = '';
+  var effect = filters[idx++ % filters.length]; // loop through filters.
+  if (effect) {
+    el.classList.add(effect);
+  }
+}
+
+document.querySelector('video').addEventListener('click', changeFilter, false);
+&lt;/script&gt;
+</code></pre>
+
+
+</body>
+</html>

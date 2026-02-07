@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Handling-files-and-arguments.html</title>
+  <meta name="generator" content="Haroopad 0.13.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../asset/clearness-dark.css" rel="stylesheet">
+</head>
+<body class="markdown clearness-dark">
+<p><em>This feature requires node-webkit &gt;= v0.3.2</em></p><p>For some applications, such as text editor and IDE, it’s important to have the ability to bind file types to the app, e.g. the <code>Open With</code> on many platforms.</p><h2 id="command-line-arguments"><a name="command-line-arguments" href="#command-line-arguments"></a>Command line arguments</h2><p>In node-webkit, when a user uses your app to open a file under command line, like <code>your-app file.txt file2.txt</code>, the <code>file.txt file2.txt</code> will be recorded and you can use <code>App.argv</code> to get the array of command line arguments:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>var gui = require('nw.gui');
+console.log(gui.App.argv);
+// Print &quot;file.txt, file2.txt&quot;
+</code></pre>">var gui = require('nw.gui');
+console.log(gui.App.argv);
+// Print "file.txt, file2.txt"
+</code></pre><p>And if you open a file with your app in GUI (like file explorer in Windows, Finder in Mac and nautilus in Linux), the path of opened file will also be passed with <code>App.argv</code>.</p><h2 id="open-file-with-existing-app"><a name="open-file-with-existing-app" href="#open-file-with-existing-app"></a>Open file with existing app</h2><p>In most times, when you want to open multiple files with your app, you would like to open them in one session instead of multiple sessions. For example, for an IDE, if you have already opened one IDE instance, and then you opened a source code file, you would want the existing IDE instance to handle this file instead of opening a new huge instance of the IDE.</p><p>For node-webkit apps, this is solved by default. When you open a file, node-webkit will check whether your app  has already opened, if not, a new instance of your app would start and the path of file will be passed in <code>App.argv</code>, if there is already one instance of your app, the full command line of the second instance will be passed to the existing instance by sending <code>open</code> event to the <code>App</code> object:</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Listen to `open` event
+gui.App.on('open', function(cmdline) {
+  console.log('command line: ' + cmdline);
+});
+</code></pre>">// Listen to `open` event
+gui.App.on('open', function(cmdline) {
+  console.log('command line: ' + cmdline);
+});
+</code></pre><p><strong>Before v0.7.0</strong> the callback is different: it was defined as sending the file path in the argument as parameter, and the callback is called multiple times for each of the arguments.</p><pre><code class="lang-javascript" data-origin="<pre><code class=&quot;lang-javascript&quot;>// Listen to `open` event
+gui.App.on('open', function(path) {
+  console.log('Opening file: ' + path);
+});
+</code></pre>">// Listen to `open` event
+gui.App.on('open', function(path) {
+  console.log('Opening file: ' + path);
+});
+</code></pre><p><strong>Note:</strong> <code>open</code> event is sent only if your app is a standalone app, e.g. packaged with instructions of [[How to package and distribute your apps]].</p><p><strong>Note:</strong> On Mac, when you drag a file into the dock icon of your app, the <code>open</code> will also be emitted.</p><p><strong>Note:</strong> On Mac, you should <a href="http://developer.apple.com/library/ios/#documentation/FileManagement/Conceptual/DocumentInteraction_TopicsForIOS/Articles/RegisteringtheFileTypesYourAppSupports.html">Register the File Types Your App Supports</a> in the <code>node-webkit.app/Contents/Info.plist</code>.</p><p><strong>Note:</strong> On Windows and Linux, if you don’t want this behaviour you can close it by setting <code>single-instance</code> to <code>false</code> in <code>package.json</code>, however it has no effect on Mac since it’s forced by the OS.</p><h2 id="difference-between-" app.argv"-and-"open"-event"=""><a name="difference-between-" app.argv"-and-"open"-event"="" href="#difference-between-"></a>Difference between “App.argv” and “open” event</h2><p>You may be confused to find that there’re two ways to handle file opening, the differences are:</p><ul>
+<li><code>App.argv</code> is used at the startup of your app, <code>open</code> event is sent to an existing app.</li><li><code>open</code> event is sent only for standalone apps, while <code>App.argv</code> has no restrictions.</li></ul>
+
+
+</body>
+</html>

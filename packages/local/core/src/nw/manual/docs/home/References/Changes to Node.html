@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <html>Changes to Node</html>
+  <meta name="generator" content="Haroopad 0.13.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../asset/clearness-dark.css"></head>
+</head>
+<body class="markdown clearness-dark">
+<h1 id="changes-to-node"><a name="changes-to-node" href="#changes-to-node"></a>Changes to Node</h1><hr class="section"><div class="toc"><ul>
+<li><ul>
+<li><span class="html">
+<a href="#console" html="console">console</a>
+</span>
+<!--span class="number">
+0
+</span-->
+</li>
+<li><span class="html">
+<a href="#process" html="process">process</a>
+</span>
+<!--span class="number">
+1
+</span-->
+</li>
+<li><span class="html">
+<a href="#require" html="require">require</a>
+</span>
+<!--span class="number">
+2
+</span-->
+</li>
+</ul>
+</li>
+
+</ul>
+</div><h2 id="console"><a name="console" href="#console"></a>console</h2><p>Since NW.js supports GUI applications instead of console applications, the output of <code>console.log()</code> (and other similar methods such as <code>console.warn()</code> and <code>console.error()</code>) is redirected to the console of Chromium. You may see it in your “<a href="../For Users/Debugging with DevTools.html">Developer Tools</a>“ window (on its “Console” tab).</p><h2 id="process"><a name="process" href="#process"></a>process</h2><p>A couple of new fields is added to the global <code>process</code> object:</p><ul>
+<li><code>process.versions['nw']</code> is set with NW.js’s version.</li><li><code>process.versions['chromium']</code> is set with the chromium version which NW.js is based on.</li><li><code>process.versions['nw-flavor']</code> is set to ‘sdk’ when the binary is SDK build, or ‘normal’ when the binary is normal build.</li><li><code>process.mainModule</code> is set for the start page (such as <code>index.html</code>) as specified in the manifest’s <a href="Manifest Format.html#main"><code>main</code></a> field. However, when the <a href="Manifest Format.html#node-main"><code>node-main</code></a> field is also specified in the manifest, <code>process.mainModule</code> points to the file specified in the <code>node-main</code> field.</li></ul><h2 id="require"><a name="require" href="#require"></a>require</h2><p>Behaviour of relative paths in Node’s <code>require()</code> method depends on the <a href="../For Users/Advanced/JavaScript Contexts in NW.js.html">JavaScript context</a> in which the parent file is running in. (where “the parent file” is the file in which the <code>require()</code> method is called):</p><ul>
+<li>If the parent file is running in Node context, the child’s relative path is treated as relative to its parent.</li><li>If the parent file is running in browser context, the child’s relative path is treated as relative to the application’s root directory, i.e. the directory of manifest file.</li></ul>
+
+
+</body>
+</html>
