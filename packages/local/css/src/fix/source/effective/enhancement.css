@@ -1,0 +1,110 @@
+/*
+  Inspired/Copied by/from:
+  - [A] https://github.com/elad2412/the-new-css-reset
+  - [B] https://github.com/sindresorhus/modern-normalize
+  - [C] https://www.joshwcomeau.com/css/custom-css-reset/
+  - [D] https://piccalil.li/blog/a-modern-css-reset/
+  - [E] https://css-tricks.com/snippets/css/system-font-stack/#aa-method-1-system-fonts-at-the-element-level
+  - [F] https://tailwindcss.com/docs/preflight + https://unpkg.com/tailwindcss@3.2.2/src/css/preflight.css
+  - [Z] Custom
+*/
+
+/* Ref [D]: Enable smooth scrolling */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Ref [A]/[C]: Sensible media defaults (unify to block rendering) + block ability to exceed their container */
+:where(img, picture, video, canvas, svg) {
+  display: block;
+  max-width: 100%;
+}
+
+/* Ref [Z]: Adding simple border to input fields for a slight separation from normal text */
+input:not(
+    :where(
+        [type="file"],
+        [type="checkbox"],
+        [type="radio"],
+        [type="button"],
+        [type="reset"],
+        [type="submit"],
+        [type="range"]
+      )
+  ) {
+  border: 1px solid;
+}
+
+input:not(
+    :where(
+        [type="file"],
+        [type="checkbox"],
+        [type="radio"],
+        [type="button"],
+        [type="reset"],
+        [type="submit"],
+        [type="range"],
+        [type="color"]
+      )
+  ) {
+  padding-inline: 0.5em;
+}
+
+/* Ref [Z]: Adding simple border to input fields for a slight separation from normal text */
+select {
+  border: 1px solid;
+}
+
+/* Ref [C]: give permission to use hard wraps when no soft wrap opportunities can be found */
+:where(li, p, h1, h2, h3, h4, h5, h6) {
+  overflow-wrap: break-word;
+}
+
+/* Ref [Z]: Minimum style to differ from unordered list */
+:where(ol) {
+  list-style-type: revert;
+}
+
+/* Ref [Z]: Adding simple border and default button background to all buttons */
+:where(button),
+input:where([type="button"], [type="reset"], [type="submit"]),
+::-webkit-file-upload-button,
+::file-selector-button {
+  border: 1px solid;
+  background: ButtonFace;
+  padding-inline: 0.5em;
+}
+
+/* Ref [Z]: Make sure dividers are visible by default */
+:where(hr) {
+  border-top: 1px solid;
+}
+
+/* Ref [Z]: Make sure basic text formatting is still applied correctly and unified. */
+:where(strong, b) {
+  font-weight: bold;
+}
+
+:where(em, i) {
+  font-style: italic;
+}
+
+/* Ref [Z]: Make sure label are still using the default cursor */
+:where(label) {
+  cursor: default;
+}
+
+/** Ref [F]: Make sure disabled elements don't get the pointer cursor and block any interaction. */
+:disabled,
+[aria-disabled="true"] {
+  cursor: default;
+  pointer-events: none;
+}
+
+:where(a) {
+  /* Ref [D]: Improve link elements */
+  text-decoration-skip-ink: auto;
+
+  /* Ref[Z]: Minimum style to differ from normal text */
+  text-decoration: underline;
+}

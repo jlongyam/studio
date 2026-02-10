@@ -291,11 +291,11 @@ var ui = (function (exports) {
 		focusOn = selector;
 		document.addEventListener('ui:render', setFocus, {once: true});
 	}
-	exports.display = display; 
-	exports.focus = focus;
-	exports.render = render;
-	exports.sync = sync; 
-	exports.model = model; 
+	exports.display = display;  // component
+	exports.focus = focus;      // focus
+	exports.render = render;    // render
+	exports.sync = sync;        // signal
+	exports.model = model;      // store
 	Object.defineProperty(exports, '__esModule', { value: true });
 	return exports;
 })({});

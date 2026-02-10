@@ -1,0 +1,10 @@
+
+@import './source/preflight.css';
+@import './source/effective/index.css';
+/*@import './source/cordova.css';*/
+
+body {
+	/*background: initial;
+	font: initial;
+	text-transform: initial;*/
+}
