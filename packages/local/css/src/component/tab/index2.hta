@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="x-ua-compatible" content="ie=9">
 <title>IE8-Compatible Tabs with Span</title>
 <style>
 /* Reset & base */
@@ -23,7 +24,8 @@ body { font: 14px Arial, sans-serif; padding: 20px; }
   float: left; /* default: horizontal (top/right/left) */
   margin-right: 2px;
 }
-.tab-headers span {
+.tab-headers span,
+.tab-headers .tab-label {
   display: inline-block; /* IE8 needs inline-block for click area */
   padding: 6px 12px;
   background: #ddd;
@@ -42,7 +44,8 @@ body { font: 14px Arial, sans-serif; padding: 20px; }
 }
 
 /* Make spans keyboard focusable*/
-.tab-headers span:focus {
+.tab-headers span:focus,
+.tab-headers .tab-label:focus {
   outline: 2px dotted #333;
   outline: 2px solid silver;
   outline-offset: 0;
@@ -121,9 +124,9 @@ body { font: 14px Arial, sans-serif; padding: 20px; }
 <h2>Top Tabs</h2>
 <div class="tabs top" id="tabsTop">
   <ul class="tab-headers">
-    <li><span tabindex="0" data-target="top-1" class="active">Tab 1</span></li>
-    <li><span tabindex="0" data-target="top-2">Tab 2</span></li>
-    <li><span tabindex="0" data-target="top-3">Tab 3</span></li>
+    <li><label class="tab-label" tabindex="0" data-target="top-1" class="active">Tab 1</label></li>
+    <li><label class="tab-label" tabindex="0" data-target="top-2">Tab 2</label></li>
+    <li><label class="tab-label" tabindex="0" data-target="top-3">Tab 3</label></li>
   </ul>
   <div class="tab-content">
     <div id="top-1" class="tab-pane active">Content for top tab 1.</div>

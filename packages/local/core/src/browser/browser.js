@@ -131,4 +131,5 @@
       }
     }
   })
+  //window.browser = 
 }())
