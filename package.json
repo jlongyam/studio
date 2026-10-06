@@ -24,12 +24,7 @@
     "studio": "./scripts/studio.js"
   },
   "workspaces": [
-    "packages/global/tester",
-    "packages/global/env",
-    "packages/global/ansi",
-    
-    "packages/global/fs",
-    "packages/global/legacy"
+    "packages/global/editor"
   ],
   "dependencies": {
     "clean-modules": "^3.1.1",
